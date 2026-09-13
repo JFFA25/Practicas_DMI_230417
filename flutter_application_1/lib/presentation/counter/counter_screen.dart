@@ -10,6 +10,16 @@ class CounterScreen extends StatefulWidget {
 class _CounterScreenState extends State<CounterScreen> {
   int clickCounter = 0;
 
+  Color _getCounterColor() {
+    if (clickCounter > 0) {
+      return Colors.green;
+    }
+    if (clickCounter < 0) {
+      return Colors.red;
+    }
+    return Colors.blue;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,17 +45,18 @@ class _CounterScreenState extends State<CounterScreen> {
           children: [
             Text(
               '$clickCounter',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 160,
                 fontWeight: FontWeight.w100,
                 fontFamily: 'tf2',
+                color: _getCounterColor(),
               ),
             ),
             const Text(
               'Clicks',
               style: TextStyle(
                 fontSize: 25,
-                fontFamily: 'tf2', // Tu fuente aquí
+                fontFamily: 'tf2', 
               ),
             ),
           ],
