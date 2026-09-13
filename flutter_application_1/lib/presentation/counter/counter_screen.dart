@@ -13,7 +13,14 @@ class _CounterScreenState extends State<CounterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Counter Screen'), elevation: 0),
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text(
+          'Counter Screen',
+          style: TextStyle(fontFamily: 'tf2', fontSize: 22),
+        ),
+        elevation: 0,
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {
@@ -31,10 +38,16 @@ class _CounterScreenState extends State<CounterScreen> {
               style: const TextStyle(
                 fontSize: 160,
                 fontWeight: FontWeight.w100,
-                fontFamily: 'tf2'
+                fontFamily: 'tf2',
               ),
             ),
-            const Text('Clicks', style: TextStyle(fontSize: 25)),
+            const Text(
+              'Clicks',
+              style: TextStyle(
+                fontSize: 25,
+                fontFamily: 'tf2', // Tu fuente aquí
+              ),
+            ),
           ],
         ),
       ),
