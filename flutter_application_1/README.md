@@ -5,7 +5,7 @@
 Mi Primer Aplicación Móvil con Flutter. La práctica consiste en agregar los botones de funcionalidad al contador: uno para aumentar de uno en uno, otro para disminuir de uno en uno y otro para reiniciar el valor. Además, el número cambia de color según su estado: **verde** cuando es positivo, **rojo** cuando es negativo y **azul** cuando está en neutro (0). También se aplica el principio de **polimorfismo** en la lógica de los botones, usando una clase abstracta `CounterAction` con distintas subclases para cada acción.
 
 
-[Abrir diagrama interactivo](https://jffa25.github.io/Practicas_DMI_230417/arquitectura-counter-functions.html)
+[Abrir diagrama interactivo](https://jffa25.github.io/Practicas_DMI_230417/arquitectura-flutter-application.html)
 
 
 ## Tecnologías utilizadas

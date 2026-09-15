@@ -1,0 +1,396 @@
+{
+    "schema_version":  1,
+    "diagram_type":  "architecture",
+    "meta":  {
+                 "title":  "Arquitectura de flutter_application_1",
+                 "quality_profile":  "standard",
+                 "viewBox":  [
+                                 1780,
+                                 960
+                             ]
+             },
+    "components":  [
+                       {
+                           "id":  "assets",
+                           "type":  "cloud",
+                           "label":  "assets/",
+                           "sublabel":  "Fuente tf2build.ttf",
+                           "tag":  "Recursos",
+                           "pos":  [
+                                       360,
+                                       400
+                                   ],
+                           "size":  [
+                                        180,
+                                        70
+                                    ]
+                       },
+                       {
+                           "id":  "images",
+                           "type":  "cloud",
+                           "label":  "images/",
+                           "sublabel":  "cap1.png, cap2.png, cap3.png",
+                           "tag":  "Recursos",
+                           "pos":  [
+                                       360,
+                                       550
+                                   ],
+                           "size":  [
+                                        180,
+                                        70
+                                    ]
+                       },
+                       {
+                           "id":  "pubspec",
+                           "type":  "security",
+                           "label":  "pubspec.yaml",
+                           "sublabel":  "Deps, SDK y fuentes",
+                           "tag":  "Manifiesto",
+                           "pos":  [
+                                       810,
+                                       700
+                                   ],
+                           "size":  [
+                                        180,
+                                        70
+                                    ]
+                       },
+                       {
+                           "id":  "lock",
+                           "type":  "security",
+                           "label":  "pubspec.lock",
+                           "sublabel":  "Versiones resueltas",
+                           "tag":  "Bloqueo",
+                           "pos":  [
+                                       40,
+                                       60
+                                   ],
+                           "size":  [
+                                        180,
+                                        70
+                                    ]
+                       },
+                       {
+                           "id":  "analysis",
+                           "type":  "security",
+                           "label":  "analysis_options.yaml",
+                           "sublabel":  "Lint y analisis Dart",
+                           "tag":  "Calidad",
+                           "pos":  [
+                                       40,
+                                       190
+                                   ],
+                           "size":  [
+                                        200,
+                                        70
+                                    ]
+                       },
+                       {
+                           "id":  "metadata",
+                           "type":  "security",
+                           "label":  ".metadata",
+                           "sublabel":  "Metadatos del proyecto",
+                           "tag":  "Flutter",
+                           "pos":  [
+                                       40,
+                                       320
+                                   ],
+                           "size":  [
+                                        200,
+                                        70
+                                    ]
+                       },
+                       {
+                           "id":  "gitignore",
+                           "type":  "security",
+                           "label":  ".gitignore",
+                           "sublabel":  "Exclusiones de Git",
+                           "tag":  "Git",
+                           "pos":  [
+                                       40,
+                                       450
+                                   ],
+                           "size":  [
+                                        180,
+                                        70
+                                    ]
+                       },
+                       {
+                           "id":  "dart_tool",
+                           "type":  "messagebus",
+                           "label":  ".dart_tool/",
+                           "sublabel":  "Estado local generado",
+                           "tag":  "Generado",
+                           "pos":  [
+                                       40,
+                                       580
+                                   ],
+                           "size":  [
+                                        180,
+                                        70
+                                    ]
+                       },
+                       {
+                           "id":  "test",
+                           "type":  "backend",
+                           "label":  "test/",
+                           "sublabel":  "widget_test.dart",
+                           "tag":  "Pruebas",
+                           "pos":  [
+                                       810,
+                                       90
+                                   ],
+                           "size":  [
+                                        180,
+                                        70
+                                    ]
+                       },
+                       {
+                           "id":  "build",
+                           "type":  "messagebus",
+                           "label":  "build/",
+                           "sublabel":  "Salidas de compilacion",
+                           "tag":  "Generado",
+                           "pos":  [
+                                       1180,
+                                       400
+                                   ],
+                           "size":  [
+                                        200,
+                                        70
+                                    ]
+                       },
+                       {
+                           "id":  "lib",
+                           "type":  "frontend",
+                           "label":  "lib/",
+                           "sublabel":  "Codigo fuente Dart de la app",
+                           "tag":  "Nucleo",
+                           "pos":  [
+                                       790,
+                                       400
+                                   ],
+                           "size":  [
+                                        240,
+                                        90
+                                    ]
+                       },
+                       {
+                           "id":  "android",
+                           "type":  "external",
+                           "label":  "android/",
+                           "sublabel":  "Destino Android",
+                           "tag":  "Plataforma",
+                           "pos":  [
+                                       1500,
+                                       60
+                                   ],
+                           "size":  [
+                                        190,
+                                        70
+                                    ]
+                       },
+                       {
+                           "id":  "ios",
+                           "type":  "external",
+                           "label":  "ios/",
+                           "sublabel":  "Destino iOS",
+                           "tag":  "Plataforma",
+                           "pos":  [
+                                       1500,
+                                       190
+                                   ],
+                           "size":  [
+                                        190,
+                                        70
+                                    ]
+                       },
+                       {
+                           "id":  "linux",
+                           "type":  "external",
+                           "label":  "linux/",
+                           "sublabel":  "Destino Linux",
+                           "tag":  "Plataforma",
+                           "pos":  [
+                                       1500,
+                                       320
+                                   ],
+                           "size":  [
+                                        190,
+                                        70
+                                    ]
+                       },
+                       {
+                           "id":  "macos",
+                           "type":  "external",
+                           "label":  "macos/",
+                           "sublabel":  "Destino macOS",
+                           "tag":  "Plataforma",
+                           "pos":  [
+                                       1500,
+                                       450
+                                   ],
+                           "size":  [
+                                        190,
+                                        70
+                                    ]
+                       },
+                       {
+                           "id":  "web",
+                           "type":  "external",
+                           "label":  "web/",
+                           "sublabel":  "Destino Web",
+                           "tag":  "Plataforma",
+                           "pos":  [
+                                       1500,
+                                       580
+                                   ],
+                           "size":  [
+                                        190,
+                                        70
+                                    ]
+                       },
+                       {
+                           "id":  "windows",
+                           "type":  "external",
+                           "label":  "windows/",
+                           "sublabel":  "Destino Windows",
+                           "tag":  "Plataforma",
+                           "pos":  [
+                                       1500,
+                                       710
+                                   ],
+                           "size":  [
+                                        190,
+                                        70
+                                    ]
+                       }
+                   ],
+    "connections":  [
+                        {
+                            "from":  "assets",
+                            "to":  "lib",
+                            "label":  "recursos consumidos",
+                            "variant":  "emphasis",
+                            "fromSide":  "right",
+                            "toSide":  "left",
+                            "labelAt":  [
+                                            564,
+                                            484
+                                        ]
+                        },
+                        {
+                            "from":  "images",
+                            "to":  "lib",
+                            "label":  "imagenes consumidas",
+                            "variant":  "emphasis",
+                            "fromSide":  "right",
+                            "toSide":  "left",
+                            "via":  [
+                                        [
+                                            680,
+                                            585
+                                        ],
+                                        [
+                                            680,
+                                            445
+                                        ]
+                                    ],
+                            "labelDy":  20
+                        },
+                        {
+                            "from":  "test",
+                            "to":  "lib",
+                            "label":  "prueba codigo",
+                            "fromSide":  "bottom",
+                            "toSide":  "top"
+                        },
+                        {
+                            "from":  "pubspec",
+                            "to":  "lib",
+                            "label":  "dependencias y fuentes",
+                            "fromSide":  "top",
+                            "toSide":  "bottom"
+                        },
+                        {
+                            "from":  "lib",
+                            "to":  "build",
+                            "label":  "Flutter build",
+                            "variant":  "emphasis",
+                            "fromSide":  "right",
+                            "toSide":  "left",
+                            "labelAt":  [
+                                            1054,
+                                            504
+                                        ]
+                        },
+                        {
+                            "from":  "build",
+                            "to":  "android",
+                            "variant":  "emphasis",
+                            "fromSide":  "right",
+                            "toSide":  "left"
+                        },
+                        {
+                            "from":  "build",
+                            "to":  "ios",
+                            "variant":  "emphasis",
+                            "fromSide":  "right",
+                            "toSide":  "left"
+                        },
+                        {
+                            "from":  "build",
+                            "to":  "linux",
+                            "variant":  "emphasis",
+                            "fromSide":  "right",
+                            "toSide":  "left"
+                        },
+                        {
+                            "from":  "build",
+                            "to":  "macos",
+                            "variant":  "emphasis",
+                            "fromSide":  "right",
+                            "toSide":  "left"
+                        },
+                        {
+                            "from":  "build",
+                            "to":  "web",
+                            "variant":  "emphasis",
+                            "fromSide":  "right",
+                            "toSide":  "left"
+                        },
+                        {
+                            "from":  "build",
+                            "to":  "windows",
+                            "variant":  "emphasis",
+                            "fromSide":  "right",
+                            "toSide":  "left"
+                        }
+                    ],
+    "cards":  [
+                  {
+                      "dot":  "cyan",
+                      "title":  "Flujo principal",
+                      "items":  [
+                                    "lib/ contiene main.dart y las pantallas del contador.",
+                                    "assets/ e images/ son recursos consumidos por el codigo en lib/."
+                                ]
+                  },
+                  {
+                      "dot":  "amber",
+                      "title":  "Targets Flutter",
+                      "items":  [
+                                    "android/, ios/, linux/, macos/, web/ y windows/ son runners/configuracion de cada destino.",
+                                    "Flutter los genera y usa durante el build para empaquetar el codigo de lib/."
+                                ]
+                  },
+                  {
+                      "dot":  "slate",
+                      "title":  "Estado generado",
+                      "items":  [
+                                    "build/ y .dart_tool/ son resultados locales generados por el toolchain.",
+                                    ".gitignore excluye build/ del control de versiones."
+                                ]
+                  }
+              ]
+}
