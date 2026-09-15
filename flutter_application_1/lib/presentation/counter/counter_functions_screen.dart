@@ -25,26 +25,29 @@ class _CounterFunctionsScreenState extends State<CounterFunctionsScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh_rounded),
-            onPressed: () {
-              setState(() {
-                clickCounter = 0;
-              });
-            },
-          ),
-        ],
         title: const Text(
           'Counter Functions',
           style: TextStyle(fontFamily: 'tf2', fontSize: 22),
         ),
         elevation: 0,
       ),
+
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           FloatingActionButton(
+            heroTag: 'reset',
+            onPressed: () {
+              setState(() {
+                clickCounter = 0;
+              });
+            },
+            child: const Icon(Icons.restart_alt),
+          ),
+
+          const SizedBox(height: 10),
+          FloatingActionButton(
+            heroTag: 'plus',
             onPressed: () {
               setState(() {
                 clickCounter++;
@@ -52,8 +55,10 @@ class _CounterFunctionsScreenState extends State<CounterFunctionsScreen> {
             },
             child: const Icon(Icons.plus_one),
           ),
+          
           const SizedBox(height: 10),
           FloatingActionButton(
+            heroTag: 'minus',
             onPressed: () {
               setState(() {
                 clickCounter--;
@@ -80,7 +85,7 @@ class _CounterFunctionsScreenState extends State<CounterFunctionsScreen> {
               'Clicks',
               style: TextStyle(
                 fontSize: 25,
-                fontFamily: 'tf2', // Tu fuente aquí
+                fontFamily: 'tf2', 
               ),
             ),
           ],
