@@ -1,4 +1,4 @@
-# <p align="center">Repositorio de Prácticas de ECBD</p>
+# <p align="center">Repositorio de Prácticas de DMI</p>
 
 <p align="center">
   <strong>Ingeniería en Desarrollo y Gestión de Software</strong><br>
