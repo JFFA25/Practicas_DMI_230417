@@ -37,7 +37,7 @@ Los botones (`FloatingActionButton`) se generan dinámicamente a partir de una l
 
 | Estado inicial (0) | Contador positivo | Contador negativo |
 |:---:|:---:|:---:|
-| ![Estado inicial](/flutter_application_1/images/cap1.png) | ![Positivo](/flutter_application_1/images/cap2.png) | ![Negativo](/flutter_application_1/images/cap3.png) |
+| ![Estado inicial](../flutter_application_1/images/cap1.png) | ![Positivo](../flutter_application_1/images/cap2.png) | ![Negativo](../flutter_application_1/images/cap3.png) |
 
 ## Cómo ejecutar el proyecto
 
