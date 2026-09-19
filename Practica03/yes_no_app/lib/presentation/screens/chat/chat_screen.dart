@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:yes_no_app/presentation/widgets/chat/my_message_dubble.dart';
-
+import 'package:yes_no_app/presentation/widgets/chat/her_message_dubble.dart';
 
 class ChatScreen extends StatelessWidget {
   const ChatScreen({super.key});
@@ -38,8 +38,9 @@ class _ChatView extends StatelessWidget {
               child: ListView.builder(
                 itemCount: 100,
                 itemBuilder: (context, index) {
-                  
-                  return const MyMessageDubble();
+                  return(index % 2 == 0)
+                      ? const HerMessageDubble()
+                      : const MyMessageDubble();
                 },
               ), // <-- Aquí cierra el ListView.builder de forma correcta
             ), // <-- Aquí cierra el Expanded

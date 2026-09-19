@@ -18,7 +18,7 @@ class MyMessageDubble extends StatelessWidget {
         ),
        child: Padding(
          padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
-         child: Text('Hola Hueto , Soy Tu Fan',style:TextStyle(color:Colors.white)),
+         child: Text('Hola Hueto',style:TextStyle(color:Colors.white)),
        )
       ),
       const SizedBox(height: 10,),
