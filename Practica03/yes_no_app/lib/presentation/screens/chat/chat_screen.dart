@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:yes_no_app/presentation/widgets/chat/my_message_dubble.dart';
 import 'package:yes_no_app/presentation/widgets/chat/her_message_dubble.dart';
-
+import 'package:yes_no_app/presentation/widgets/chat/shared/message_field_box.dart';
 class ChatScreen extends StatelessWidget {
   const ChatScreen({super.key});
 
@@ -42,10 +42,12 @@ class _ChatView extends StatelessWidget {
                       ? const HerMessageDubble()
                       : const MyMessageDubble();
                 },
-              ), // <-- Aquí cierra el ListView.builder de forma correcta
-            ), // <-- Aquí cierra el Expanded
-
-            const Text('Mundo'),
+              ), 
+            ), 
+            //Caja de texto
+            MessageFieldBox(
+              onValue: (value) => print('Valor del input: $value'),
+            ),
           ],
         ),
       ),
