@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:yes_no_app/presentation/widgets/chat/my_message_dubble.dart';
 import 'package:yes_no_app/presentation/widgets/chat/her_message_dubble.dart';
 import 'package:yes_no_app/presentation/widgets/chat/shared/message_field_box.dart';
+import 'package:yes_no_app/presentation/providers/chat_provider.dart';
+import 'package:yes_no_app/domain/entities/message.dart';
+
 class ChatScreen extends StatelessWidget {
   const ChatScreen({super.key});
 
@@ -29,6 +33,8 @@ class _ChatView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final chatProvider = context.watch<ChatProvider>();
+
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -36,18 +42,18 @@ class _ChatView extends StatelessWidget {
           children: [
             Expanded(
               child: ListView.builder(
-                itemCount: 100,
+                controller: chatProvider.scrollController,
+                itemCount: chatProvider.messagesLists.length,
                 itemBuilder: (context, index) {
-                  return(index % 2 == 0)
-                      ? const HerMessageDubble()
-                      : const MyMessageDubble();
+                  final message = chatProvider.messagesLists[index];
+                  return (message.fromwho == Fromwho.hers)
+                      ? HerMessageDubble()
+                      : MyMessageDubble(message: message);
                 },
-              ), 
-            ), 
-            //Caja de texto
-            MessageFieldBox(
-              onValue: (value) => print('Valor del input: $value'),
+              ),
             ),
+            //Caja de texto
+            MessageFieldBox(onValue: chatProvider.sendMessage),
           ],
         ),
       ),
