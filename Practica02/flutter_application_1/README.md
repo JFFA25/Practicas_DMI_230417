@@ -7,7 +7,7 @@ Mi Primer Aplicación Móvil con Flutter. La práctica consiste en agregar los b
 
 [Abrir diagrama interactivo](https://jffa25.github.io/Practicas_DMI_230417/arquitectura-flutter-application.html)
 
-[![Vista previa del diagrama](../arquitectura-flutter-application.visual-check.1440x900.dark.png)](../arquitectura-flutter-application.html)
+![Vista previa del diagrama](/Practica02/images/ss.png)
 
 ## Tecnologías utilizadas
 
@@ -31,13 +31,12 @@ Los botones (`FloatingActionButton`) se generan dinámicamente a partir de una l
 - Se eliminó la lógica condicional para diferenciar el comportamiento de cada botón, aplicando polimorfismo.
 - El código quedó más escalable: agregar una nueva acción solo requiere crear una nueva subclase.
 
-## Capturas como evidencia
 
-<!-- Reemplaza estos placeholders con tus imágenes reales -->
+## Evidencia de funcionamiento
 
-| Estado inicial (0) | Contador positivo | Contador negativo |
+| Estado inicial | Contador positivo | Contador negativo |
 |:---:|:---:|:---:|
-| ![Estado inicial](/flutter_application_1/images/cap1.png) | ![Positivo](/flutter_application_1/images/cap2.png) | ![Negativo](/flutter_application_1/images/cap3.png) |
+| ![Estado inicial](./images/cap1.png) | ![Contador positivo](./images/cap2.png) | ![Contador negativo](./images/cap3.png) |
 
 ## Cómo ejecutar el proyecto
 
