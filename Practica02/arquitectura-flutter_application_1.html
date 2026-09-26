@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>flutter_application_1 — Arquitectura interactiva · Práctica 02</title>
+<style>
+:root{
+  --bg:#0b1020; --panel:#121b36; --panel2:#0f1730;
+  --line:#243156; --line2:#2f3f6b; --txt:#e8edfb; --txt2:#9fb0d8; --txt3:#6d7ea8;
+  --accent:#7c9cff; --edge:#54679b; --edgeLbl:#8ea2cf;
+  --shadow:0 8px 28px rgba(0,0,0,.45);
+}
+html[data-theme="light"]{
+  --bg:#f4f6fc; --panel:#ffffff; --panel2:#f7f9ff;
+  --line:#d3dcf2; --line2:#bcc9e6; --txt:#131a2e; --txt2:#4b5a7d; --txt3:#7a89ab;
+  --accent:#2f5fe0; --edge:#8b9cc4; --edgeLbl:#5c6d94;
+  --shadow:0 8px 24px rgba(30,50,110,.14);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--txt);overflow:hidden;
+  font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+svg{display:block;font-family:inherit}
+#topbar{position:fixed;top:0;left:0;right:0;height:56px;z-index:30;display:flex;align-items:center;gap:14px;
+  padding:0 16px;background:var(--panel);border-bottom:1px solid var(--line)}
+#brand{display:flex;align-items:center;gap:10px;min-width:0}
+#brand .mark{width:30px;height:30px;border-radius:8px;flex:0 0 auto;
+  background:linear-gradient(140deg,#7c9cff,#c084fc 55%,#f472b6);display:grid;place-items:center;
+  color:#0b1020;font-weight:800;font-size:12.5px}
+#brand h1{margin:0;font-size:14px;font-weight:700;white-space:nowrap}
+#brand p{margin:1px 0 0;font-size:10.5px;color:var(--txt3);white-space:nowrap}
+#views{display:flex;gap:6px;flex-wrap:wrap}
+.btn{border:1px solid var(--line2);background:var(--panel2);color:var(--txt2);padding:6px 11px;
+  border-radius:8px;font-size:11.5px;font-weight:600;cursor:pointer;transition:.15s;white-space:nowrap}
+.btn:hover{color:var(--txt);border-color:var(--accent);transform:translateY(-1px)}
+.btn.active{background:var(--panel2);border-color:var(--accent);color:var(--txt);box-shadow:inset 0 0 0 1px var(--accent)}
+.spacer{flex:1}
+#tools{display:flex;align-items:center;gap:6px}
+.iconbtn{width:32px;height:32px;display:grid;place-items:center;padding:0;border:1px solid var(--line2);
+  background:var(--panel2);color:var(--txt2);border-radius:8px;cursor:pointer;transition:.15s;font-size:16px;line-height:1}
+.iconbtn:hover{color:var(--txt);border-color:var(--accent)}
+.iconbtn.on{border-color:var(--accent);color:var(--txt)}
+#zoomval{font-size:11px;color:var(--txt3);width:42px;text-align:center;font-variant-numeric:tabular-nums}
+#stage{position:fixed;inset:56px 0 0 0}
+#diag{width:100%;height:100%;cursor:grab;touch-action:none}
+#diag.panning{cursor:grabbing}
+text{user-select:none;-webkit-user-select:none}
+#details{position:fixed;right:14px;top:70px;width:330px;max-height:calc(100vh - 100px);z-index:40;
+  background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);
+  display:flex;flex-direction:column;overflow:hidden;transition:opacity .18s,transform .18s}
+#details.hidden{opacity:0;transform:translateX(14px);pointer-events:none}
+#dhead{padding:12px 14px 10px;border-bottom:1px solid var(--line);display:flex;gap:9px;align-items:flex-start}
+#dclose{margin-left:auto;background:none;border:none;color:var(--txt3);cursor:pointer;font-size:17px;line-height:1;padding:0 2px}
+#dclose:hover{color:var(--txt)}
+#dbody{padding:12px 14px 14px;overflow:auto;font-size:12.5px;line-height:1.55}
+#dbody .path{font-family:ui-monospace,"Cascadia Code",Consolas,monospace;font-size:10.5px;color:var(--txt3);
+  word-break:break-all;margin-top:4px}
+#dbody .sub{color:var(--txt2);margin-top:6px}
+#dbody .tip{color:var(--txt2);margin-top:9px;padding:8px 10px;background:var(--panel2);border:1px solid var(--line);
+  border-radius:9px;font-size:11.8px;line-height:1.6}
+#dbody h5{margin:14px 0 6px;font-size:10px;letter-spacing:.9px;text-transform:uppercase;color:var(--txt3);
+  display:flex;align-items:center;gap:6px}
+#dbody h5 .dot{width:7px;height:7px;border-radius:50%}
+.rel{display:block;width:100%;text-align:left;background:var(--panel2);border:1px solid var(--line);
+  color:var(--txt2);border-radius:8px;padding:6px 8px;margin-bottom:5px;cursor:pointer;font-size:11.5px;transition:.13s}
+.rel:hover{border-color:var(--accent);color:var(--txt);transform:translateX(2px)}
+.rel .dir{display:inline-block;font-weight:800;margin-right:6px;font-size:10px}
+.rel.out .dir{color:#f472b6}.rel.in .dir{color:#34d399}
+.rel em{font-style:normal;color:var(--txt3);display:block;margin-top:2px;font-size:10.5px}
+#hint{color:var(--txt3);font-size:12.5px;line-height:1.65}
+#hint b{color:var(--txt2)}
+kbd{background:var(--panel2);border:1px solid var(--line2);border-bottom-width:2px;border-radius:5px;
+  padding:1px 5px;font-size:10.5px;font-family:ui-monospace,Consolas,monospace;color:var(--txt2)}
+#legend{position:fixed;left:14px;bottom:14px;z-index:40;width:238px;background:var(--panel);
+  border:1px solid var(--line);border-radius:12px;padding:10px 11px;box-shadow:var(--shadow)}
+#legend h4{margin:0 0 7px;font-size:10px;letter-spacing:.9px;text-transform:uppercase;color:var(--txt3)}
+#legend .row{display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--txt2);padding:2.5px 0}
+#legend .sw{width:9px;height:9px;border-radius:3px;flex:0 0 auto}
+#legend .tg{font-size:8.5px;font-weight:800;letter-spacing:.5px;color:var(--txt3);
+  background:var(--panel2);border:1px solid var(--line);border-radius:4px;padding:0 3px;flex:0 0 auto}
+#legend .cnt{margin-left:auto;font-size:10px;color:var(--txt3);font-variant-numeric:tabular-nums}
+#stats{position:fixed;right:14px;bottom:14px;z-index:40;background:var(--panel);border:1px solid var(--line);
+  border-radius:11px;padding:8px 12px;box-shadow:var(--shadow);font-size:11px;color:var(--txt3);
+  display:flex;gap:12px;align-items:center;flex-wrap:wrap;max-width:330px}
+#stats b{color:var(--txt);font-variant-numeric:tabular-nums}
+#toggles{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:40;display:flex;gap:6px}
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <div id="brand">
+    <div class="mark">C1</div>
+    <div>
+      <h1>flutter_application_1 · Arquitectura del proyecto</h1>
+      <p>Práctica 02 — Flutter / Dart · Counter Functions · 6 plataformas habilitadas</p>
+    </div>
+  </div>
+  <div id="views"></div>
+  <div class="spacer"></div>
+  <div id="tools">
+    <button class="iconbtn on" id="btnLabels" title="Etiquetas de flecha">
+      <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 4h6M11 4h3M2 8h10M2 12h5M10 12h4"/><circle cx="9.6" cy="4" r="1.7"/><circle cx="8.6" cy="12" r="1.7"/></svg>
+    </button>
+    <button class="iconbtn" id="btnOut" title="Alejar">−</button>
+    <div id="zoomval">100%</div>
+    <button class="iconbtn" id="btnIn" title="Acercar">+</button>
+    <button class="iconbtn" id="btnFit" title="Ajustar a pantalla (F)">
+      <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6V2.8h3.2M14 6V2.8h-3.2M2 10v3.2h3.2M14 10v3.2h-3.2"/></svg>
+    </button>
+    <button class="iconbtn" id="btnTheme" title="Tema claro/oscuro">
+      <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="3.2"/><path d="M8 1v1.6M8 13.4V15M15 8h-1.6M2.6 8H1M12.9 3.1l-1.1 1.1M4.2 11.8l-1.1 1.1M12.9 12.9l-1.1-1.1M4.2 4.2 3.1 3.1"/></svg>
+    </button>
+  </div>
+</div>
+
+<div id="stage">
+  <svg id="diag">
+    <defs>
+      <marker id="arw" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M0 1.4 9 5 0 8.6z" fill="context-stroke"/>
+      </marker>
+    </defs>
+    <g id="viewport">
+      <g id="gBands"></g>
+      <g id="gEdges"></g>
+      <g id="gLabels"></g>
+      <g id="gGroups"></g>
+      <g id="gNodes"></g>
+    </g>
+  </svg>
+</div>
+
+<div id="details" class="hidden">
+  <div id="dhead">
+    <div id="dicon"></div>
+    <div style="min-width:0"><div id="dtitle" style="font-size:13px;font-weight:700"></div><div id="dpath" class="path"></div></div>
+    <button id="dclose" title="Cerrar (Esc)">×</button>
+  </div>
+  <div id="dbody"></div>
+</div>
+
+<div id="legend"><h4>Tipos de nodo</h4><div id="legendRows"></div></div>
+<div id="toggles">
+  <button class="btn" id="btnExpandAll">Expandir todo</button>
+  <button class="btn" id="btnCollapseAll">Colapsar todo</button>
+  <button class="btn" id="btnReset">Reiniciar</button>
+</div>
+<div id="stats"></div>
+
+<script>
+"use strict";
+
+/* ===========================================================================
+   MODELO — análisis del repositorio flutter_application_1 (Flutter / Dart)
+   Nodo = [id, etiqueta, kind, subtítulo, detalle]
+   Grupo = {id, título, kind, colapsado, nodos:[...]}
+   =========================================================================== */
+const KINDS = {
+  entry:   {c:"#c084fc", t:"ENT", i:"play",    l:"Punto de entrada"},
+  config:  {c:"#fbbf24", t:"CFG", i:"sliders", l:"Configuración"},
+  dart:    {c:"#38bdf8", t:"SRC", i:"code",    l:"Código fuente Dart"},
+  ui:      {c:"#f472b6", t:"UI",  i:"layout",  l:"Presentación / UI"},
+  domain:  {c:"#34d399", t:"DOM", i:"layers",  l:"Dominio"},
+  infra:   {c:"#2dd4bf", t:"INF", i:"db",      l:"Infraestructura"},
+  external:{c:"#fb7185", t:"EXT", i:"cloud",   l:"Servicio externo"},
+  test:    {c:"#a3e635", t:"TST", i:"check",   l:"Pruebas"},
+  build:   {c:"#94a3b8", t:"BLD", i:"box",     l:"Artefacto generado"},
+  platform:{c:"#818cf8", t:"TGT", i:"device",  l:"Target de plataforma"},
+  asset:   {c:"#facc15", t:"AST", i:"image",   l:"Recurso / asset"},
+  doc:     {c:"#64748b", t:"DOC", i:"file",    l:"Documentación"},
+  native:  {c:"#ff8c42", t:"NTV", i:"code",    l:"Código nativo (Kotlin/Swift/C++)"},
+  pkg:     {c:"#e879f9", t:"PKG", i:"pkg",     l:"Paquete externo (pub)"}
+};
+
+const ICONS = {
+  play:['M5 3.2v9.6l8-4.8-8-4.8z'],
+  code:['M6 3.5 2.5 8 6 12.5','M10 3.5 13.5 8 10 12.5'],
+  sliders:['M2.5 4.5h3.9M10.3 4.5h3.2M2.5 8h.6M7.1 8h6.4M2.5 11.5h5.4M11.8 11.5h1.7',
+           'M8.1 4.5a1.7 1.7 0 1 0 3.4 0 1.7 1.7 0 1 0-3.4 0',
+           'M4.9 8a1.7 1.7 0 1 0 3.4 0 1.7 1.7 0 1 0-3.4 0',
+           'M9.6 11.5a1.7 1.7 0 1 0 3.4 0 1.7 1.7 0 1 0-3.4 0'],
+  layers:['M8 2 14 5 8 8 2 5 8 2z','M2.5 8.6 8 11.4l5.5-2.8','M2.5 11.4 8 14.2l5.5-2.8'],
+  db:['M8 1.8c3 0 5.2.8 5.2 1.7S11 5.2 8 5.2 2.8 4.4 2.8 3.5 5 1.8 8 1.8z',
+      'M2.8 3.5v9c0 .9 2.2 1.7 5.2 1.7s5.2-.8 5.2-1.7v-9','M2.8 8c0 .9 2.2 1.7 5.2 1.7s5.2-.8 5.2-1.7'],
+  layout:['M2 3h12v10H2z','M2 6.5h12','M6 6.5V13'],
+  cloud:['M4.5 12.4h7a2.8 2.8 0 0 0 .3-5.6 4.2 4.2 0 0 0-8-1.2 2.9 2.9 0 0 0 .7 6.8z'],
+  check:['M2.8 8.4 6.2 11.8 13.2 4.4'],
+  box:['M8 1.6 14.2 4.9v6.2L8 14.4 1.8 11.1V4.9L8 1.6z','M1.8 4.9 8 8.2l6.2-3.3','M8 8.2v6.2'],
+  device:['M4 2.2h8v11.6H4z','M6.4 4.3h3.2','M6.6 11.6h2.8'],
+  image:['M2 3h12v10H2z','M2 10.5 5.6 7l3 2.8L11 7.6l3 2.6',
+         'M4.7 6.3a.9.9 0 1 0 0-1.8.9.9 0 0 0 0 1.8z'],
+  file:['M4 1.8h4.8L12 5v9.2H4z','M8.6 1.8V5H12','M6 8h4','M6 10.5h4'],
+  pkg:['M8 1.6 14.2 4.9v6.2L8 14.4 1.8 11.1V4.9L8 1.6z','M1.8 4.9 8 8.2l6.2-3.3','M8 8.2v6.2',
+       'M8 5.4v3.7M6.15 7.25h3.7']
+};
+
+const LAYERS = [
+{ id:"deps", t:"Dependencias y recursos", s:"flutter_application_1/", k:"config", groups:[
+  { id:"g-manifest", t:"Manifiesto y resolución", k:"config", c:false, nodes:[
+    ["pubspec","pubspec.yaml","config","SDK ^3.13.2 · 1.0.0+1 · fonts tf2",
+     "name: flutter_application_1, version: 1.0.0+1, environment.sdk: ^3.13.2. dependencies: flutter (SDK) y cupertino_icons ^1.0.8. dev_dependencies: flutter_test (SDK) y flutter_lints ^6.0.0. En la sección flutter: uses-material-design: true y un bloque fonts con family 'tf2' cuyo asset es assets/fonts/tf2build.ttf. El bloque assets de imágenes está comentado: la app solo empaqueta la fuente."],
+    ["publock","pubspec.lock","config","versiones exactas resueltas",
+     "Fija la versión concreta de cada dependencia tras flutter pub get. Es la entrada de la resolución que materializa .dart_tool/package_config.json."]
+  ]},
+  { id:"g-fonts", t:"assets/fonts/ — familia 'tf2'", k:"asset", c:false, nodes:[
+    ["tf2build","assets/fonts/tf2build.ttf","asset","fuente empaquetada · familia 'tf2'",
+     "Único recurso binario propio de la app. pubspec.yaml lo declara con fonts: - family: tf2 / fonts: - asset: assets/fonts/tf2build.ttf, y ambas pantallas lo referencian como fontFamily: 'tf2' en el AppBar, en el número gigante (fontSize 160, FontWeight.w100) y en la etiqueta 'Clicks'. En build/ aparece copiado en unit_test_assets/assets/fonts/tf2build.ttf y declarado en FontManifest.json."]
+  ]},
+  { id:"g-quality", t:"Calidad y metadatos", k:"config", c:false, nodes:[
+    ["analysisopt","analysis_options.yaml","config","flutter_lints · excluye 7 carpetas",
+     "Configura el analizador de Dart. include: package:flutter_lints/flutter.yaml. analyzer.exclude deja fuera build/**, android/**, ios/**, web/**, windows/**, macos/** y linux/**: el análisis estático solo cubre lib/ y test/."],
+    ["metadata",".metadata","config","project_type: app · canal stable",
+     "Rastreado por la herramienta Flutter: project_type app y las 7 plataformas (root, android, ios, linux, macos, web, windows) con su revisión de creación. Declara lib/main.dart e ios/Runner.xcodeproj/project.pbxproj como unmanaged_files, es decir, editados a mano."],
+    ["gitignore",".gitignore","config","exclusiones de git",
+     "Exclusiones estándar de Flutter (build/, .dart_tool/, .flutter-plugins*, /android/, etc.) más las reglas específicas de Windows."]
+  ]},
+  { id:"g-test", t:"test/ — pruebas", k:"test", c:false, nodes:[
+    ["widgettest","test/widget_test.dart","test","smoke test de MyApp",
+     "Único test del repositorio. Hace pumpWidget(const MyApp()), comprueba que aparece el texto '0' y que '1' no aparece, luego hace tap sobre Icons.add y vuelve a comprobar. Es la prueba del contador que genera flutter create: el icono real es Icons.plus_one, no Icons.add, y la pantalla inicial es CounterFunctionsScreen, así que el segundo expect(find.byIcon(Icons.add)) no encuentra nada y la prueba falla tal como está. Importa flutter/material, flutter_test y package:flutter_application_1/main.dart."]
+  ]},
+  { id:"g-images", t:"images/ — evidencia del README", k:"asset", c:false, nodes:[
+    ["cap1","images/cap1.png","asset","estado inicial (0, azul)",
+     "Captura del estado inicial: el contador en 0 y en azul. Se referencia desde la tabla de evidencia del README. No es un asset de la app: no está declarado en pubspec.yaml, así que Flutter no la empaqueta."],
+    ["cap2","images/cap2.png","asset","contador positivo (verde)",
+     "Captura con el contador en positivo y en color verde, tras pulsar el FAB de incremento."],
+    ["cap3","images/cap3.png","asset","contador negativo (rojo)",
+     "Captura con el contador en negativo y en color rojo, tras pulsar el FAB de decremento."]
+  ]},
+  { id:"g-docs", t:"Documentación", k:"doc", c:false, nodes:[
+    ["readme","README.md","doc","Práctica 02 · Counter Functions",
+     "Describe el objetivo (tres botones: +1, −1 y reiniciar, con color verde/rojo/azul según el signo), las tecnologías, la solución, la tabla de evidencia con images/cap1-3.png, cómo ejecutar y el autor. OJO: el texto describe una clase abstracta CounterAction con subclases IncrementAction, DecrementAction y ResetAction, pero el código actual de counter_functions_screen.dart NO contiene esa jerarquía: usa tres FloatingActionButton con setState inline. El README está desfasado respecto al código."]
+  ]}
+]},
+
+{ id:"lib", t:"lib/ · Código fuente Dart", s:"lib/", k:"entry", groups:[
+  { id:"g-boot", t:"Punto de entrada", k:"entry", c:false, nodes:[
+    ["main","lib/main.dart","entry","runApp(MyApp) · MaterialApp",
+     "Único punto de entrada de Dart. void main() { runApp(const MyApp()); }. MyApp es un StatelessWidget que devuelve un MaterialApp con debugShowCheckedModeBanner: false y un theme: ThemeData(useMaterial3: true, colorSchemeSeed: Colors.blue) inline —nótese que aquí el tema NO se extrae a un archivo, a diferencia de apps más grandes— y home: const CounterFunctionsScreen(). Importa:flutter/material.dart y, con ruta relativa, 'presentation/counter/counter_functions_screen.dart'. Es el archivo que el motor compila a kernel para las 6 plataformas."]
+  ]}
+]},
+
+{ id:"pres", t:"presentation/counter/ · Pantallas", s:"lib/presentation/counter/", k:"ui", groups:[
+  { id:"g-funcs", t:"counter_functions_screen.dart", k:"ui", c:false, nodes:[
+    ["counterfuncs","counter_functions_screen.dart","dart","CounterFunctionsScreen · 3 FAB",
+     "CounterFunctionsScreen extends StatefulWidget; su estado es _CounterFunctionsScreenState con int clickCounter = 0. El Scaffold lleva AppBar con título 'Counter Functions' en fontFamily 'tf2' y elevation 0; un floatingActionButton que es una Column con tres FloatingActionButton (heroTag 'reset' → Icons.restart_alt y clickCounter = 0, heroTag 'plus' → Icons.plus_one y clickCounter++, heroTag 'minus' → Icons.exposure_minus_1_outlined y clickCounter--), cada uno con su setState; y un body Center con Column que pinta '$clickCounter' a fontSize 160, FontWeight.w100, fontFamily 'tf2' y el color que devuelve _getCounterColor(). Ese helper privado es la lógica de color: verde si > 0, rojo si < 0, azul si 0. Solo importa flutter/material.dart: no hay capa de dominio ni de estado, el estado vive en el State. Es la pantalla que main.dart monta como home, así que CounterScreen queda huérfana en esta versión."]
+  ]},
+  { id:"g-simple", t:"counter_screen.dart", k:"ui", c:false, nodes:[
+    ["countersimple","counter_screen.dart","dart","CounterScreen · 1 FAB (legado)",
+     "CounterScreen extends StatefulWidget con su _CounterScreenState y el mismo _getCounterColor(). AppBar con título 'Counter Screen' en 'tf2', un único FloatingActionButton con Icons.plus_one que hace clickCounter++, y el mismo cuerpo con el número gigante en 'tf2'. Es la versión anterior de la práctica: main.dart ya no la importa, así que el archivo compila pero no se instancia nunca. Mantener el mismo _getCounterColor duplicado en las dos pantallas es el punto más claro de deuda técnica del proyecto."]
+  ]}
+]},
+
+{ id:"pkgs", t:"Dependencias externas", s:"pub.dev", k:"external", groups:[
+  { id:"g-pkgrt", t:"Dependencias runtime", k:"pkg", c:true, nodes:[
+    ["pk-flutter","flutter  (SDK)","pkg","framework · material · widgets",
+     "Aporta material.dart y todo lo que usan las pantallas: Scaffold, AppBar, FloatingActionButton, ThemeData, Colors e Icons (plus_one, restart_alt, exposure_minus_1_outlined). uses-material-design: true hace que se empaquete además la fuente MaterialIcons-Regular.otf, visible en build/unit_test_assets/fonts/."],
+    ["pk-cupertino","cupertino_icons ^1.0.8","pkg","declarada, sin uso",
+     "Declarada en pubspec.yaml con el comentario por defecto de Flutter, pero ningún archivo la importa. Aun así sí termina en el build: build/unit_test_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf aparece copiado y declarado en FontManifest.json con la familia packages/cupertino_icons/CupertinoIcons."]
+  ]},
+  { id:"g-pkgdev", t:"Dependencias de desarrollo", k:"pkg", c:true, nodes:[
+    ["pk-flu-test","flutter_test  (SDK)","pkg","importada por el test",
+     "Usada únicamente por test/widget_test.dart: testWidgets, WidgetTester, expect y find. No entra en lib/."],
+    ["pk-lints","flutter_lints ^6.0.0","pkg","activada por analysis_options",
+     "Reglas de lint recomendadas. No se importa en código: analysis_options.yaml la activa con include: package:flutter_lints/flutter.yaml, así que viaja por la configuración."]
+  ]}
+]},
+
+{ id:"build", t:"build/ · Artefactos generados", s:"build/ · .dart_tool/", k:"build", groups:[
+  { id:"g-buildroot", t:"Raíz de build", k:"build", c:false, nodes:[
+    ["build","build/","build","raíz de salidas de flutter build / flutter test",
+     "Directorio local y generated: lo crean flutter build y flutter test y se regenera por completo. En este repositorio contiene tres subcarpetas: unit_test_assets/ (el bundle de recursos que usa flutter test), test_cache/ (el kernel cacheado) y native_assets/ (manifiesto de assets nativos). No hay build/app/ con Gradle porque en esta máquina solo se ejecutaron pruebas, no un build de Android; por eso el único APK conceivable saldría de aquí tras un flutter build apk."]
+  ]},
+  { id:"g-darttool", t:".dart_tool/ — resolución y caché", k:"build", c:true, nodes:[
+    ["dt-pkgcfg",".dart_tool/package_config.json","build","mapa paquete → ruta",
+     "Generado por flutter pub get a partir de pubspec.yaml y pubspec.lock. Es lo que permite resolver los import package:flutter_application_1/main.dart, package:flutter_test/... y package:flutter/... en tiempo de compilación."],
+    ["dt-pkggraph",".dart_tool/package_graph.json","build","grafo de dependencias",
+     "Grafo plano nombre → versión que usa la herramienta para resolver versiones y detectar conflictos antes de compilar."],
+    ["dt-version",".dart_tool/version","build","3.47.3 · versión del SDK",
+     "Versión del SDK de Flutter/Dart con la que se generó la carpeta de trabajo. Es la que fija el resto de archivos generados."],
+    ["dt-vscode",".dart_tool/extension_discovery/vs_code.json","build","entrada para el servidor de análisis",
+     "Manifiesto de extension discovery que el editor lee para saber que este directorio es la raíz de un paquete Flutter y que el punto de entrada está en lib/."],
+    ["dt-dartpad",".dart_tool/dartpad/web_plugin_registrant.dart","build","registro de plugins web",
+     "Generado al publicar en web. Aquí no registra ningún plugin porque ninguna dependencia aporta soporte web nativo."]
+  ]},
+  { id:"g-uta", t:"build/unit_test_assets/ — bundle de recursos", k:"build", c:true, nodes:[
+    ["uta-assetman","AssetManifest.bin","build","manifiesto de assets (binario)",
+     "Índice binario de los assets empaquetados que Flutter construye para las pruebas. Contiene las rutas de tf2build.ttf y de CupertinoIcons.ttf, en formato protobuf."],
+    ["uta-fontman","FontManifest.json","build","3 familias de fuente",
+     "Declara las tres familias que el motor tiene disponibles: MaterialIcons → fonts/MaterialIcons-Regular.otf, tf2 → assets/fonts/tf2build.ttf y packages/cupertino_icons/CupertinoIcons → packages/cupertino_icons/assets/CupertinoIcons.ttf. Es la prueba material de que la familia 'tf2' de pubspec.yaml se empaquetó."],
+    ["uta-native","NativeAssetsManifest.json","build","manifiesto de assets nativos",
+     "Se emite junto a native_assets.json. Registra librerías nativas enlazadas; aquí está vacío porque el proyecto no usa assets nativos."],
+    ["uta-notices","NOTICES.Z","build","licencias de terceros (comprimido)",
+     "Archivo comprimido con los avisos de licencia de todas las dependencias empaquetadas, exigido por las tiendas de apps."],
+    ["uta-tf2","assets/fonts/tf2build.ttf","asset","copia de la fuente 'tf2'",
+     "Copia empaquetada de assets/fonts/tf2build.ttf. Es el destino de la arista 'tf2build.ttf se empaqueta en' y la prueba de que el asset declarado en pubspec.yaml llegó al bundle."],
+    ["uta-maticons","fonts/MaterialIcons-Regular.otf","asset","fuente Material Icons",
+     "Se incluye porque pubspec.yaml declara uses-material-design: true, necesario para los Icon que usan las pantallas."],
+    ["uta-cupertino","packages/cupertino_icons/assets/CupertinoIcons.ttf","asset","fuente Cupertino (dependencia sin uso)",
+     "Copia de la fuente de cupertino_icons, una dependencia declarada pero nunca importada: la app la arrastra al bundle sin usarla."],
+    ["uta-ink","shaders/ink_sparkle.frag","asset","shader de la tinta de Material",
+     "Shader GLSL del efecto de tinta isotrópica de Material 3, aportado por el propio SDK de Flutter."],
+    ["uta-stretch","shaders/stretch_effect.frag","asset","shader del efecto stretch",
+     "Shader GLSL del efecto de estiramiento de los botones de Material, también aportado por el SDK."]
+  ]},
+  { id:"g-tcache", t:"build/test_cache/ — caché de kernel", k:"build", c:true, nodes:[
+    ["tc-dill","build/test_cache/build/8b0c1bcd….cache.dill.track.dill","build","kernel con tracking de dependencias",
+     "Snapshot de kernel (Dill) que flutter test cachea para no recompilar el test en cada ejecución. El prefijo 8b0c1bcd es el hash de la configuración de compilación, así que cambia si cambian las flags o el SDK."]
+  ]},
+  { id:"g-nassets", t:"build/native_assets/ — assets nativos", k:"build", c:true, nodes:[
+    ["na-win","build/native_assets/windows/native_assets.json","build","format-version 1.0.0 · vacío",
+     "Manifiesto de assets nativos por plataforma, generado en la última compilación para Windows. Su campo native-assets está vacío: el proyecto no enlaza ninguna librería nativa propia. Es la única plataforma con subcarpeta aquí, lo que delata que la última build fue de escritorio."]
+  ]}
+]},
+
+{ id:"targets", t:"Targets de compilación", s:"6 plataformas · 141 archivos", k:"platform", groups:[
+  { id:"g-android", t:"android/ — Android · Gradle + Kotlin", k:"platform", c:true, nodes:[
+    ["ad-root","android/build.gradle.kts","config","script raíz de AGP",
+     "Script raíz: declara los plugins del Android Gradle Plugin y de Flutter y los repositorios. android/settings.gradle.kts es quien lo incluye y resuelve los plugins."],
+    ["ad-settings","android/settings.gradle.kts","config","pluginManagement + include ':app'",
+     "Configura pluginManagement con google(), mavenCentral() y gradlePluginPortal(), e incluye el módulo :app."],
+    ["ad-props","android/gradle.properties","config","jvmargs · AndroidX",
+     "Propiedades de la JVM y de Gradle: android.useAndroidX=true, idioma del paquete de recursos y argumentos de memoria."],
+    ["ad-local","android/local.properties","config","sdk.dir · flutter.sdk",
+     "Rutas del SDK de Android y del SDK de Flutter en esta máquina. Es específico de cada equipo y por eso git lo excluye."],
+    ["ad-wrapper","android/gradle/wrapper/gradle-wrapper.properties","config","fija la versión de Gradle",
+     "A diferencia de una plantilla completa, aquí NO está gradle-wrapper.jar: el wrapper no está versionado. flutter lo resuelve con su propia copia al compilar, así que flutter build apk funciona igual en un clon limpio."],
+    ["ad-appgradle","android/app/build.gradle.kts","config","com.example.flutter_application_1",
+     "Módulo de la app: namespace y applicationId com.example.flutter_application_1; compileSdk, minSdk y targetSdk heredados de flutter.compileSdkVersion / flutter.minSdkVersion / flutter.targetSdkVersion; plugin de Flutter y los buildTypes debug, profile y release."],
+    ["ad-manifest","android/app/src/main/AndroidManifest.xml","config","MainActivity",
+     "Manifiesto principal. flutter_application_1 no hace peticiones de red, así que (a diferencia de una app con API) no necesita el permiso INTERNET. Declara el intent-filter MAIN/LAUNCHER hacia .MainActivity."],
+    ["ad-manifests","…/src/debug/AndroidManifest.xml · …/src/profile/AndroidManifest.xml","config","variantes debug y profile",
+     "Manifiestos de sobreposición para las variantes debug y profile."],
+    ["ad-activity","…/main/kotlin/com/example/flutter_application_1/MainActivity.kt","native","FlutterActivity",
+     "Subclase de FlutterActivity, sin cuerpo. El paquete sigue el nombre del proyecto, así que al renombrar la app hay que mover también esta ruta. Es el punto de entrada nativo: el motor llama a lib/main.dart desde aquí."],
+    ["ad-registrant","…/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java","native","registro de plugins",
+     "Clase generada por la herramienta Flutter que registra los plugins con soporte Android. Vacía: ninguna dependencia aporta plugin nativo."],
+    ["ad-draw","res/drawable/launch_background.xml · drawable-v21/launch_background.xml","asset","splash",
+     "Fondo de la pantalla de lanzamiento; la variante -v21 usa el drawable específico para API 21 o superior."],
+    ["ad-values","res/values/styles.xml · res/values-night/styles.xml","asset","temas claro y oscuro",
+     "Estilos Android de la app para modo claro y para modo noche."],
+    ["ad-mipmaps","res/mipmap-{hdpi,mdpi,xhdpi,xxhdpi,xxxhdpi}/ic_launcher.png","asset","5 densidades",
+     "Icono del lanzador en las cinco densidades que Android exige, equivalente funcional de AppIcon.appiconset en iOS y app_icon.ico en Windows."],
+    ["ad-gi","android/.gitignore","config","exclusiones de Android",
+     "Ignora local.properties, /gradle, /captures, .cxx y la firma de release. Tampoco hay .gradle/ ni .kotlin/ en el repo: esta máquina nunca compiló el módulo Android."]
+  ]},
+  { id:"g-ios", t:"ios/ — iOS · Xcode + Swift", k:"platform", c:true, nodes:[
+    ["ios-delegate","ios/Runner/AppDelegate.swift","native","@main · FlutterAppDelegate",
+     "Punto de entrada nativo de iOS: subclase de FlutterAppDelegate con @main, desde la que el motor llama a lib/main.dart."],
+    ["ios-scene","ios/Runner/SceneDelegate.swift","native","UISceneDelegate",
+     "Handler de escenas de UIKit (UIApplicationSceneManifest). Instancia el FlutterViewController como rootViewController de cada escena."],
+    ["ios-plugins","ios/Runner/GeneratedPluginRegistrant.h · .m","native","registro de plugins",
+     "Cabecera e implementación Obj-C que registran los plugins con soporte iOS. Sin plugins nativos, ambos quedan vacíos."],
+    ["ios-bridge","ios/Runner/Runner-Bridging-Header.h","native","bridge Obj-C ↔ Swift",
+     "Cabecera de interoperabilidad Objective-C/Swift, referenciada desde SWIFT_OBJC_BRIDGING_HEADER en el proyecto Xcode."],
+    ["ios-info","ios/Runner/Info.plist","config","CFBundleDisplayName: flutter_application_1",
+     "Metadatos del bundle: nombre visible, identificador, versión, orientaciones y UILaunchStoryboardName."],
+    ["ios-pbx","ios/Runner.xcodeproj/project.pbxproj","config","proyecto Xcode",
+     "Definición del proyecto y sus targets. Está declarado en .metadata como unmanaged_file: fue editado a mano y flutter migrate no lo sobrescribe."],
+    ["ios-pbxws","…/xcodeproj/project.xcworkspace/{contents.xcworkspacedata, xcshareddata/*}","config","workspace interno",
+     "Workspace embebido del proyecto: contents.xcworkspacedata más xcshareddata con IDEWorkspaceChecks.plist y WorkspaceSettings.xcsettings."],
+    ["ios-scheme","…/xcodeproj/xcshareddata/xcschemes/Runner.xcscheme","config","esquema Runner",
+     "Esquema compartido de Xcode con las acciones Run, Test, Profile, Analyze y Archive."],
+    ["ios-ws","ios/Runner.xcworkspace/contents.xcworkspacedata","config","workspace de la app",
+     "Workspace que flutter build ios abre: referencia el proyecto Runner y, si los hubiera, los pods de plugins."],
+    ["ios-wsxs","ios/Runner.xcworkspace/xcshareddata/{IDEWorkspaceChecks.plist, WorkspaceSettings.xcsettings}","config","ajustes compartidos",
+     "Ajustes de workspace compartidos entre todos los usuarios del repositorio."],
+    ["ios-launch","ios/Runner/Base.lproj/LaunchScreen.storyboard","asset","LaunchScreen",
+     "Storyboard de la pantalla de lanzamiento, referenciado por UILaunchStoryboardName en Info.plist."],
+    ["ios-mainstory","ios/Runner/Base.lproj/Main.storyboard","asset","Main.storyboard",
+     "Storyboard principal con el FlutterViewController: el contenedor UIKit que hospeda la vista de Flutter."],
+    ["ios-appicon","ios/Runner/Assets.xcassets/AppIcon.appiconset/","asset","Contents.json + 15 PNG",
+     "Catálogo de iconos: un Contents.json y quince PNG que cubren todos los tamaños requeridos (20, 29, 40, 60, 76, 83.5 y 1024 pt con variantes @1x/@2x/@3x)."],
+    ["ios-launchimg","ios/Runner/Assets.xcassets/LaunchImage.imageset/","asset","Contents.json + 3 PNG + README",
+     "Imágenes de lanzamiento en tres densidades, más un README.md que documenta que es una imagen por defecto de Flutter y puede borrarse."],
+    ["ios-genxc","ios/Flutter/Generated.xcconfig","config","FLUTTER_ROOT · FLUTTER_BUILD_DIR",
+     "Generado en cada build: define la raíz del SDK, el directorio de build y el nombre del paquete. Es la fuente de verdad que consumen los xcconfig de Debug y Release."],
+    ["ios-xcconfs","ios/Flutter/Debug.xcconfig · ios/Flutter/Release.xcconfig","config","2 xcconfig de Flutter",
+     "Ambos hacen #include de Generated.xcconfig y añaden las flags de optimización y el bundle identifier de debug y de release."],
+    ["ios-appfw","ios/Flutter/AppFrameworkInfo.plist","config","AppFrameworkInfo",
+     "Plist del App.framework que declara el bundle identifier y la versión mínima de iOS admitida por el motor."],
+    ["ios-export","ios/Flutter/flutter_export_environment.sh","config","exportado en el build",
+     "Script generado durante el build con FLUTTER_ROOT, FLUTTER_APPLICATION_PATH, FLUTTER_TARGET y FLUTTER_BUILD_DIR. No se versiona."],
+    ["ios-eph","ios/Flutter/ephemeral/","build","SPM + lldb",
+     "Contenido generado: el paquete Swift FlutterGeneratedPluginSwiftPackage (Package.swift y FlutterGeneratedPluginSwiftPackage.swift), .packages, .swift_pm.lock, flutter_lldbinit, flutter_lldb_helper.py y flutter_native_integration.env."],
+    ["ios-tests","ios/RunnerTests/RunnerTests.swift","test","test nativo Xcode",
+     "Target de pruebas nativas sin casos escritos. flutter test no lo ejecuta: solo corre test/."],
+    ["ios-gi","ios/.gitignore","config","exclusiones de iOS",
+     "Ignora Pods/, .symlinks/, Flutter/ephemeral/, Flutter/Generated.xcconfig y Flutter/flutter_export_environment.sh."]
+  ]},
+  { id:"g-macos", t:"macos/ — macOS · Xcode + Swift", k:"platform", c:true, nodes:[
+    ["mac-delegate","macos/Runner/AppDelegate.swift","native","FlutterAppDelegate",
+     "Punto de entrada nativo de macOS. Abre la ventana de Flutter y registra los plugins mediante GeneratedPluginRegistrant.swift."],
+    ["mac-window","macos/Runner/MainFlutterWindow.swift","native","FlutterWindow",
+     "Subclase de FlutterWindow que ajusta el tamaño inicial de la ventana al de la guardada por el sistema."],
+    ["mac-info","macos/Runner/Info.plist","config","CFBundleName: flutter_application_1",
+     "Metadatos del bundle: nombre, identificador, versión mínima del sistema, LSMinimumSystemVersion y política de red."],
+    ["mac-ent1","macos/Runner/DebugProfile.entitlements","config","sandbox debug/profile",
+     "Firmas de la variante debug/profile: com.apple.security.network.client, app-sandbox y códigos de cliente de plantillas."],
+    ["mac-ent2","macos/Runner/Release.entitlements","config","sandbox release",
+     "Las mismas firmas para la variante release, con el certificado de distribución."],
+    ["mac-menu","macos/Runner/Base.lproj/MainMenu.xib","asset","menú de la app",
+     "Interfaz del menú principal (About, Services, Hide, Quit) en formato XIB."],
+    ["mac-cfgs","macos/Runner/Configs/{AppInfo,Debug,Release,Warnings}.xcconfig","config","4 xcconfig",
+     "AppInfo define PRODUCT_NAME, PRODUCT_BUNDLE_IDENTIFIER y las versiones; Debug y Release incluyen GeneratedPluginRegistrant y Generated.xcconfig; Warnings ajusta el nivel de warnings. Encadenados con #include."],
+    ["mac-icon","macos/Runner/Assets.xcassets/AppIcon.appiconset/","asset","7 PNG + Contents.json",
+     "Icono de escritorio en siete tamaños (16, 32, 64, 128, 256, 512, 1024 px). Mismo icono que en Android y Windows, en formato .appiconset."],
+    ["mac-pbx","macos/Runner.xcodeproj/project.pbxproj","config","proyecto Xcode",
+     "Definición del proyecto macOS y sus targets Runner y RunnerTests."],
+    ["mac-scheme","macos/Runner.xcodeproj/xcshareddata/xcschemes/Runner.xcscheme","config","esquema Runner",
+     "Esquema compartido de Xcode para compilar y probar el target Runner."],
+    ["mac-pbxws","macos/Runner.xcodeproj/project.xcworkspace/{contents.xcworkspacedata, xcshareddata/*}","config","workspace interno",
+     "Workspace embebido del proyecto con sus ajustes compartidos."],
+    ["mac-ws","macos/Runner.xcworkspace/contents.xcworkspacedata","config","workspace de la app",
+     "Workspace que flutter build macos abre, apuntando al proyecto Runner."],
+    ["mac-wsxs","macos/Runner.xcworkspace/xcshareddata/{IDEWorkspaceChecks.plist, WorkspaceSettings.xcsettings}","config","ajustes compartidos",
+     "Ajustes de workspace compartidos."],
+    ["mac-xcconfs","macos/Flutter/Flutter-Debug.xcconfig · Flutter-Release.xcconfig","config","xcconfig de Flutter",
+     "Ambos incluyen ephemeral/Flutter-Generated.xcconfig, que a su vez arrastra GeneratedPluginRegistrant y las rutas del SDK: son los archivos que inyectan FLUTTER_ROOT y FLUTTER_BUILD_DIR en Xcode."],
+    ["mac-registrant","macos/Flutter/GeneratedPluginRegistrant.swift","native","registro de plugins",
+     "Registro de plugins en Swift, invocado desde AppDelegate al iniciar. Sin plugins que registrar."],
+    ["mac-eph","macos/Flutter/ephemeral/","build","SPM + xcconfig",
+     "Generado en cada build: FlutterGeneratedPluginSwiftPackage (Package.swift y FlutterGeneratedPluginSwiftPackage.swift), Flutter-Generated.xcconfig, flutter_export_environment.sh, .packages, .swift_pm.lock y flutter_native_integration.env."],
+    ["mac-tests","macos/RunnerTests/RunnerTests.swift","test","test nativo Xcode",
+     "Target de pruebas nativas, sin casos escritos."],
+    ["mac-gi","macos/.gitignore","config","exclusiones de macOS",
+     "Ignora Pods/, .symlinks/, Flutter/ephemeral/ y los xcconfig generados."]
+  ]},
+  { id:"g-linux", t:"linux/ — Linux · CMake + C++/GTK", k:"platform", c:true, nodes:[
+    ["lx-cmake","linux/CMakeLists.txt","config","proyecto raíz CMake",
+     "CMakeLists raíz: declara el proyecto, los ajustes comunes y las dependencias, y hace add_subdirectory de flutter/ y runner/."],
+    ["lx-fluttercmake","linux/flutter/CMakeLists.txt","config","CMake de flutter/",
+     "Compila el wrapper de Flutter embedder (flutter_linux) y, si los hubiera, los plugins de escritorio."],
+    ["lx-runnercmake","linux/runner/CMakeLists.txt","config","CMake del ejecutable",
+     "Compila el ejecutable y genera el .desktop y el launcher de la aplicación."],
+    ["lx-plugins","linux/flutter/generated_plugins.cmake","config","lista de plugins",
+     "Generado por flutter con los targets de plugin que deben enlazarse. Vacío en este proyecto."],
+    ["lx-main","linux/runner/main.cc","native","punto de entrada C++",
+     "main() de GTK: inicializa la biblioteca, crea la ventana y ejecuta el bucle de eventos."],
+    ["lx-app","linux/runner/my_application.cc · my_application.h","native","ventana GTK",
+     "MyApplication, subclase de GtkApplication que registra la ventana y la aplicación. Equivalente Linux de FlutterWindow en Windows y MainFlutterWindow en macOS."],
+    ["lx-registrant","linux/flutter/generated_plugin_registrant.cc · .h","native","registro de plugins",
+     "Registro de plugins en C++, invocado desde main.cc. Sin plugins que registrar."],
+    ["lx-gi","linux/.gitignore","config","exclusiones de Linux",
+     "Ignora ephemeral/, linux/flutter/ephemeral/ y los artefactos de CMake."]
+  ]},
+  { id:"g-windows", t:"windows/ — Windows · CMake + Win32", k:"platform", c:true, nodes:[
+    ["win-cmake","windows/CMakeLists.txt","config","proyecto raíz CMake",
+     "CMakeLists raíz: proyecto, ajustes comunes y add_subdirectory de flutter/ y runner/."],
+    ["win-fluttercmake","windows/flutter/CMakeLists.txt","config","CMake de flutter/",
+     "Compila flutter_windows.dll, el embedder de escritorio para Windows."],
+    ["win-runnercmake","windows/runner/CMakeLists.txt","config","CMake del ejecutable",
+     "Compila el runner y añade el .rc que embebe el icono y la información de versión del ejecutable."],
+    ["win-plugins","windows/flutter/generated_plugins.cmake","config","lista de plugins",
+     "Generado por flutter con los plugins de escritorio que deben enlazarse; vacío aquí."],
+    ["win-main","windows/runner/main.cpp","native","WinMain + Win32Window",
+     "Punto de entrada de la aplicación: inicializa COM, crea la ventana Win32 y entra en el bucle de mensajes."],
+    ["win-flwin","windows/runner/flutter_window.cpp · flutter_window.h","native","FlutterWindowView",
+     "Vista Win32 que hospeda el contenido de Flutter: crea el controlador, gestiona el ciclo de vida y redimensiona."],
+    ["win-win32","windows/runner/win32_window.cpp · win32_window.h","native","ventana Win32 nativa",
+     "Implementación Win32 pura: registro de clase, WndProc, estilos y gestión de tamaño."],
+    ["win-utils","windows/runner/utils.cpp · utils.h","native","utilidades de converters",
+     "Funciones auxiliares de conversión entre UTF-8 y UTF-16 usadas por la capa Win32."],
+    ["win-res","windows/runner/resource.h · Runner.rc","asset","icono y versión",
+     "resource.h declara los identificadores de recurso y Runner.rc los compila: icono, información de versión y manifiesto."],
+    ["win-manifest","windows/runner/runner.exe.manifest","asset","manifiesto Win32",
+     "Fija la versión de las APIs de Windows requeridas (common-controls v6, per-monitor DPI) y el nivel de aislamiento."],
+    ["win-ico","windows/runner/resources/app_icon.ico","asset","icono .ico",
+     "El icono del ejecutable en formato .ico multi-resolución, referenciado desde Runner.rc."],
+    ["win-registrant","windows/flutter/generated_plugin_registrant.cc · .h","native","registro de plugins",
+     "Registro de plugins de escritorio en C++, invocado desde main.cpp. Sin plugins que registrar."],
+    ["win-gi","windows/.gitignore","config","exclusiones de Windows",
+     "Ignora ephemeral/, flutter/ephemeral/ y la carpeta de publicación."]
+  ]},
+  { id:"g-web", t:"web/ — Web · PWA", k:"platform", c:true, nodes:[
+    ["web-index","web/index.html","config","bootstrap + base href",
+     "Contenedor de la app web. El título es flutter_application_1, tomado del name de pubspec.yaml, e incluye <base href=\"$FLUTTER_BASE_HREF\"> que el build sustituye, <script src=\"flutter_bootstrap.js\" async> y los meta de apple-mobile-web-app."],
+    ["web-manifest","web/manifest.json","config","PWA standalone",
+     "Manifiesto de la app web instalable: name y short_name, display standalone, orientation portrait-primary y los cuatro iconos de web/icons/, dos de ellos maskable."],
+    ["web-favicon","web/favicon.png","asset","favicon",
+     "Favicon que el navegador muestra en la pestaña."],
+    ["web-icons","web/icons/{Icon-192, Icon-512, Icon-maskable-192, Icon-maskable-512}.png","asset","4 iconos PWA",
+     "Iconos 192 y 512 px en variantes normal y maskable, referenciados por manifest.json e index.html."]
+  ]}
+]}
+];
+
+/* Conexiones: [origen, destino, etiqueta] */
+const EDGES = [
+  /* --- relaciones originales conservadas --- */
+  ["pubspec","main","dependencias y SDK"],
+  ["pubspec","group:g-fonts","declara familia 'tf2'"],
+  ["group:g-fonts","counterfuncs","fontFamily: 'tf2'"],
+  ["group:g-fonts","countersimple","fontFamily: 'tf2'"],
+  ["widgettest","main","importa main.dart"],
+  ["main","counterfuncs","importa y monta CounterFunctionsScreen"],
+  ["main","build","Flutter build"],
+  ["build","group:g-android","Flutter build → APK"],
+  ["build","group:g-ios","Flutter build → IPA"],
+  ["build","group:g-macos","Flutter build → .app"],
+  ["build","group:g-linux","Flutter build → binario ELF"],
+  ["build","group:g-windows","Flutter build → .exe + DLL"],
+  ["build","group:g-web","Flutter build → JS/WASM"],
+  /* --- dependencias --- */
+  ["pubspec","group:g-pkgrt","declara dependencia"],
+  ["pubspec","group:g-pkgdev","declara dev_dep"],
+  ["publock","group:g-pkgrt","fija versiones"],
+  ["analysisopt","pk-lints","activa lints"],
+  ["widgettest","pk-flu-test","usa runner de test"],
+  ["main","pk-flutter","usa SDK Flutter"],
+  ["counterfuncs","pk-flutter","widgets Material"],
+  ["countersimple","pk-flutter","widgets Material"],
+  /* --- recursos y empaquetado --- */
+  ["tf2build","uta-tf2","se empaqueta en"],
+  ["pubspec","uta-fontman","genera FontManifest.json"],
+  ["pubspec","uta-assetman","genera AssetManifest.bin"],
+  ["readme","group:g-images","evidencia en README"],
+  /* --- build / dart_tool --- */
+  ["analysisopt","group:g-buildroot","excluye build/**"],
+  ["analysisopt","group:g-android","excluye android/**"],
+  ["analysisopt","group:g-web","excluye web/**"],
+  ["group:g-darttool","build","compila →"],
+  ["widgettest","group:g-tcache","flutter test →"],
+  ["widgettest","group:g-uta","bundle de test"],
+  ["group:g-nassets","group:g-windows","native_assets de Windows"],
+  /* --- targets declarados --- */
+  ["metadata","group:g-android","target declarado"],
+  ["metadata","group:g-ios","target declarado"],
+  ["metadata","group:g-macos","target declarado"],
+  ["metadata","group:g-linux","target declarado"],
+  ["metadata","group:g-windows","target declarado"],
+  ["metadata","group:g-web","target declarado"],
+  ["pubspec","group:g-web","name → título web"]
+];
+
+/* ===========================================================================
+   VISTAS GUIADAS
+   =========================================================================== */
+const VIEWS = [
+  {id:"full",   label:"Vista completa",             layers:"all",      mode:"default"},
+  {id:"deps",   label:"Dependencias y recursos",    layers:["deps","pkgs"], mode:"expandAll"},
+  {id:"code",   label:"Código fuente y pruebas",    layers:["deps","lib","pres"], mode:"expandAll"},
+  {id:"screens",label:"presentation/counter/",      layers:["lib","pres"], mode:"default"},
+  {id:"targets",label:"Targets de compilación",     layers:["deps","build","targets"], mode:"collapseAll", expand:["group:g-buildroot"]}
+];
+</script>
+<script>
+"use strict";
+/* ===========================================================================
+   RUNTIME — layout, render e interacción
+   =========================================================================== */
+const NW = 224, NH = 37, NGAP = 7;
+const GPAD = 12, GHDR = 30, GGAP = 15;
+const COLGAP = 136, LAYERHEAD = 62, MARGIN = 40;
+
+const NODES = {}, GROUPS = {}, GROUP_OF = {};
+LAYERS.forEach(L => L.groups.forEach(g => {
+  g.layer = L.id; GROUPS[g.id] = g;
+  g.nodes.forEach(n => { GROUP_OF[n[0]] = g.id; });
+}));
+
+const ROOT = "flutter_application_1/";
+/* Prefijo de carpeta para etiquetas que ya son un nombre de archivo suelto */
+const GPREFIX = {
+  "g-manifest":ROOT, "g-quality":ROOT, "g-docs":ROOT, "g-test":ROOT+"test/",
+  "g-fonts":ROOT, "g-images":ROOT, "g-boot":ROOT,
+  "g-funcs":ROOT+"lib/presentation/counter/", "g-simple":ROOT+"lib/presentation/counter/",
+  "g-pkgrt":ROOT+"pubspec.yaml", "g-pkgdev":ROOT+"pubspec.yaml",
+  "g-buildroot":ROOT, "g-darttool":ROOT, "g-uta":ROOT+"build/unit_test_assets/",
+  "g-tcache":ROOT, "g-nassets":ROOT,
+  "g-android":ROOT, "g-ios":ROOT, "g-macos":ROOT, "g-linux":ROOT,
+  "g-windows":ROOT, "g-web":ROOT
+};
+/* Rutas explícitas para etiquetas abreviadas con "…" o agrupadas */
+const PATHOVER = {
+  "ad-manifests"  : ROOT+"android/app/src/debug/AndroidManifest.xml  ·  android/app/src/profile/AndroidManifest.xml",
+  "ad-activity"   : ROOT+"android/app/src/main/kotlin/com/example/flutter_application_1/MainActivity.kt",
+  "ad-registrant" : ROOT+"android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java",
+  "ios-pbxws"     : ROOT+"ios/Runner.xcodeproj/project.xcworkspace/contents.xcworkspacedata",
+  "ios-scheme"    : ROOT+"ios/Runner.xcodeproj/xcshareddata/xcschemes/Runner.xcscheme",
+  "ad-draw"       : ROOT+"android/app/src/main/res/drawable/launch_background.xml  ·  drawable-v21/launch_background.xml",
+  "ad-values"     : ROOT+"android/app/src/main/res/values/styles.xml  ·  values-night/styles.xml",
+  "ad-mipmaps"    : ROOT+"android/app/src/main/res/mipmap-{hdpi,mdpi,xhdpi,xxhdpi,xxxhdpi}/ic_launcher.png"
+};
+function pathOf(id, label){
+  if(PATHOVER[id]) return PATHOVER[id];
+  const lbl = String(label === undefined ? id : label);
+  if(lbl.indexOf("/") >= 0) return ROOT + lbl;
+  const g = GROUPS[GROUP_OF[id]];
+  const pre = GPREFIX[g ? g.id : ""] || ROOT;
+  /* pkgs: la "ruta" es la entrada de pubspec.yaml que la declara */
+  if(/\.[a-z0-9]+$/.test(pre) && /\s/.test(lbl)) return pre + "  ·  " + lbl;
+  return pre + lbl;
+}
+
+/* Segunda pasada: los nodos ya pueden resolver su ruta */
+LAYERS.forEach(L => L.groups.forEach(g => {
+  g.nodes.forEach(n => { NODES[n[0]] = {id:n[0], label:n[1], kind:n[2], sub:n[3], tip:n[4],
+                                       group:g.id, layer:L.id, path:pathOf(n[0], n[1])}; });
+}));
+
+const collapsed = {};
+function defaultCollapsed(){ Object.keys(GROUPS).forEach(id => collapsed[id] = !!GROUPS[id].c); }
+defaultCollapsed();
+
+let visLayers = "all", selected = null, showLabels = true;
+
+const PLAT_LABEL = {"g-android":"android/","g-ios":"ios/","g-macos":"macos/","g-linux":"linux/","g-windows":"windows/","g-web":"web/"};
+
+/* ---------------- LAYOUT ---------------- */
+function layout(){
+  const cols = LAYERS.filter(L => visLayers === "all" || visLayers.indexOf(L.id) >= 0);
+  const boxes = {};
+  let maxH = 0;
+  cols.forEach((L,ci) => {
+    const x = MARGIN + ci * (NW + COLGAP);
+    let y = MARGIN + LAYERHEAD;
+    L.groups.forEach(g => {
+      if(visLayers !== "all" && visLayers.indexOf(g.layer) < 0) return;
+      if(collapsed[g.id]){
+        boxes["group:"+g.id] = {x, y, w:NW, h:NH, kind:g.k, g:g.id, sum:true};
+        y += NH + GGAP;
+      }else{
+        const h = GHDR + GPAD*2 + g.nodes.length*NH + (g.nodes.length-1)*NGAP;
+        boxes["group:"+g.id] = {x, y, w:NW, h, kind:g.k, g:g.id, sum:false};
+        g.nodes.forEach((n,i) => {
+          boxes[n[0]] = {x:x+GPAD, y:y+GHDR+GPAD+i*(NH+NGAP), w:NW-GPAD*2, h:NH,
+                         kind:n[2], node:n[0], group:g.id};
+        });
+        y += h + GGAP;
+      }
+    });
+    L._h = y - MARGIN - LAYERHEAD;
+    L._x = x;
+    maxH = Math.max(maxH, L._h);
+  });
+  cols.forEach(L => { const off = (maxH - L._h)/2;
+    L.groups.forEach(g => {
+      const b = boxes["group:"+g.id];
+      if(!b) return;
+      b.y += off;
+      if(!b.sum) g.nodes.forEach(n => boxes[n[0]].y += off);
+    });
+  });
+  const W = MARGIN*2 + cols.length*(NW+COLGAP) - COLGAP;
+  const H = MARGIN*2 + LAYERHEAD + maxH;
+  return {boxes, cols, W, H};
+}
+
+/* ---------------- GEOMETRÍA DE EXTREMOS ---------------- */
+function endpoint(ref, boxes){
+  if(ref.indexOf("group:") === 0){
+    const b = boxes[ref];
+    if(!b) return null;
+    if(b.sum) return {x:b.x+b.w, y:b.y+b.h/2, box:b};
+    return {x:b.x+b.w, y:b.y+GHDR/2, box:b};
+  }
+  const b = boxes[ref];
+  if(!b) return null;
+  return {x:b.x+b.w, y:b.y+b.h/2, box:b};
+}
+function resolveVisible(ref, boxes){
+  if(ref.indexOf("group:") === 0) return boxes[ref] ? ref : null;
+  const b = boxes[ref];
+  if(b) return (b.group && collapsed[b.group]) ? "group:"+b.group : ref;
+  /* El nodo no tiene caja porque su grupo está colapsado: se dibuja contra el grupo */
+  const gid = GROUP_OF[ref];
+  if(gid && collapsed[gid] && boxes["group:"+gid]) return "group:"+gid;
+  return null;
+}
+
+/* ---------------- RENDER ---------------- */
+const svg = document.getElementById("diag");
+const gBands = document.getElementById("gBands"), gEdges = document.getElementById("gEdges"),
+      gLabels = document.getElementById("gLabels"), gGroups = document.getElementById("gGroups"),
+      gNodes = document.getElementById("gNodes");
+const EL = (n,a) => { const e = document.createElementNS("http://www.w3.org/2000/svg", n);
+  for(const k in a) if(a[k] !== null && a[k] !== undefined) e.setAttribute(k, a[k]); return e; };
+function iconEl(kind, x, y, s, color){
+  const k = KINDS[kind] || KINDS.config;
+  const g = EL("g", {transform:"translate("+x+","+y+") scale("+(s/16)+")", stroke:color, fill:"none",
+                     "stroke-width":1.5, "stroke-linecap":"round", "stroke-linejoin":"round"});
+  (ICONS[k.i]||[]).forEach(d => g.appendChild(EL("path", {d})));
+  return g;
+}
+function trunc(s, n){ return s && s.length > n ? s.slice(0, n-1) + "…" : (s || ""); }
+
+let LAY = null;
+function render(){
+  LAY = layout();
+  const {boxes, cols} = LAY;
+  gBands.textContent = ""; gEdges.textContent = ""; gLabels.textContent = "";
+  gGroups.textContent = ""; gNodes.textContent = "";
+
+  cols.forEach(L => {
+    const top = MARGIN, h = LAY.H - MARGIN*2;
+    gBands.appendChild(EL("rect", {x:L._x-16, y:top, w:NW+32, h, rx:14,
+      fill:"var(--panel2)", "fill-opacity":".45", stroke:"var(--line)", "stroke-dasharray":"3 4"}));
+    const t = EL("text", {x:L._x, y:top+22, "font-size":"12.5", "font-weight":"700", fill:"var(--txt)"});
+    t.textContent = L.t; gBands.appendChild(t);
+    const s = EL("text", {x:L._x, y:top+38, "font-size":"10.5", fill:"var(--txt3)"});
+    s.textContent = L.s; gBands.appendChild(s);
+  });
+
+  Object.keys(GROUPS).forEach(gid => {
+    const b = boxes["group:"+gid]; if(!b) return;
+    const g = GROUPS[gid], col = KINDS[b.kind].c;
+    const isSel = selected === "group:"+gid;
+    const rg = EL("g", {style:"cursor:pointer"});
+    rg.appendChild(EL("rect", {x:b.x, y:b.y, w:b.w, h:b.h, rx:11, fill:"var(--panel)",
+      stroke:isSel ? "var(--accent)" : "var(--line)", "stroke-width":isSel ? 1.8 : 1}));
+    rg.appendChild(EL("rect", {x:b.x, y:b.y, w:b.w, h:3.5, rx:2, fill:col, "fill-opacity":".9"}));
+    rg.appendChild(iconEl(b.kind, b.x+10, b.y+8, 14, col));
+    const ht = EL("text", {x:b.x+30, y:b.y+19, "font-size":"10.5", "font-weight":"700", fill:col, "letter-spacing":".4"});
+    ht.textContent = trunc(g.t.toUpperCase(), 30); rg.appendChild(ht);
+    rg.appendChild(EL("path", {d: b.sum ? "M2 0l4 4-4 4" : "M0 2l4 4 4-4",
+      transform:"translate("+(b.x+b.w-18)+","+(b.y+13)+")", stroke:"var(--txt3)", fill:"none",
+      "stroke-width":1.6, "stroke-linecap":"round", "stroke-linejoin":"round"}));
+    if(b.sum){
+      const c = EL("text", {x:b.x+30, y:b.y+NH-6, "font-size":"9.5", fill:"var(--txt3)"});
+      c.textContent = g.nodes.length + (g.nodes.length === 1 ? " elemento · " : " elementos · ") + "clic para expandir";
+      rg.appendChild(c);
+    }
+    rg.addEventListener("click", ev => { ev.stopPropagation();
+      if(b.sum){ collapsed[gid] = false; if(isSel) selected = null; render(); }
+      else select("group:"+gid);
+    });
+    const hdr = EL("rect", {x:b.x, y:b.y, w:b.w, h:GHDR, fill:"transparent"});
+    hdr.addEventListener("click", ev => { ev.stopPropagation(); collapsed[gid] = true; render(); });
+    rg.appendChild(hdr);
+    gGroups.appendChild(rg);
+  });
+
+  Object.keys(NODES).forEach(id => {
+    const b = boxes[id]; if(!b) return;
+    const n = NODES[id], k = KINDS[n.kind], col = k.c;
+    const dim = selected && !isNeighbour(id);
+    const g = EL("g", {style:"cursor:pointer", opacity: dim ? .22 : 1});
+    g.appendChild(EL("rect", {x:b.x, y:b.y, w:b.w, h:b.h, rx:9, fill:"var(--panel)",
+      stroke:selected === id ? "var(--accent)" : "var(--line)", "stroke-width":selected === id ? 2 : 1}));
+    g.appendChild(EL("rect", {x:b.x, y:b.y+6, width:3, height:b.h-12, rx:2, fill:col}));
+    g.appendChild(iconEl(n.kind, b.x+11, b.y+10, 15, col));
+    const tg = EL("text", {x:b.x+b.w-9, y:b.y+14, "font-size":"8", "font-weight":"800",
+      "text-anchor":"end", fill:col, "fill-opacity":".85", "letter-spacing":".4"});
+    tg.textContent = k.t; g.appendChild(tg);
+    const t1 = EL("text", {x:b.x+32, y:b.y+15, "font-size":"11.5", "font-weight":"600", fill:"var(--txt)"});
+    t1.textContent = trunc(n.label, 25); g.appendChild(t1);
+    const t2 = EL("text", {x:b.x+32, y:b.y+28, "font-size":"9.5", fill:"var(--txt3)"});
+    t2.textContent = trunc(n.sub, 30); g.appendChild(t2);
+    g.addEventListener("click", ev => { ev.stopPropagation(); select(id); });
+    gNodes.appendChild(g);
+  });
+
+  drawEdges(boxes);
+  updateStats();
+  document.getElementById("legendRows").innerHTML = legendHtml();
+}
+
+function isNeighbour(id){
+  if(!selected) return true;
+  if(selected === id) return true;
+  const selGroup = selected.indexOf("group:") === 0 ? selected.slice(6) : null;
+  const grp = GROUP_OF[id];
+  if(selGroup && (grp === selGroup)) return true;
+  return EDGES.some(e => (e[0] === selected && e[1] === id) || (e[1] === selected && e[0] === id));
+}
+
+function drawEdges(boxes){
+  const items = [];
+  EDGES.forEach((e) => {
+    const a = resolveVisible(e[0], boxes), b = resolveVisible(e[1], boxes);
+    if(!a || !b || a === b) return;
+    const pa = endpoint(a, boxes), pb = endpoint(b, boxes);
+    if(!pa || !pb) return;
+    items.push({a, b, pa, pb, lbl:e[2]});
+  });
+  const byT = {};
+  items.forEach(it => { (byT[it.b] = byT[it.b] || []).push(it); });
+  Object.keys(byT).forEach(t => {
+    const arr = byT[t].sort((x,y) => x.pa.y - y.pa.y);
+    let last = -1e9;
+    arr.forEach(it => { let y = (it.pa.y + it.pb.y)/2; if(y < last + 11) y = last + 11; it.ly = y; last = y; });
+  });
+
+  items.forEach(it => {
+    const on = selected && (it.a === selected || it.b === selected);
+    const col = on ? "var(--accent)" : "var(--edge)";
+    let d, lx;
+    const sameCol = it.pa.x === it.pb.x;
+    if(sameCol){
+      const bulge = it.pa.x + 58;
+      d = "M"+it.pa.x+","+it.pa.y+" C"+bulge+","+it.pa.y+" "+bulge+","+it.pb.y+" "+it.pb.x+","+it.pb.y;
+      lx = bulge + 6;
+    }else{
+      const mx = (it.pa.x + it.pb.x)/2;
+      d = "M"+it.pa.x+","+it.pa.y+" C"+mx+","+it.pa.y+" "+mx+","+it.pb.y+" "+it.pb.x+","+it.pb.y;
+      lx = mx;
+    }
+    const p = EL("path", {d, fill:"none", stroke:col, "stroke-width":on ? 2.1 : 1.1,
+      "stroke-opacity": selected ? (on ? 1 : .13) : .62, "marker-end":"url(#arw)",
+      "stroke-dasharray": it.lbl.indexOf("Flutter build") === 0 ? "5 3" : null});
+    p.style.cursor = "pointer";
+    p.addEventListener("mouseenter", () => { p.setAttribute("stroke-opacity", 1); p.setAttribute("stroke-width", 2.4); });
+    p.addEventListener("mouseleave", () => { p.setAttribute("stroke-opacity", selected ? (on?1:.13) : .62);
+                                              p.setAttribute("stroke-width", on ? 2.1 : 1.1); });
+    p.addEventListener("click", ev => { ev.stopPropagation(); select(it.a); });
+    gEdges.appendChild(p);
+
+    if(showLabels){
+      const w = it.lbl.length*4.55 + 9;
+      const g = EL("g", {opacity: selected ? (on ? 1 : .1) : .82, "pointer-events":"none"});
+      g.appendChild(EL("rect", {x:lx-w/2, y:(it.ly||0)-7.5, w, h:12, rx:4, fill:"var(--bg)", "fill-opacity":".92"}));
+      const t = EL("text", {x:lx, y:(it.ly||0)+1.8, "font-size":"8.4", "text-anchor":"middle",
+                            fill: on ? "var(--accent)" : "var(--edgeLbl)"});
+      t.textContent = it.lbl; g.appendChild(t);
+      gLabels.appendChild(g);
+    }
+  });
+}
+
+/* ---------------- SELECCIÓN / DETALLE ---------------- */
+function relsOf(id){
+  const out = [], inn = [];
+  EDGES.forEach(e => {
+    if(e[0] === id) out.push([e[1], e[2]]);
+    if(e[1] === id) inn.push([e[0], e[2]]);
+  });
+  return {out, inn};
+}
+function relLabel(r){
+  if(r.indexOf("group:") === 0){
+    const g = GROUPS[r.slice(6)];
+    return g ? g.t : r;
+  }
+  return NODES[r] ? NODES[r].label : r;
+}
+function select(id){
+  selected = (selected === id) ? null : id;
+  const d = document.getElementById("details");
+  if(!selected){ d.classList.add("hidden"); render(); return; }
+  d.classList.remove("hidden");
+  if(selected.indexOf("group:") === 0){
+    const gid = selected.slice(6), g = GROUPS[gid];
+    const r = relsOf(selected);
+    const counts = {};
+    g.nodes.forEach(n => { const k = n[2]; counts[k] = (counts[k]||0)+1; });
+    document.getElementById("dicon").innerHTML = iconSvg(g.k, 20, KINDS[g.k].c);
+    document.getElementById("dtitle").textContent = g.t;
+    document.getElementById("dpath").textContent = (PLAT_LABEL[gid] || folderOf(gid) || "flutter_application_1/") +
+      "  ·  " + g.nodes.length + (g.nodes.length === 1 ? " elemento" : " elementos");
+    let h = '<div class="sub">' + Object.keys(counts).map(k =>
+        '<span style="color:'+KINDS[k].c+'">■</span> ' + counts[k] + " " + KINDS[k].l.toLowerCase()).join(" · ") + '</div>';
+    h += '<h5>Elementos del grupo</h5>';
+    g.nodes.forEach(n => { h += '<button class="rel" data-go="'+n[0]+'"><span class="dir">→</span>' + esc(n[1]) +
+      '<em>' + esc(n[3]) + '</em></button>'; });
+    h += relHTML(r, id);
+    fillBody(h); render();
+  }else{
+    const n = NODES[id], k = KINDS[n.kind], r = relsOf(id);
+    document.getElementById("dicon").innerHTML = iconSvg(n.kind, 20, k.c);
+    document.getElementById("dtitle").textContent = n.label;
+    document.getElementById("dpath").textContent = n.path;
+    fillBody('<div class="sub" style="color:'+k.c+';font-weight:600"><b>'+k.t+'</b> · '+ k.l +
+      (n.sub ? ' — ' + esc(n.sub) : '') + '</div>' +
+      (n.tip ? '<div class="tip">' + esc(n.tip) + '</div>' : '') + relHTML(r, id));
+    render();
+  }
+}
+function folderOf(gid){
+  const m = {"g-manifest":"flutter_application_1/","g-quality":"flutter_application_1/","g-docs":"flutter_application_1/",
+    "g-test":"flutter_application_1/test/","g-fonts":"flutter_application_1/assets/fonts/",
+    "g-images":"flutter_application_1/images/","g-boot":"flutter_application_1/lib/",
+    "g-funcs":"flutter_application_1/lib/presentation/counter/","g-simple":"flutter_application_1/lib/presentation/counter/",
+    "g-pkgrt":"flutter_application_1/pubspec.yaml","g-pkgdev":"flutter_application_1/pubspec.yaml",
+    "g-buildroot":"flutter_application_1/","g-darttool":"flutter_application_1/.dart_tool/",
+    "g-uta":"flutter_application_1/build/unit_test_assets/","g-tcache":"flutter_application_1/build/test_cache/",
+    "g-nassets":"flutter_application_1/build/native_assets/"};
+  return m[gid] === undefined ? "" : m[gid];
+}
+function relHTML(r, id){
+  let h = "";
+  const blk = (title, arr, cls, dot) => {
+    if(!arr.length) return "";
+    h += '<h5><span class="dot" style="background:'+dot+'"></span>' + title + ' (' + arr.length + ')</h5>';
+    arr.forEach(x => { h += '<button class="rel '+cls+'" data-go="'+x[0]+'">' +
+      '<span class="dir">' + (cls === "out" ? "→" : "←") + '</span>' + esc(relLabel(x[0])) +
+      '<em>' + esc(x[1]) + '</em></button>'; });
+  };
+  blk("Entradas", r.inn, "in", "#34d399");
+  blk("Salidas", r.out, "out", "#f472b6");
+  return h;
+}
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function iconSvg(kind, size, col){
+  const k = KINDS[kind] || KINDS.config;
+  return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 16 16" fill="none" stroke="'+col+
+    '" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">' +
+    (ICONS[k.i]||[]).map(d => '<path d="'+d+'"/>').join("") + '</svg>';
+}
+function fillBody(h){
+  const b = document.getElementById("dbody");
+  b.innerHTML = h;
+  b.querySelectorAll("[data-go]").forEach(btn => btn.addEventListener("click", () => {
+    const t = btn.getAttribute("data-go");
+    if(LAY && LAY.boxes[t]){ selected = null; select(t); }
+  }));
+}
+
+/* ---------------- ZOOM / PAN ---------------- */
+let k = 1, tx = 0, ty = 0;
+const vp = document.getElementById("viewport");
+function applyT(){
+  vp.setAttribute("transform","translate("+tx+","+ty+") scale("+k+")");
+  document.getElementById("zoomval").textContent = Math.round(k*100) + "%";
+}
+function zoomAt(cx, cy, f){
+  const nk = Math.min(2.6, Math.max(.1, k*f));
+  tx = cx - (cx - tx) * (nk/k); ty = cy - (cy - ty) * (nk/k); k = nk; applyT();
+}
+function fit(){
+  if(!LAY) return;
+  const r = svg.getBoundingClientRect();
+  const s = Math.min((r.width-40)/LAY.W, (r.height-40)/LAY.H);
+  k = Math.min(1.25, Math.max(.1, s));
+  tx = (r.width - LAY.W*k)/2; ty = (r.height - LAY.H*k)/2;
+  applyT();
+}
+svg.addEventListener("wheel", ev => {
+  ev.preventDefault();
+  const r = svg.getBoundingClientRect();
+  zoomAt(ev.clientX - r.left, ev.clientY - r.top, ev.deltaY < 0 ? 1.12 : 1/1.12);
+}, {passive:false});
+let down = null;
+svg.addEventListener("pointerdown", ev => { down = {x:ev.clientX, y:ev.clientY, tx, ty};
+  svg.classList.add("panning"); svg.setPointerCapture(ev.pointerId); });
+svg.addEventListener("pointermove", ev => { if(!down) return;
+  tx = down.tx + (ev.clientX-down.x); ty = down.ty + (ev.clientY-down.y); applyT(); });
+svg.addEventListener("pointerup", () => { down = null; svg.classList.remove("panning"); });
+svg.addEventListener("click", ev => { if(ev.target === svg || ev.target.id === "viewport"){
+  selected = null; document.getElementById("details").classList.add("hidden"); render(); } });
+document.getElementById("btnIn").addEventListener("click", () => { const r = svg.getBoundingClientRect();
+  zoomAt(r.width/2, r.height/2, 1.2); });
+document.getElementById("btnOut").addEventListener("click", () => { const r = svg.getBoundingClientRect();
+  zoomAt(r.width/2, r.height/2, 1/1.2); });
+document.getElementById("btnFit").addEventListener("click", fit);
+document.getElementById("btnLabels").addEventListener("click", e => {
+  showLabels = !showLabels; e.currentTarget.classList.toggle("on", showLabels); render(); });
+document.getElementById("btnTheme").addEventListener("click", () => {
+  const h = document.documentElement;
+  h.dataset.theme = h.dataset.theme === "dark" ? "light" : "dark"; });
+document.getElementById("dclose").addEventListener("click", () => {
+  selected = null; document.getElementById("details").classList.add("hidden"); render(); });
+document.addEventListener("keydown", ev => {
+  if(ev.key === "Escape"){ selected = null; document.getElementById("details").classList.add("hidden"); render(); }
+  if(ev.key === "f" || ev.key === "F") fit();
+});
+document.getElementById("btnExpandAll").addEventListener("click", () => {
+  Object.keys(collapsed).forEach(id => collapsed[id] = false); render(); fit(); });
+document.getElementById("btnCollapseAll").addEventListener("click", () => {
+  Object.keys(collapsed).forEach(id => collapsed[id] = true); render(); fit(); });
+document.getElementById("btnReset").addEventListener("click", () => {
+  defaultCollapsed(); visLayers = "all"; applyView("full"); });
+
+/* ---------------- VISTAS ---------------- */
+const viewsBox = document.getElementById("views");
+VIEWS.forEach(v => {
+  const b = document.createElement("button");
+  b.className = "btn" + (v.id === "full" ? " active" : "");
+  b.textContent = v.label; b.dataset.v = v.id;
+  b.addEventListener("click", () => applyView(v.id));
+  viewsBox.appendChild(b);
+});
+function applyView(id, skipFit){
+  const v = VIEWS.find(x => x.id === id); if(!v) return;
+  visLayers = v.layers;
+  if(v.mode === "default") defaultCollapsed();
+  if(v.mode === "expandAll") Object.keys(collapsed).forEach(g => collapsed[g] = false);
+  if(v.mode === "collapseAll") Object.keys(collapsed).forEach(g => collapsed[g] = true);
+  if(v.expand) v.expand.forEach(g => collapsed[g.slice(6)] = false);
+  viewsBox.querySelectorAll(".btn").forEach(b => b.classList.toggle("active", b.dataset.v === id));
+  selected = null; document.getElementById("details").classList.add("hidden");
+  render(); if(!skipFit) fit();
+}
+
+/* ---------------- LEYENDA / STATS ---------------- */
+function legendHtml(){
+  const counts = {};
+  Object.keys(NODES).forEach(id => { const kk = NODES[id].kind; counts[kk] = (counts[kk]||0)+1; });
+  return Object.keys(KINDS).filter(kk => counts[kk]).map(kk =>
+    '<div class="row"><span class="sw" style="background:'+KINDS[kk].c+'"></span>' +
+    '<span class="tg">'+KINDS[kk].t+'</span>'+KINDS[kk].l +
+    '<span class="cnt">'+counts[kk]+'</span></div>').join("");
+}
+function updateStats(){
+  const nNodes = Object.keys(NODES).length, nGroups = Object.keys(GROUPS).length;
+  const vis = new Set(); LAY.boxes && Object.keys(LAY.boxes).forEach(b => vis.add(b));
+  document.getElementById("stats").innerHTML =
+    "<span><b>" + nNodes + "</b> nodos</span><span><b>" + nGroups + "</b> grupos</span>" +
+    "<span><b>" + LAY.cols.length + "</b> capas</span><span><b>" + EDGES.length + "</b> conexiones</span>" +
+    "<span><b>" + vis.size + "</b> en pantalla</span>";
+}
+
+/* ---------------- ARRANQUE ---------------- */
+document.getElementById("dbody").innerHTML =
+  '<div id="hint"><b>Clic</b> en un nodo para ver sus conexiones directas · <b>Clic</b> en la cabecera de un grupo para colapsarlo · ' +
+  '<b>Clic</b> en un chip resumen para expandirlo.<br><br>' +
+  '<b>Rueda</b> para zoom · <b>arrastrar</b> para mover · <b>F</b> o <kbd>⤢</kbd> para ajustar a pantalla · <kbd>Esc</kbd> para limpiar la selección.<br><br>' +
+  'Cada nodo lleva arriba a la derecha su <b>tipo</b> (SRC, CFG, AST, BLD, TGT…). Usa las <b>vistas guiadas</b> de arriba para saltar a Dependencias, Código fuente, presentation/counter/ o Targets sin expandir a mano.</div>';
+applyView("full", true);
+fit();
+window.addEventListener("resize", () => fit());
+</script>
+</body>
+</html>

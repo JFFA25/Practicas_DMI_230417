@@ -1,0 +1,363 @@
+{
+    "schema_version":  1,
+    "diagram_type":  "architecture",
+    "meta":  {
+                 "title":  "Arquitectura de yes_no_app",
+                 "output":  "arquitectura-yes_no_app.html",
+                 "visual_preset":  "blueprint",
+                 "quality_profile":  "showcase",
+                 "views":  [
+                               {
+                                   "id":  "flujo",
+                                   "label":  "Flujo de respuesta",
+                                   "focus":  [
+                                                 "inicio",
+                                                 "presentacion",
+                                                 "proveedor",
+                                                 "helper",
+                                                 "api",
+                                                 "modelo"
+                                             ],
+                                   "note":  "De la pregunta a la respuesta visible en el chat."
+                               },
+                               {
+                                   "id":  "mensajes",
+                                   "label":  "Mensajes",
+                                   "focus":  [
+                                                 "entidad",
+                                                 "modelo",
+                                                 "proveedor",
+                                                 "presentacion"
+                                             ],
+                                   "note":  "Message conserva texto, remitente, hora e imagen opcional."
+                               }
+                           ]
+             },
+    "components":  [
+                       {
+                           "id":  "recursos",
+                           "type":  "cloud",
+                           "label":  "Dependencias y recursos",
+                           "sublabel":  "pubspec.yaml; images/",
+                           "tag":  "provider y Dio usados; http declarado sin uso",
+                           "pos":  [
+                                       560,
+                                       30
+                                   ],
+                           "size":  [
+                                        560,
+                                        86
+                                    ]
+                       },
+                       {
+                           "id":  "inicio",
+                           "type":  "frontend",
+                           "label":  "main.dart",
+                           "sublabel":  "MyApp; MaterialApp; AppTheme",
+                           "tag":  "MultiProvider; ChatProvider",
+                           "pos":  [
+                                       1045,
+                                       140
+                                   ],
+                           "size":  [
+                                        250,
+                                        82
+                                    ]
+                       },
+                       {
+                           "id":  "helper",
+                           "type":  "backend",
+                           "label":  "GetYesNoAnswer",
+                           "sublabel":  "config/helpers/get_yes_no_answer.dart; Dio",
+                           "tag":  "getAnswer(); yes/no/maybe 40/40/20",
+                           "pos":  [
+                                       320,
+                                       294
+                                   ],
+                           "size":  [
+                                        280,
+                                        92
+                                    ]
+                       },
+                       {
+                           "id":  "entidad",
+                           "type":  "backend",
+                           "label":  "Message",
+                           "sublabel":  "domain/entities/message.dart; Fromwho",
+                           "tag":  "hora local; imageUrl opcional",
+                           "pos":  [
+                                       685,
+                                       420
+                                   ],
+                           "size":  [
+                                        250,
+                                        92
+                                    ]
+                       },
+                       {
+                           "id":  "modelo",
+                           "type":  "backend",
+                           "label":  "YesNoModel",
+                           "sublabel":  "infrastructure/models/yes_no_model.dart",
+                           "tag":  "lee JSON; toMessageEntity()",
+                           "pos":  [
+                                       320,
+                                       420
+                                   ],
+                           "size":  [
+                                        280,
+                                        92
+                                    ]
+                       },
+                       {
+                           "id":  "presentacion",
+                           "type":  "frontend",
+                           "label":  "ChatScreen",
+                           "sublabel":  "presentation/; MessageFieldBox",
+                           "tag":  "MyMessageDubble; HerMessageDubble",
+                           "pos":  [
+                                       1010,
+                                       294
+                                   ],
+                           "size":  [
+                                        320,
+                                        92
+                                    ]
+                       },
+                       {
+                           "id":  "proveedor",
+                           "type":  "backend",
+                           "label":  "ChatProvider",
+                           "sublabel":  "presentation/providers/chat_provider.dart",
+                           "tag":  "messagesLists; sendMessage(); herReply()",
+                           "pos":  [
+                                       660,
+                                       295
+                                   ],
+                           "size":  [
+                                        300,
+                                        90
+                                    ]
+                       },
+                       {
+                           "id":  "api",
+                           "type":  "external",
+                           "label":  "Servicio externo",
+                           "sublabel":  "https://yesno.wtf/api",
+                           "tag":  "JSON y GIF; sin backend propio",
+                           "pos":  [
+                                       0,
+                                       295
+                                   ],
+                           "size":  [
+                                        290,
+                                        90
+                                    ]
+                       },
+                       {
+                           "id":  "plataformas",
+                           "type":  "backend",
+                           "label":  "Proyectos de plataforma",
+                           "sublabel":  "android/ · ios/ · linux/ · macos/ · web/ · windows/",
+                           "tag":  "Runners y configuración nativa",
+                           "pos":  [
+                                       40,
+                                       560
+                                   ],
+                           "size":  [
+                                        500,
+                                        90
+                                    ]
+                       },
+                       {
+                           "id":  "build",
+                           "type":  "backend",
+                           "label":  "build/",
+                           "sublabel":  "Salida local de Flutter",
+                           "tag":  "Artefactos generados",
+                           "pos":  [
+                                       590,
+                                       560
+                                   ],
+                           "size":  [
+                                        180,
+                                        90
+                                    ]
+                       },
+                       {
+                           "id":  "apk",
+                           "type":  "cloud",
+                           "label":  "app-debug.apk",
+                           "sublabel":  "build/app/outputs/flutter-apk/",
+                           "tag":  "Android debug · presente",
+                           "pos":  [
+                                       815,
+                                       560
+                                   ],
+                           "size":  [
+                                        480,
+                                        90
+                                    ]
+                       }
+                   ],
+    "boundaries":  [
+                       {
+                           "kind":  "region",
+                           "label":  "Dependencias y recursos",
+                           "wraps":  [
+                                         "recursos"
+                                     ],
+                           "pad":  22
+                       },
+                       {
+                           "kind":  "region",
+                           "label":  "Flutter - lib/ - Codigo fuente Dart",
+                           "wraps":  [
+                                         "inicio",
+                                         "helper",
+                                         "entidad",
+                                         "modelo",
+                                         "presentacion",
+                                         "proveedor"
+                                     ],
+                           "pad":  25
+                       },
+                       {
+                           "kind":  "region",
+                           "label":  "Targets y salida compilada",
+                           "wraps":  [
+                                         "plataformas",
+                                         "build",
+                                         "apk"
+                                     ],
+                           "pad":  22
+                       }
+                   ],
+    "connections":  [
+                        {
+                            "id":  "arranque",
+                            "from":  "inicio",
+                            "to":  "presentacion",
+                            "label":  "inicia ChatScreen",
+                            "variant":  "emphasis",
+                            "fromSide":  "bottom",
+                            "toSide":  "top",
+                            "labelAt":  [
+                                            1170,
+                                            286
+                                        ]
+                        },
+                        {
+                            "id":  "pregunta",
+                            "from":  "proveedor",
+                            "to":  "helper",
+                            "label":  "texto recortado termina en ?",
+                            "labelAt":  [
+                                            705,
+                                            280
+                                        ],
+                            "route":  "straight"
+                        },
+                        {
+                            "id":  "consulta",
+                            "from":  "helper",
+                            "to":  "api",
+                            "label":  "Dio; force yes/no/maybe",
+                            "variant":  "emphasis",
+                            "labelAt":  [
+                                            375,
+                                            270
+                                        ]
+                        },
+                        {
+                            "id":  "json",
+                            "from":  "helper",
+                            "to":  "modelo",
+                            "label":  "JSON a YesNoModel",
+                            "fromSide":  "bottom",
+                            "toSide":  "top",
+                            "labelAt":  [
+                                            460,
+                                            402
+                                        ]
+                        },
+                        {
+                            "id":  "convierte",
+                            "from":  "modelo",
+                            "to":  "entidad",
+                            "label":  "toMessageEntity()",
+                            "labelAt":  [
+                                            705,
+                                            525
+                                        ]
+                        },
+                        {
+                            "id":  "respuesta",
+                            "from":  "entidad",
+                            "to":  "proveedor",
+                            "label":  "agrega Message",
+                            "fromSide":  "top",
+                            "toSide":  "bottom",
+                            "via":  [
+                                        [
+                                            810,
+                                            402
+                                        ]
+                                    ],
+                            "labelAt":  [
+                                            810,
+                                            402
+                                        ]
+                        },
+                        {
+                            "id":  "renderiza",
+                            "from":  "proveedor",
+                            "to":  "presentacion",
+                            "label":  "notifica y actualiza el chat",
+                            "labelAt":  [
+                                            990,
+                                            402
+                                        ]
+                        },
+                        {
+                            "id":  "targets-a-build",
+                            "from":  "plataformas",
+                            "to":  "build",
+                            "fromSide":  "right",
+                            "toSide":  "left"
+                        },
+                        {
+                            "id":  "build-a-apk",
+                            "from":  "build",
+                            "to":  "apk",
+                            "fromSide":  "right",
+                            "toSide":  "left"
+                        }
+                    ],
+    "cards":  [
+                  {
+                      "dot":  "cyan",
+                      "title":  "Flujo de respuesta",
+                      "items":  [
+                                    "Con ? al final, getAnswer() elige yes/no/maybe 40/40/20 y usa Dio con force.",
+                                    "YesNoModel convierte JSON en Message; ChatProvider agrega la respuesta."
+                                ]
+                  },
+                  {
+                      "dot":  "violet",
+                      "title":  "Modelo de mensajes",
+                      "items":  [
+                                    "Message guarda texto, remitente, hora local e imagen opcional.",
+                                    "Las burbujas muestran texto y hora; HerMessageDubble presenta el GIF."
+                                ]
+                  },
+                  {
+                      "dot":  "rose",
+                      "title":  "Sin backend propio",
+                      "items":  [
+                                    "La app consulta yesno.wtf como servicio externo.",
+                                    "Solo está presente el APK Android debug; no se afirman salidas generadas para los demás targets."
+                                ]
+                  }
+              ]
+}

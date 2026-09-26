@@ -1,0 +1,266 @@
+{
+    "schema_version":  1,
+    "diagram_type":  "architecture",
+    "meta":  {
+                 "title":  "Arquitectura de Yes, No, Maybe",
+                 "output":  "arquitectura-yes_no_app.html",
+                 "quality_profile":  "showcase",
+                 "views":  [
+                               {
+                                   "id":  "recorrido",
+                                   "label":  "Recorrido principal",
+                                   "focus":  [
+                                                 "inicio",
+                                                 "chat",
+                                                 "coordinador",
+                                                 "consulta",
+                                                 "yesno",
+                                                 "modelo"
+                                             ],
+                                   "note":  "Sigue el mensaje con pregunta hasta la respuesta automÃƒÆ’Ã‚Â¡tica y su visualizaciÃƒÆ’Ã‚Â³n."
+                               },
+                               {
+                                   "id":  "respuesta",
+                                   "label":  "Respuesta y visualizaciÃƒÆ’Ã‚Â³n",
+                                   "focus":  [
+                                                 "yesno",
+                                                 "modelo",
+                                                 "coordinador",
+                                                 "chat",
+                                                 "mensaje"
+                                             ],
+                                   "note":  "El JSON se convierte en Message y regresa a la conversaciÃƒÆ’Ã‚Â³n."
+                               },
+                               {
+                                   "id":  "dominio",
+                                   "label":  "Estado y entidad",
+                                   "focus":  [
+                                                 "coordinador",
+                                                 "mensaje",
+                                                 "chat"
+                                             ],
+                                   "note":  "ChatProvider mantiene la lista de mensajes y Message conserva los datos de cada mensaje."
+                               }
+                           ]
+             },
+    "components":  [
+                       {
+                           "id":  "inicio",
+                           "type":  "frontend",
+                           "label":  "Inicio Ãƒâ€šÃ‚Â· main.dart",
+                           "sublabel":  "MaterialApp Ãƒâ€šÃ‚Â· AppTheme",
+                           "tag":  "MultiProvider / ChatProvider",
+                           "pos":  [
+                                       50,
+                                       110
+                                   ],
+                           "size":  [
+                                        170,
+                                        78
+                                    ]
+                       },
+                       {
+                           "id":  "chat",
+                           "type":  "frontend",
+                           "label":  "Interfaz Ãƒâ€šÃ‚Â· ChatScreen",
+                           "sublabel":  "Campo de envÃƒÆ’Ã‚Â­o y conversaciÃƒÆ’Ã‚Â³n",
+                           "tag":  "MyMessageDubble Ãƒâ€šÃ‚Â· HerMessageDubble",
+                           "pos":  [
+                                       40,
+                                       310
+                                   ],
+                           "size":  [
+                                        190,
+                                        78
+                                    ]
+                       },
+                       {
+                           "id":  "coordinador",
+                           "type":  "backend",
+                           "label":  "Estado Ãƒâ€šÃ‚Â· ChatProvider",
+                           "sublabel":  "Lista y coordinaciÃƒÆ’Ã‚Â³n de mensajes",
+                           "tag":  "ChangeNotifier Ãƒâ€šÃ‚Â· desplazamiento",
+                           "pos":  [
+                                       280,
+                                       310
+                                   ],
+                           "size":  [
+                                        190,
+                                        78
+                                    ]
+                       },
+                       {
+                           "id":  "mensaje",
+                           "type":  "backend",
+                           "label":  "Dominio · Message",
+                           "sublabel":  "Texto · remitente · hora local",
+                           "tag":  "URL de imagen opcional",
+                           "pos":  [
+                                       280,
+                                       110
+                                   ],
+                           "size":  [
+                                        190,
+                                        78
+                                    ]
+                       },
+                       {
+                           "id":  "consulta",
+                           "type":  "backend",
+                           "label":  "GetYesNoAnswer",
+                           "sublabel":  "Dio · parámetro force",
+                           "tag":  "40 % yes · 40 % no · 20 % maybe",
+                           "pos":  [
+                                       520,
+                                       310
+                                   ],
+                           "size":  [
+                                        190,
+                                        78
+                                    ]
+                       },
+                       {
+                           "id":  "modelo",
+                           "type":  "backend",
+                           "label":  "YesNoModel",
+                           "sublabel":  "Interpreta JSON",
+                           "tag":  "Sí · No · Tal Vez + GIF",
+                           "pos":  [
+                                       580,
+                                       110
+                                   ],
+                           "size":  [
+                                        175,
+                                        78
+                                    ]
+                       },
+                       {
+                           "id":  "yesno",
+                           "type":  "external",
+                           "label":  "yesno.wtf",
+                           "sublabel":  "https://yesno.wtf/api",
+                           "tag":  "Servicio externo · GIF",
+                           "pos":  [
+                                       820,
+                                       310
+                                   ],
+                           "size":  [
+                                        175,
+                                        78
+                                    ]
+                       }
+                   ],
+    "boundaries":  [
+                       {
+                           "kind":  "region",
+                           "label":  "Aplicación Flutter · sin backend propio",
+                           "wraps":  [
+                                         "inicio",
+                                         "chat",
+                                         "coordinador",
+                                         "mensaje",
+                                         "consulta",
+                                         "modelo"
+                                     ],
+                           "pad":  30
+                       }
+                   ],
+    "connections":  [
+                        {
+                            "id":  "arranque",
+                            "from":  "inicio",
+                            "to":  "chat",
+                            "variant":  "emphasis"
+                        },
+                        {
+                            "id":  "envio",
+                            "from":  "chat",
+                            "to":  "coordinador",
+                            "label":  "envía mensaje",
+                            "labelAt":  [
+                                            255,
+                                            402
+                                        ]
+                        },
+                        {
+                            "id":  "entidad",
+                            "from":  "coordinador",
+                            "to":  "mensaje",
+                            "label":  "agrega Message"
+                        },
+                        {
+                            "id":  "disparador",
+                            "from":  "coordinador",
+                            "to":  "consulta",
+                            "label":  "si el texto termina en ?",
+                            "variant":  "emphasis",
+                            "labelDy":  55
+                        },
+                        {
+                            "id":  "solicitud",
+                            "from":  "consulta",
+                            "to":  "yesno",
+                            "label":  "HTTP + force",
+                            "variant":  "emphasis",
+                            "labelAt":  [
+                                            735,
+                                            402
+                                        ]
+                        },
+                        {
+                            "id":  "retorno",
+                            "from":  "yesno",
+                            "to":  "modelo",
+                            "label":  "JSON + GIF"
+                        },
+                        {
+                            "id":  "conversion",
+                            "from":  "modelo",
+                            "to":  "mensaje",
+                            "label":  "convierte a Message"
+                        },
+                        {
+                            "id":  "respuesta",
+                            "from":  "modelo",
+                            "to":  "coordinador",
+                            "label":  "agrega respuesta del bot",
+                            "variant":  "dashed"
+                        },
+                        {
+                            "id":  "render",
+                            "from":  "mensaje",
+                            "to":  "chat",
+                            "label":  "texto · hora · GIF opcional",
+                            "labelAt":  [
+                                            255,
+                                            225
+                                        ]
+                        }
+                    ],
+    "cards":  [
+                  {
+                      "dot":  "cyan",
+                      "title":  "Disparo de respuesta",
+                      "items":  [
+                                    "ChatProvider consulta al servicio cuando el mensaje recortado termina en ?",
+                                    "GetYesNoAnswer elige yes, no o maybe con probabilidades 40/40/20."
+                                ]
+                  },
+                  {
+                      "dot":  "emerald",
+                      "title":  "Límite de integración",
+                      "items":  [
+                                    "La aplicación llama directamente a yesno.wtf/api con Dio y force.",
+                                    "No hay backend propio; yesno.wtf es la dependencia externa."
+                                ]
+                  },
+                  {
+                      "dot":  "violet",
+                      "title":  "Regreso al chat",
+                      "items":  [
+                                    "YesNoModel convierte la respuesta en Message.",
+                                    "ChatProvider notifica y desplaza; las burbujas muestran el texto, la hora y el GIF si existe."
+                                ]
+                  }
+              ]
+}
