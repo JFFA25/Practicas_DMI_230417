@@ -5,7 +5,7 @@
     "title": "Arquitectura de flutter_application_1",
     "output": "arquitectura-flutter-application.html",
     "quality_profile": "showcase",
-    "viewBox": [1380, 660],
+    "viewBox": [992, 540],
     "repository": {
       "url": "https://github.com/JFFA25/Practicas_DMI_230417.git",
       "provider": "github",
@@ -13,91 +13,102 @@
     },
     "views": [
       {
-        "id": "entrada",
-        "label": "Flujo de entrada",
-        "focus": ["main", "counter_funcs", "widget_test", "pubspec"],
-        "note": "main.dart importa y monta CounterFunctionsScreen; widget_test.dart lo verifica."
+        "id": "completo",
+        "label": "Vista completa",
+        "focus": ["pubspec", "fonts_asset", "main", "widget_test", "counter_funcs", "counter_simple", "build", "android", "ios", "linux", "macos", "web", "windows"],
+        "note": "Dependencias, codigo fuente, pantallas, build y los seis destinos de plataforma."
       },
       {
-        "id": "fuentes",
-        "label": "Fuentes y recursos",
-        "focus": ["pubspec", "fonts_asset", "counter_funcs", "counter_simple"],
-        "note": "pubspec.yaml declara la familia 'tf2' y ambas pantallas la consumen."
+        "id": "dependencias",
+        "label": "Dependencias y recursos",
+        "focus": ["pubspec", "fonts_asset"],
+        "note": "pubspec.yaml declara el SDK, las dependencias y la familia 'tf2' desde assets/fonts/."
       },
       {
-        "id": "empaquetado",
-        "label": "Empaquetado por target",
-        "focus": ["main", "build", "android", "ios", "linux", "macos", "web", "windows"],
-        "note": "La compilacion de lib genera el artefacto de cada destino Flutter."
+        "id": "codigo",
+        "label": "Codigo fuente y pruebas",
+        "focus": ["main", "counter_funcs", "counter_simple", "widget_test"],
+        "note": "main.dart monta la pantalla y test/widget_test.dart verifica MyApp."
+      },
+      {
+        "id": "pantallas",
+        "label": "presentation/counter/",
+        "focus": ["counter_funcs", "counter_simple"],
+        "note": "CounterFunctionsScreen y CounterScreen comparten la familia 'tf2'."
+      },
+      {
+        "id": "targets",
+        "label": "Targets de compilacion",
+        "focus": ["build", "android", "ios", "linux", "macos", "web", "windows"],
+        "note": "build/ empaqueta lib/ hacia los seis destinos de plataforma."
       }
     ]
   },
   "components": [
-    { "id": "pubspec", "type": "security", "label": "pubspec.yaml", "sublabel": "Deps, SDK y fuentes", "tag": "Manifiesto", "pos": [20, 48], "size": [180, 66], "sources": [
+    { "id": "pubspec", "type": "security", "label": "pubspec.yaml", "sublabel": "Deps, SDK y fuentes", "tag": "Manifiesto", "pos": [60, 34], "size": [200, 64], "sources": [
       { "path": "Practica02/flutter_application_1/pubspec.yaml", "line": 60, "label": "familia 'tf2'" },
       { "path": "Practica02/flutter_application_1/pubspec.yaml", "line": 63, "label": "assets/fonts/tf2build.ttf" }
     ] },
-    { "id": "fonts_asset", "type": "cloud", "label": "assets/fonts/", "sublabel": "tf2build.ttf · familia 'tf2'", "tag": "Recursos", "pos": [250, 148], "size": [180, 74], "sources": [
+    { "id": "fonts_asset", "type": "cloud", "label": "assets/fonts/", "sublabel": "tf2build.ttf · familia 'tf2'", "tag": "Recursos", "pos": [700, 34], "size": [200, 64], "sources": [
       { "path": "Practica02/flutter_application_1/assets/fonts/tf2build.ttf", "label": "Fuente empaquetada" }
     ] },
-    { "id": "main", "type": "frontend", "label": "main.dart", "sublabel": "runApp(MyApp)", "tag": "lib/", "pos": [560, 48], "size": [200, 74], "sources": [
+    { "id": "main", "type": "frontend", "label": "main.dart", "sublabel": "runApp(MyApp)", "tag": "lib/", "pos": [60, 134], "size": [200, 68], "sources": [
       { "path": "Practica02/flutter_application_1/lib/main.dart", "line": 2, "label": "import counter_functions_screen" },
       { "path": "Practica02/flutter_application_1/lib/main.dart", "line": 19, "label": "home: CounterFunctionsScreen" }
     ] },
-    { "id": "counter_funcs", "type": "frontend", "label": "counter_functions_screen.dart", "sublabel": "CounterFunctionsScreen", "tag": "presentation/counter/", "pos": [560, 248], "size": [200, 74], "sources": [
-      { "path": "Practica02/flutter_application_1/lib/presentation/counter/counter_functions_screen.dart", "line": 3, "label": "class CounterFunctionsScreen" },
-      { "path": "Practica02/flutter_application_1/lib/presentation/counter/counter_functions_screen.dart", "line": 29, "label": "fontFamily 'tf2'" }
-    ] },
-    { "id": "counter_simple", "type": "frontend", "label": "counter_screen.dart", "sublabel": "CounterScreen", "tag": "presentation/counter/", "pos": [560, 348], "size": [180, 74], "sources": [
-      { "path": "Practica02/flutter_application_1/lib/presentation/counter/counter_screen.dart", "line": 3, "label": "class CounterScreen" },
-      { "path": "Practica02/flutter_application_1/lib/presentation/counter/counter_screen.dart", "line": 29, "label": "fontFamily 'tf2'" }
-    ] },
-    { "id": "widget_test", "type": "backend", "label": "widget_test.dart", "sublabel": "Smoke test de MyApp", "tag": "test/", "pos": [900, 48], "size": [180, 66], "sources": [
+    { "id": "widget_test", "type": "backend", "label": "widget_test.dart", "sublabel": "Smoke test de MyApp", "tag": "test/", "pos": [420, 134], "size": [200, 64], "sources": [
       { "path": "Practica02/flutter_application_1/test/widget_test.dart", "line": 11, "label": "import main.dart" },
       { "path": "Practica02/flutter_application_1/test/widget_test.dart", "line": 15, "label": "pumpWidget(MyApp)" }
     ] },
-    { "id": "build", "type": "messagebus", "label": "build/", "sublabel": "Salidas de compilación", "tag": "Generado", "pos": [900, 248], "size": [180, 66] },
-    { "id": "android", "type": "external", "label": "android/", "sublabel": "Destino Android", "tag": "Plataforma", "pos": [1150, 48], "size": [180, 66] },
-    { "id": "ios", "type": "external", "label": "ios/", "sublabel": "Destino iOS", "tag": "Plataforma", "pos": [1150, 148], "size": [180, 66] },
-    { "id": "linux", "type": "external", "label": "linux/", "sublabel": "Destino Linux", "tag": "Plataforma", "pos": [1150, 248], "size": [180, 66] },
-    { "id": "macos", "type": "external", "label": "macos/", "sublabel": "Destino macOS", "tag": "Plataforma", "pos": [1150, 348], "size": [180, 66] },
-    { "id": "web", "type": "external", "label": "web/", "sublabel": "Destino Web", "tag": "Plataforma", "pos": [1150, 448], "size": [180, 66] },
-    { "id": "windows", "type": "external", "label": "windows/", "sublabel": "Destino Windows", "tag": "Plataforma", "pos": [1150, 548], "size": [180, 66] }
+    { "id": "counter_funcs", "type": "frontend", "label": "counter_functions_screen.dart", "sublabel": "CounterFunctionsScreen", "tag": "presentation/counter/", "pos": [420, 238], "size": [230, 68], "sources": [
+      { "path": "Practica02/flutter_application_1/lib/presentation/counter/counter_functions_screen.dart", "line": 3, "label": "class CounterFunctionsScreen" },
+      { "path": "Practica02/flutter_application_1/lib/presentation/counter/counter_functions_screen.dart", "line": 29, "label": "fontFamily 'tf2'" }
+    ] },
+    { "id": "counter_simple", "type": "frontend", "label": "counter_screen.dart", "sublabel": "CounterScreen", "tag": "presentation/counter/", "pos": [700, 238], "size": [200, 68], "sources": [
+      { "path": "Practica02/flutter_application_1/lib/presentation/counter/counter_screen.dart", "line": 3, "label": "class CounterScreen" },
+      { "path": "Practica02/flutter_application_1/lib/presentation/counter/counter_screen.dart", "line": 29, "label": "fontFamily 'tf2'" }
+    ] },
+    { "id": "build", "type": "messagebus", "label": "build/", "sublabel": "Salidas de compilación", "tag": "Generado", "pos": [400, 342], "size": [200, 62] },
+    { "id": "android", "type": "external", "label": "android/", "sublabel": "Destino Android", "tag": "Plataforma", "pos": [60, 440], "size": [132, 54] },
+    { "id": "ios", "type": "external", "label": "ios/", "sublabel": "Destino iOS", "tag": "Plataforma", "pos": [206, 440], "size": [132, 54] },
+    { "id": "linux", "type": "external", "label": "linux/", "sublabel": "Destino Linux", "tag": "Plataforma", "pos": [352, 440], "size": [132, 54] },
+    { "id": "macos", "type": "external", "label": "macos/", "sublabel": "Destino macOS", "tag": "Plataforma", "pos": [498, 440], "size": [132, 54] },
+    { "id": "web", "type": "external", "label": "web/", "sublabel": "Destino Web", "tag": "Plataforma", "pos": [644, 440], "size": [132, 54] },
+    { "id": "windows", "type": "external", "label": "windows/", "sublabel": "Destino Windows", "tag": "Plataforma", "pos": [790, 440], "size": [132, 54] }
   ],
   "boundaries": [
+    { "kind": "region", "label": "Dependencias y recursos", "wraps": ["pubspec", "fonts_asset"] },
     { "kind": "region", "label": "lib/ · Código fuente Dart", "wraps": ["main", "counter_funcs", "counter_simple"] },
-    { "kind": "region", "label": "presentation/counter/ · Pantallas", "wraps": ["counter_funcs", "counter_simple"] }
+    { "kind": "region", "label": "presentation/counter/ · Pantallas", "wraps": ["counter_funcs", "counter_simple"], "pad": 14 },
+    { "kind": "region", "label": "Targets de compilación", "wraps": ["android", "ios", "linux", "macos", "web", "windows"] }
   ],
   "connections": [
-    { "id": "main-to-funcs", "from": "main", "to": "counter_funcs", "label": "importa y monta CounterFunctionsScreen", "variant": "emphasis", "fromSide": "bottom", "toSide": "top", "via": [[660, 185]], "labelAt": [660, 172] },
-    { "id": "test-to-main", "from": "widget_test", "to": "main", "label": "importa main.dart", "labelAt": [830, 72] },
-    { "id": "pubspec-to-main", "from": "pubspec", "to": "main", "label": "dependencias y SDK", "labelAt": [430, 72] },
-    { "id": "pubspec-to-fonts", "from": "pubspec", "to": "fonts_asset", "label": "declara familia 'tf2'", "fromSide": "bottom", "toSide": "top", "labelAt": [200, 130] },
-    { "id": "fonts-to-funcs", "from": "fonts_asset", "to": "counter_funcs", "label": "fontFamily: 'tf2'", "labelAt": [490, 200] },
-    { "id": "fonts-to-simple", "from": "fonts_asset", "to": "counter_simple", "label": "fontFamily: 'tf2'", "fromSide": "bottom", "toSide": "left", "via": [[340, 385]], "labelAt": [480, 378] },
-    { "id": "main-to-build", "from": "main", "to": "build", "label": "Flutter build", "variant": "emphasis", "labelAt": [825, 296] },
-    { "id": "build-to-android", "from": "build", "to": "android", "variant": "emphasis", "fromSide": "right", "toSide": "left" },
-    { "id": "build-to-ios", "from": "build", "to": "ios", "variant": "emphasis", "fromSide": "right", "toSide": "left" },
-    { "id": "build-to-linux", "from": "build", "to": "linux", "variant": "emphasis", "fromSide": "right", "toSide": "left" },
-    { "id": "build-to-macos", "from": "build", "to": "macos", "variant": "emphasis", "fromSide": "right", "toSide": "left" },
-    { "id": "build-to-web", "from": "build", "to": "web", "variant": "emphasis", "fromSide": "right", "toSide": "left" },
-    { "id": "build-to-windows", "from": "build", "to": "windows", "variant": "emphasis", "fromSide": "right", "toSide": "left" }
+    { "id": "main-to-funcs", "from": "main", "to": "counter_funcs", "label": "importa y monta CounterFunctionsScreen", "variant": "emphasis", "labelAt": [290, 220] },
+    { "id": "test-to-main", "from": "widget_test", "to": "main", "label": "importa main.dart", "labelAt": [352, 158] },
+    { "id": "pubspec-to-main", "from": "pubspec", "to": "main", "label": "dependencias y SDK", "labelAt": [280, 116] },
+    { "id": "pubspec-to-fonts", "from": "pubspec", "to": "fonts_asset", "label": "declara familia 'tf2'", "labelAt": [480, 66] },
+    { "id": "fonts-to-funcs", "from": "fonts_asset", "to": "counter_funcs", "label": "fontFamily: 'tf2'" },
+    { "id": "fonts-to-simple", "from": "fonts_asset", "to": "counter_simple", "label": "fontFamily: 'tf2'", "labelAt": [800, 150] },
+    { "id": "main-to-build", "from": "main", "to": "build", "label": "Flutter build", "variant": "emphasis", "fromSide": "left", "toSide": "left", "via": [[20, 168], [20, 373]] },
+    { "id": "build-to-android", "from": "build", "to": "android", "variant": "emphasis", "fromSide": "bottom", "toSide": "top" },
+    { "id": "build-to-ios", "from": "build", "to": "ios", "variant": "emphasis", "fromSide": "bottom", "toSide": "top" },
+    { "id": "build-to-linux", "from": "build", "to": "linux", "variant": "emphasis", "fromSide": "bottom", "toSide": "top" },
+    { "id": "build-to-macos", "from": "build", "to": "macos", "variant": "emphasis", "fromSide": "bottom", "toSide": "top" },
+    { "id": "build-to-web", "from": "build", "to": "web", "variant": "emphasis", "fromSide": "bottom", "toSide": "top" },
+    { "id": "build-to-windows", "from": "build", "to": "windows", "variant": "emphasis", "fromSide": "bottom", "toSide": "top" }
   ],
   "cards": [
     { "dot": "cyan", "title": "Núcleo lib/", "items": [
-      "main.dart es el punto de entrada y monta CounterFunctionsScreen como home.",
-      "counter_screen.dart es una pantalla independiente sin importaciones desde main.",
-      "test/widget_test.dart importa main.dart y hace smoke test de MyApp."
+      "main.dart monta CounterFunctionsScreen como home.",
+      "test/widget_test.dart importa main.dart y hace smoke test."
     ] },
     { "dot": "emerald", "title": "Fuentes y recursos", "items": [
       "pubspec.yaml declara la familia 'tf2' desde assets/fonts/tf2build.ttf.",
-      "Ambas pantallas referencian fontFamily: 'tf2'.",
-      "El único recurso empaquetado del proyecto es la fuente; no hay imágenes registradas en assets."
+      "Ambas pantallas usan fontFamily: 'tf2'; no hay otros assets."
     ] },
     { "dot": "amber", "title": "Targets y generados", "items": [
-      "build/ empaqueta lib/ hacia los 6 destinos: APK, IPA, JS/WASM y binarios nativos.",
-      "build/ es un directorio local generado por el toolchain de Flutter.",
-      "Los destinos tienen su propio runner y configuración nativa por plataforma."
+      "build/ empaqueta lib/ hacia los 6 destinos: APK, IPA, JS/WASM y binarios.",
+      "build/ es un directorio local generado por Flutter."
     ] }
   ]
 }
