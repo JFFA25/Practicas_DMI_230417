@@ -8,6 +8,7 @@ class HerMessageDubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+    final time = TimeOfDay.fromDateTime(message.sentAt).format(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -18,13 +19,25 @@ class HerMessageDubble extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Text(message.text, style: TextStyle(color: Colors.white)),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(message.text, style: const TextStyle(color: Colors.white)),
+                const SizedBox(height: 4),
+                Text(
+                  time,
+                  style: const TextStyle(color: Colors.white70, fontSize: 11),
+                ),
+              ],
+            ),
           ),
         ),
-        const SizedBox(height: 5),
-        // Todo: Imagen
-        _ImageBubble(message.imageUrl!),
+        if (message.imageUrl != null) ...[
+          const SizedBox(height: 5),
+          _ImageBubble(message.imageUrl!),
+        ],
         const SizedBox(height: 10),
       ],
     );
@@ -35,7 +48,7 @@ class _ImageBubble extends StatelessWidget {
 
   final String imageUrl;
 
-  const new(this.imageUrl);
+  const _ImageBubble(this.imageUrl);
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;

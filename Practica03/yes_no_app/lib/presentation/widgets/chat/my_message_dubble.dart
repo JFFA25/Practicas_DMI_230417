@@ -8,24 +8,35 @@ class MyMessageDubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final colors = Theme.of(context).colorScheme;
+    final time = TimeOfDay.fromDateTime(message.sentAt).format(context);
 
-   return Column(
-    crossAxisAlignment: CrossAxisAlignment.end,
-    children:[
-      Container(
-        decoration:BoxDecoration( 
-          color: colors.primary,
-          borderRadius: BorderRadius.circular(20)
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            color: colors.primary,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(message.text, style: const TextStyle(color: Colors.white)),
+                const SizedBox(height: 4),
+                Text(
+                  time,
+                  style: const TextStyle(color: Colors.white70, fontSize: 11),
+                ),
+              ],
+            ),
+          ),
         ),
-       child: Padding(
-         padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
-         child: Text(message.text,style:TextStyle(color:Colors.white)),
-       )
-      ),
-      const SizedBox(height: 10,),
-    ],
-   );
+        const SizedBox(height: 10),
+      ],
+    );
   }
 }
