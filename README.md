@@ -53,5 +53,5 @@ Cada práctica incluye el código fuente, una breve descripción del objetivo de
 | No. | Nombre                                  | Descripción                                                                 | Potenciador | Estatus       |
 |:---:|:----------------------------------------|:-----------------------------------------------------------------------------|:-----------:|:-------------:|
 | 01  | Metodologia de Evaluacion de la Materia | Revisión de la forma en que se evaluará la materia durante el cuatrimestre. |     05      | 🟢 Completada |
-| 02  | Mi Primer Aplicaccion Movil con Flutter | App contador con botones para sumar, restar y reiniciar, con colores según el valor. |     25      | 🟢 Completada |
+| 02  | [Mi Primer Aplicaccion Movil con Flutter ](/Practica02/flutter_application_1/README.md) | App contador con botones para sumar, restar y reiniciar, con colores según el valor. |     25      | 🟢 Completada |
 | 03  | [Yes, No, Maybe](/Practica03/yes_no_app/README.md) | Chat Flutter con respuestas automáticas y GIFs mediante la API yesno.wtf. |     --      | 🟢 Completada |
