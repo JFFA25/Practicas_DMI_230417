@@ -1,17 +1,19 @@
-# toktik
+# Toktik - A Flutter Project
 
-A new Flutter project.
+## Importante:
+Los videos no están incluídos en el repositorio, debido a que son muy pesados y GitHub no lo permite.
 
-## Getting Started
+Pueden descargar 8 videos de aquí:
+[Pexels Free Videos](https://www.pexels.com/search/videos/vertical/)
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Renombren esos videos así, ya que es lo que se encuentra en nuestro data source.
+```
+1.mp4
+2.mp4
+3.mp4
+4.mp4
+5.mp4
+6.mp4
+7.mp4
+8.mp4
+```
