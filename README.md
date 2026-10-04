@@ -38,14 +38,11 @@ El objetivo es aplicar los fundamentos del desarrollo de aplicaciones móviles m
 
 Cada práctica incluye el código fuente, una breve descripción del objetivo de aprendizaje y, cuando aplica, capturas de pantalla o evidencias del funcionamiento de la aplicación.
 
-## Información de la materia
+## Información de la materia y el estudiante
 
-| Campo | Detalle |
+| Información de la Materia | Datos del Estudiante |
 |:--|:--|
-| **Materia** | Desarrollo Móvil Integral |
-| **Carrera** | Ingeniería en Desarrollo y Gestión de Software |
-| **Docente** | M.T.I. Marco A. Ramírez Hernández |
-| **Periodo** | Septiembre - Diciembre |
+| <table><tr><th>Campo</th><th>Detalle</th></tr><tr><td><b>Materia</b></td><td>Desarollo Movil Integral</td></tr><tr><td><b>Carrera</b></td><td>Ingeniería en Desarrollo y Gestión de Software</td></tr><tr><td><b>Docente</b></td><td>M.T.I. Marco A. Ramírez Hernández</td></tr><tr><td><b>Periodo</b></td><td>Septiembre - Diciembre</td></tr></table> | <table><tr><th>Campo</th><th>Detalle</th></tr><tr><td><b>Nombre</b></td><td>Jose Francisco Flores Amador</td></tr><tr><td><b>Matrícula</b></td><td>230417</td></tr><tr><td><b>Grupo</b></td><td>10 A°</td></tr><tr><td><b>Correo</b></td><td>230417@utxicotepec.edu.mx</td></tr></table> |
 
 
 ## Tabla de Prácticas de la Materia
