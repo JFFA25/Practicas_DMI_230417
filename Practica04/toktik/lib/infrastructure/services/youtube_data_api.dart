@@ -1,0 +1,167 @@
+import 'dart:convert';
+
+import 'package:http/http.dart' as http;
+import 'package:toktik/domain/entities/video_post.dart';
+
+class YoutubeDataApi {
+  static const defaultSearchQuery = String.fromEnvironment(
+    'YOUTUBE_SEARCH_QUERY',
+    defaultValue: 'shorts',
+  );
+  static const _defaultApiKey = String.fromEnvironment('YOUTUBE_API_KEY');
+
+  final http.Client _client;
+  final String apiKey;
+
+  YoutubeDataApi({http.Client? client, String? apiKey})
+      : _client = client ?? http.Client(),
+        apiKey = apiKey ?? _defaultApiKey;
+
+  bool get isConfigured => apiKey.trim().isNotEmpty;
+
+  Future<List<VideoPost>> searchShorts(
+    String query, {
+    int maxResults = 10,
+  }) async {
+    _checkConfiguration();
+    final normalizedQuery = query.trim();
+    if (normalizedQuery.isEmpty) {
+      throw const YoutubeApiException('Escribe un término de búsqueda.');
+    }
+
+    final searchQuery =
+        normalizedQuery.toLowerCase().contains('short')
+            ? normalizedQuery
+            : '$normalizedQuery shorts';
+    final searchData = await _get('search', {
+      'part': 'snippet',
+      'type': 'video',
+      'videoDuration': 'short',
+      'q': searchQuery,
+      'maxResults': '$maxResults',
+    });
+    final searchItems = _items(searchData);
+    final videoIds = searchItems
+        .map((item) => _object(item['id'])['videoId'])
+        .whereType<String>()
+        .where((id) => id.isNotEmpty)
+        .toList();
+
+    if (videoIds.isEmpty) return [];
+
+    final videosData = await _get('videos', {
+      'part': 'snippet,statistics',
+      'id': videoIds.join(','),
+      'maxResults': '$maxResults',
+    });
+
+    return _items(videosData).map((item) {
+      final snippet = _object(item['snippet']);
+      final statistics = _object(item['statistics']);
+      final videoId = _string(item['id']);
+
+      return VideoPost(
+        caption: _string(snippet['title']),
+        videoUrl: 'https://www.youtube.com/watch?v=$videoId',
+        likes: _integer(statistics['likeCount']),
+        views: _integer(statistics['viewCount']),
+        comments: _integer(statistics['commentCount']),
+        youtubeVideoId: videoId,
+      );
+    }).toList();
+  }
+
+  Future<List<YoutubeComment>> getComments(String videoId) async {
+    _checkConfiguration();
+    final data = await _get('commentThreads', {
+      'part': 'snippet',
+      'videoId': videoId,
+      'maxResults': '20',
+      'order': 'relevance',
+      'textFormat': 'plainText',
+    });
+
+    return _items(data).map((item) {
+      final thread = _object(item['snippet']);
+      final comment = _object(thread['topLevelComment']);
+      final snippet = _object(comment['snippet']);
+      return YoutubeComment(
+        author: _string(snippet['authorDisplayName']),
+        text: _string(snippet['textDisplay']),
+        likes: _integer(snippet['likeCount']),
+      );
+    }).toList();
+  }
+
+  Future<Map<String, dynamic>> _get(
+    String endpoint,
+    Map<String, String> parameters,
+  ) async {
+    final uri = Uri.https(
+      'www.googleapis.com',
+      '/youtube/v3/$endpoint',
+      {...parameters, 'key': apiKey},
+    );
+    final response = await _client.get(uri);
+    final decoded = jsonDecode(response.body);
+    if (response.statusCode < 200 || response.statusCode >= 300) {
+      final error = _object(_object(decoded)['error']);
+      final message = _string(error['message']);
+      throw YoutubeApiException(
+        message.isEmpty
+            ? 'YouTube API respondió con HTTP ${response.statusCode}.'
+            : message,
+      );
+    }
+
+    return _object(decoded);
+  }
+
+  List<Map<String, dynamic>> _items(Map<String, dynamic> data) {
+    final items = data['items'];
+    if (items is! List) return [];
+    return items.map(_object).toList();
+  }
+
+  Map<String, dynamic> _object(Object? value) {
+    if (value is Map) {
+      return value.map((key, value) => MapEntry(key.toString(), value));
+    }
+    return {};
+  }
+
+  String _string(Object? value) => value is String ? value : '';
+
+  int _integer(Object? value) => int.tryParse(value.toString()) ?? 0;
+
+  void _checkConfiguration() {
+    if (!isConfigured) {
+      throw const YoutubeApiException(
+        'Configura YOUTUBE_API_KEY para buscar videos de YouTube.',
+      );
+    }
+  }
+
+  void close() => _client.close();
+}
+
+class YoutubeComment {
+  final String author;
+  final String text;
+  final int likes;
+
+  const YoutubeComment({
+    required this.author,
+    required this.text,
+    required this.likes,
+  });
+}
+
+class YoutubeApiException implements Exception {
+  final String message;
+
+  const YoutubeApiException(this.message);
+
+  @override
+  String toString() => message;
+}
