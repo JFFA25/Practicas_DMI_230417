@@ -9,13 +9,13 @@ class DiscoverProvider extends ChangeNotifier {
     : _youtubeApi = youtubeApi ?? YoutubeDataApi();
 
   final YoutubeDataApi _youtubeApi;
-
   bool initialLoading = true;
+  List<VideoPost> videos = [];
+  String? statusMessage;
+
   late final List<VideoPost> _localVideos = videoPosts
       .map((video) => LocalVideoModel.fromJson(video).toVideoPostEntity())
       .toList();
-  List<VideoPost> videos = [];
-  String? statusMessage;
 
   int get localVideoCount => _localVideos.length;
 
@@ -38,7 +38,7 @@ class DiscoverProvider extends ChangeNotifier {
             'Se muestran los videos locales.';
       } else {
         final youtubeVideos = await _youtubeApi.searchShorts(query);
-        videos = _interleave(_localVideos, youtubeVideos);
+        videos = _interleaveVideos(_localVideos, youtubeVideos);
         if (youtubeVideos.isEmpty) {
           statusMessage =
               'YouTube no devolvió resultados; se muestran los videos locales.';
@@ -47,8 +47,8 @@ class DiscoverProvider extends ChangeNotifier {
     } catch (error) {
       videos = List.of(_localVideos);
       statusMessage =
-          'No se pudo consultar YouTube; se muestran los videos '
-          'locales. $error';
+          'No se pudo consultar YouTube; se muestran los videos locales. '
+          '$error';
     } finally {
       initialLoading = false;
       notifyListeners();
@@ -58,7 +58,7 @@ class DiscoverProvider extends ChangeNotifier {
   Future<List<YoutubeComment>> getComments(String videoId) =>
       _youtubeApi.getComments(videoId);
 
-  List<VideoPost> _interleave(
+  List<VideoPost> _interleaveVideos(
     List<VideoPost> localVideos,
     List<VideoPost> youtubeVideos,
   ) {

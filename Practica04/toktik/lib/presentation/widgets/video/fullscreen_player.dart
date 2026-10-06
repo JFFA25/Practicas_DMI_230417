@@ -55,6 +55,14 @@ class _FullScreenPlayerState extends State<FullScreenPlayer> {
     }
   }
 
+  void _togglePlayback() {
+    if (controller.value.isPlaying) {
+      controller.pause();
+    } else {
+      controller.play();
+    }
+  }
+
   @override
   void didUpdateWidget(covariant FullScreenPlayer oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -96,64 +104,66 @@ class _FullScreenPlayerState extends State<FullScreenPlayer> {
             onPointerSignal: widget.onPointerSignal,
             onPointerDown: widget.onPointerDown,
             child: GestureDetector(
-          onTap: () {
-            if (controller.value.isPlaying) {
-              controller.pause();
-              return;
-            }
-            controller.play();
-          },
-          child: AspectRatio(
-            aspectRatio: controller.value.aspectRatio,
-            child: Stack(
-              children: [
-                VideoPlayer(controller),
-
-                // Gradiente
-                VideoBackground(
-                  stops: const [0.8, 1.0],
-                ),
-
-                if (_isPlaying != true)
+              behavior: HitTestBehavior.opaque,
+              onTap: _togglePlayback,
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
                   Center(
-                    child: IconButton(
-                      tooltip: 'Reproducir video',
-                      onPressed: controller.play,
-                      icon: const Icon(
-                        Icons.play_circle_fill,
-                        color: Colors.white,
-                        size: 72,
+                    child: AspectRatio(
+                      aspectRatio: controller.value.aspectRatio,
+                      child: VideoPlayer(controller),
+                    ),
+                  ),
+                  VideoBackground(stops: const [0.8, 1.0]),
+                  if (_isPlaying != true)
+                    Center(
+                      child: IconButton(
+                        tooltip: 'Reproducir video',
+                        onPressed: controller.play,
+                        icon: const Icon(
+                          Icons.play_circle_fill,
+                          color: Colors.white,
+                          size: 72,
+                        ),
+                      ),
+                    ),
+                  Positioned(
+                    bottom: 50,
+                    left: 20,
+                    child: _VideoCaption(caption: widget.caption),
+                  ),
+                  Positioned(
+                    left: 16,
+                    bottom: 128,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: Colors.black.withValues(alpha: 0.42),
+                        shape: BoxShape.circle,
+                      ),
+                      child: IconButton(
+                        tooltip: _isMuted == true
+                            ? 'Activar sonido'
+                            : 'Silenciar',
+                        onPressed: () async {
+                          final isMuted = _isMuted != true;
+                          await controller.setVolume(isMuted ? 0 : 1);
+                          if (mounted) {
+                            setState(() => _isMuted = isMuted);
+                          }
+                        },
+                        icon: Icon(
+                          _isMuted == true
+                              ? Icons.volume_off
+                              : Icons.volume_up,
+                          color: Colors.white,
+                          size: 25,
+                        ),
                       ),
                     ),
                   ),
-
-                // Texto
-                Positioned(
-                    bottom: 50,
-                    left: 20,
-                    child: _VideoCaption(caption: widget.caption)),
-                Positioned(
-                  top: 16,
-                  right: 16,
-                  child: IconButton(
-                    tooltip: _isMuted == true ? 'Activar sonido' : 'Silenciar',
-                    onPressed: () async {
-                      final isMuted = _isMuted != true;
-                      await controller.setVolume(isMuted ? 0 : 1);
-                      if (mounted) {
-                        setState(() => _isMuted = isMuted);
-                      }
-                    },
-                    icon: Icon(
-                      _isMuted == true ? Icons.volume_off : Icons.volume_up,
-                      color: Colors.white,
-                      size: 30,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+                ],
+              ),
             ),
           ),
         );

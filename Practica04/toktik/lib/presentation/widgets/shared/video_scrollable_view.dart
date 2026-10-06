@@ -32,6 +32,25 @@ class _VideoScrollableViewState extends State<VideoScrollableView> {
   bool _wheelLocked = false;
 
   @override
+  void didUpdateWidget(covariant VideoScrollableView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.videos.isEmpty) {
+      _currentIndex = 0;
+      return;
+    }
+
+    final lastIndex = widget.videos.length - 1;
+    if (_currentIndex > lastIndex) {
+      _currentIndex = lastIndex;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && _pageController.hasClients) {
+          _pageController.jumpToPage(lastIndex);
+        }
+      });
+    }
+  }
+
+  @override
   void dispose() {
     _pageController.dispose();
     _focusNode.dispose();
@@ -98,48 +117,55 @@ class _VideoScrollableViewState extends State<VideoScrollableView> {
             itemCount: widget.videos.length,
             onPageChanged: (index) => setState(() => _currentIndex = index),
             itemBuilder: (context, index) {
-              final VideoPost videoPost = widget.videos[index];
+              final video = widget.videos[index];
+              final buttons = VideoButtons(
+                video: video,
+                canGoPrevious: index > 0,
+                canGoNext: index < widget.videos.length - 1,
+                onPreviousPressed: () => _goToPage(index - 1),
+                onNextPressed: () => _goToPage(index + 1),
+                onCommentsPressed: video.youtubeVideoId == null
+                    ? null
+                    : () => showModalBottomSheet<void>(
+                        context: context,
+                        isScrollControlled: true,
+                        builder: (context) => VideoCommentsSheet(
+                          loadComments: () =>
+                              widget.loadComments(video.youtubeVideoId!),
+                        ),
+                      ),
+              );
 
               return Stack(
                 children: [
                   SizedBox.expand(
-                    child: videoPost.youtubeVideoId == null
+                    child: video.youtubeVideoId == null
                         ? FullScreenPlayer(
-                            caption: videoPost.caption,
-                            videoUrl: videoPost.videoUrl,
+                            videoUrl: video.videoUrl,
+                            caption: video.caption,
                             isActive: index == _currentIndex,
                             onPointerSignal: _handlePointerSignal,
                             onPointerDown: (_) => _focusNode.requestFocus(),
                           )
                         : YoutubeFullscreenPlayer(
-                            videoId: videoPost.youtubeVideoId!,
-                            caption: videoPost.caption,
-                            isActive: index == _currentIndex,
-                            onPointerSignal: _handlePointerSignal,
-                            onPointerDown: (_) => _focusNode.requestFocus(),
-                          ),
+                              videoId: video.youtubeVideoId!,
+                              caption: video.caption,
+                              isActive: index == _currentIndex,
+                              onPointerSignal: _handlePointerSignal,
+                              onPointerDown: (_) => _focusNode.requestFocus(),
+                              onSwipeNext: () => _goToPage(index + 1),
+                              onSwipePrevious: () => _goToPage(index - 1),
+                              overlay: Positioned(
+                                bottom: 40,
+                                right: 20,
+                                child: buttons,
+                              ),
+                            ),
                   ),
                   Positioned(
                     bottom: 40,
                     right: 20,
-                    child: VideoButtons(
-                      video: videoPost,
-                      canGoPrevious: index > 0,
-                      canGoNext: index < widget.videos.length - 1,
-                      onPreviousPressed: () => _goToPage(index - 1),
-                      onNextPressed: () => _goToPage(index + 1),
-                      onCommentsPressed: videoPost.youtubeVideoId == null
-                          ? null
-                          : () => showModalBottomSheet<void>(
-                              context: context,
-                              isScrollControlled: true,
-                              builder: (context) => VideoCommentsSheet(
-                                loadComments: () => widget.loadComments(
-                                  videoPost.youtubeVideoId!,
-                                ),
-                              ),
-                            ),
-                    ),
+                    child: buttons,
                   ),
                 ],
               );

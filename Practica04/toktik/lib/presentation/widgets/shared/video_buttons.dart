@@ -31,22 +31,26 @@ class VideoButtons extends StatelessWidget {
           onPressed: canGoPrevious ? onPreviousPressed : null,
         ),
         const SizedBox(height: 8),
-        _CustomIconButton(
+        _MetricButton(
           value: video.likes,
-          iconColor: Colors.red,
           iconData: Icons.favorite,
+          label: 'Me gusta',
+          iconColor: Colors.redAccent,
         ),
-        const SizedBox(height: 20),
-        _CustomIconButton(
-          value: video.views,
-          iconData: Icons.remove_red_eye_outlined,
-        ),
-
+        if (video.youtubeVideoId == null) ...[
+          const SizedBox(height: 16),
+          _MetricButton(
+            value: video.views,
+            iconData: Icons.visibility_outlined,
+            label: 'Vistas',
+          ),
+        ],
         if (video.youtubeVideoId != null) ...[
-          const SizedBox(height: 20),
-          _CustomIconButton(
+          const SizedBox(height: 16),
+          _MetricButton(
             value: video.comments,
             iconData: Icons.mode_comment_outlined,
+            label: 'Comentarios',
             onPressed: onCommentsPressed,
           ),
         ],
@@ -100,12 +104,10 @@ class _CustomIconButton extends StatelessWidget {
   final int value;
   final IconData iconData;
   final Color? color;
-  final VoidCallback? onPressed;
 
   const _CustomIconButton({
     required this.value,
     required this.iconData,
-    this.onPressed,
     iconColor,
   }) : color = iconColor ?? Colors.white;
 
@@ -113,13 +115,72 @@ class _CustomIconButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        IconButton(
-          onPressed: onPressed ?? () {},
-          icon: Icon(iconData, color: color, size: 30),
-        ),
+        Icon(iconData, color: color, size: 30),
 
         if (value > 0) Text(HumanFormats.humanReadbleNumber(value.toDouble())),
       ],
+    );
+  }
+}
+
+class _MetricButton extends StatelessWidget {
+  final int value;
+  final IconData iconData;
+  final String label;
+  final Color iconColor;
+  final VoidCallback? onPressed;
+
+  const _MetricButton({
+    required this.value,
+    required this.iconData,
+    required this.label,
+    this.iconColor = Colors.white,
+    this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 72,
+      child: Column(
+        children: [
+          Material(
+            color: Colors.black.withValues(alpha: 0.38),
+            shape: const CircleBorder(),
+            child: InkWell(
+              customBorder: const CircleBorder(),
+              onTap: onPressed,
+              child: SizedBox(
+                width: 48,
+                height: 48,
+                child: Icon(iconData, color: iconColor, size: 25),
+              ),
+            ),
+          ),
+          const SizedBox(height: 5),
+          Text(
+            HumanFormats.humanReadbleNumber(value.toDouble()),
+            maxLines: 1,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 13,
+              fontWeight: FontWeight.w700,
+              shadows: [Shadow(blurRadius: 4, color: Colors.black)],
+            ),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              color: Colors.white70,
+              fontSize: 9,
+              shadows: [Shadow(blurRadius: 4, color: Colors.black)],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

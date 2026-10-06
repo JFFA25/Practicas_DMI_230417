@@ -14,8 +14,8 @@ class YoutubeDataApi {
   final String apiKey;
 
   YoutubeDataApi({http.Client? client, String? apiKey})
-      : _client = client ?? http.Client(),
-        apiKey = apiKey ?? _defaultApiKey;
+    : _client = client ?? http.Client(),
+      apiKey = apiKey ?? _defaultApiKey;
 
   bool get isConfigured => apiKey.trim().isNotEmpty;
 
@@ -29,10 +29,9 @@ class YoutubeDataApi {
       throw const YoutubeApiException('Escribe un término de búsqueda.');
     }
 
-    final searchQuery =
-        normalizedQuery.toLowerCase().contains('short')
-            ? normalizedQuery
-            : '$normalizedQuery shorts';
+    final searchQuery = normalizedQuery.toLowerCase().contains('short')
+        ? normalizedQuery
+        : '$normalizedQuery shorts';
     final searchData = await _get('search', {
       'part': 'snippet',
       'type': 'video',
@@ -41,34 +40,45 @@ class YoutubeDataApi {
       'maxResults': '$maxResults',
     });
     final searchItems = _items(searchData);
-    final videoIds = searchItems
-        .map((item) => _object(item['id'])['videoId'])
-        .whereType<String>()
-        .where((id) => id.isNotEmpty)
-        .toList();
+    final captionsById = <String, String>{};
+    final videoIds = <String>[];
+    for (final item in searchItems) {
+      final videoId = _object(item['id'])['videoId'];
+      if (videoId is! String || videoId.isEmpty) continue;
+
+      videoIds.add(videoId);
+      captionsById[videoId] = _string(_object(item['snippet'])['title']);
+    }
 
     if (videoIds.isEmpty) return [];
 
     final videosData = await _get('videos', {
-      'part': 'snippet,statistics',
+      'part': 'statistics',
       'id': videoIds.join(','),
       'maxResults': '$maxResults',
     });
+    final statisticsById = <String, Map<String, dynamic>>{
+      for (final item in _items(videosData))
+        _string(item['id']): _object(item['statistics']),
+    };
 
-    return _items(videosData).map((item) {
-      final snippet = _object(item['snippet']);
-      final statistics = _object(item['statistics']);
-      final videoId = _string(item['id']);
+    final videos = <VideoPost>[];
+    for (final videoId in videoIds) {
+      final statistics = statisticsById[videoId];
+      if (statistics == null) continue;
 
-      return VideoPost(
-        caption: _string(snippet['title']),
-        videoUrl: 'https://www.youtube.com/watch?v=$videoId',
-        likes: _integer(statistics['likeCount']),
-        views: _integer(statistics['viewCount']),
-        comments: _integer(statistics['commentCount']),
-        youtubeVideoId: videoId,
+      videos.add(
+        VideoPost(
+          caption: captionsById[videoId] ?? '',
+          videoUrl: 'https://www.youtube.com/watch?v=$videoId',
+          likes: _integer(statistics['likeCount']),
+          comments: _integer(statistics['commentCount']),
+          youtubeVideoId: videoId,
+        ),
       );
-    }).toList();
+    }
+
+    return videos;
   }
 
   Future<List<YoutubeComment>> getComments(String videoId) async {
@@ -97,11 +107,10 @@ class YoutubeDataApi {
     String endpoint,
     Map<String, String> parameters,
   ) async {
-    final uri = Uri.https(
-      'www.googleapis.com',
-      '/youtube/v3/$endpoint',
-      {...parameters, 'key': apiKey},
-    );
+    final uri = Uri.https('www.googleapis.com', '/youtube/v3/$endpoint', {
+      ...parameters,
+      'key': apiKey,
+    });
     final response = await _client.get(uri);
     final decoded = jsonDecode(response.body);
     if (response.statusCode < 200 || response.statusCode >= 300) {

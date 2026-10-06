@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:toktik/infrastructure/services/youtube_data_api.dart';
 import 'package:toktik/presentation/providers/discover_provider.dart';
 import 'package:toktik/presentation/widgets/shared/video_scrollable_view.dart';
 
@@ -13,22 +12,6 @@ class DiscoverScreen extends StatefulWidget {
 }
 
 class _DiscoverScreenState extends State<DiscoverScreen> {
-  late final TextEditingController _queryController;
-
-  @override
-  void initState() {
-    super.initState();
-    _queryController = TextEditingController(
-      text: YoutubeDataApi.defaultSearchQuery,
-    );
-  }
-
-  @override
-  void dispose() {
-    _queryController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     final discoverProvider = context.watch<DiscoverProvider>();
@@ -60,28 +43,6 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Material(
-                    color: Colors.black.withValues(alpha: 0.7),
-                    borderRadius: BorderRadius.circular(28),
-                    child: TextField(
-                      controller: _queryController,
-                      textInputAction: TextInputAction.search,
-                      onSubmitted: (_) => _search(context),
-                      decoration: InputDecoration(
-                        hintText: 'Buscar Shorts',
-                        prefixIcon: const Icon(Icons.search),
-                        suffixIcon: IconButton(
-                          tooltip: 'Buscar videos',
-                          onPressed: () => _search(context),
-                          icon: const Icon(Icons.arrow_forward),
-                        ),
-                        border: InputBorder.none,
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 14,
-                        ),
-                      ),
-                    ),
-                  ),
                   if (kDebugMode && !discoverProvider.initialLoading)
                     Padding(
                       padding: const EdgeInsets.only(top: 4),
@@ -98,17 +59,21 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                       discoverProvider.videos.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.only(top: 8),
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          color: Colors.black.withValues(alpha: 0.7),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
+                      child: Material(
+                        color: Colors.black.withValues(alpha: 0.72),
+                        borderRadius: BorderRadius.circular(8),
                         child: Padding(
-                          padding: const EdgeInsets.all(10),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 8,
+                          ),
                           child: Text(
                             discoverProvider.statusMessage!,
                             textAlign: TextAlign.center,
-                            style: const TextStyle(fontSize: 12),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                            ),
                           ),
                         ),
                       ),
@@ -120,7 +85,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
           if (discoverProvider.initialLoading &&
               discoverProvider.videos.isNotEmpty)
             const Positioned(
-              top: 76,
+              top: 8,
               left: 0,
               right: 0,
               child: LinearProgressIndicator(minHeight: 2),
@@ -128,9 +93,5 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
         ],
       ),
     );
-  }
-
-  void _search(BuildContext context) {
-    context.read<DiscoverProvider>().searchVideos(_queryController.text);
   }
 }

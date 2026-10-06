@@ -33,6 +33,7 @@ void main() {
               'items': [
                 {
                   'id': {'videoId': 'short-id'},
+                  'snippet': {'title': 'A public Short'},
                 },
               ],
             }),
@@ -40,17 +41,13 @@ void main() {
           );
         }
         if (request.url.path.endsWith('/videos')) {
+          expect(request.url.queryParameters['part'], 'statistics');
           return http.Response(
             jsonEncode({
               'items': [
                 {
                   'id': 'short-id',
-                  'snippet': {'title': 'A public Short'},
-                  'statistics': {
-                    'viewCount': '1234',
-                    'likeCount': '56',
-                    'commentCount': '7',
-                  },
+                  'statistics': {'likeCount': '56', 'commentCount': '7'},
                 },
               ],
             }),
@@ -67,7 +64,7 @@ void main() {
       expect(videos, hasLength(1));
       expect(videos.single.youtubeVideoId, 'short-id');
       expect(videos.single.caption, 'A public Short');
-      expect(videos.single.views, 1234);
+      expect(videos.single.views, 0);
       expect(videos.single.likes, 56);
       expect(videos.single.comments, 7);
     });
