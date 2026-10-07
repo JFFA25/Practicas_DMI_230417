@@ -15,18 +15,18 @@ La app separa presentación, lógica de dominio, repositorios y fuentes de datos
 Flujo por capas: presentación, estado y dominio, repositorios/datasources, APIs
 externas, persistencia local e integración nativa para los iconos estacionales.
 
+[Abrir diagrama interactivo en GitHub Pages](https://jffa25.github.io/Practicas_DMI_230417/Practica04/toktik/arquitectura-toktik/architecture-toktik.preflight.html)
+
+[![Vista previa del diagrama de arquitectura](./arquitectura-toktik/architecture-toktik.preflight.visual-check.1440x900.dark.png)](https://jffa25.github.io/Practicas_DMI_230417/Practica04/toktik/arquitectura-toktik/architecture-toktik.preflight.html)
+
+### Arquitectura general (diagrama actualizado)
+
+El diagrama muestra las capas de la app, las fuentes de video y la persistencia
+local.
+
 [Abrir diagrama interactivo en GitHub Pages](https://jffa25.github.io/Practicas_DMI_230417/Practica04/toktik/arquitectura-toktik/arquitectura-toktik.html)
 
-[![Vista previa del diagrama de arquitectura](./arquitectura-toktik/arquitectura-toktik.visual-check.2048x1320.dark.png)](https://jffa25.github.io/Practicas_DMI_230417/Practica04/toktik/arquitectura-toktik/arquitectura-toktik.html)
-
-### Consulta y paginación de videos
-
-El diagrama separa la carga inicial de la paginación; las consultas paralelas
-agrupan YouTube, GIPHY y Dailymotion, conservando los cursores de cada fuente.
-
-[Abrir diagrama interactivo en GitHub Pages](https://jffa25.github.io/Practicas_DMI_230417/Practica04/toktik/arquitectura-toktik/consulta-paginacion-discover-toktik.html)
-
-[![Vista previa del diagrama de consulta y paginación](./arquitectura-toktik/consulta-paginacion-discover-toktik.visual-check.2048x1320.dark.png)](https://jffa25.github.io/Practicas_DMI_230417/Practica04/toktik/arquitectura-toktik/consulta-paginacion-discover-toktik.html)
+[![Vista previa del diagrama de arquitectura](./arquitectura-toktik/arquitectura-toktik.visual-check.1440x900.dark.png)](https://jffa25.github.io/Practicas_DMI_230417/Practica04/toktik/arquitectura-toktik/arquitectura-toktik.html)
 
 ## Iconos
 
@@ -37,6 +37,12 @@ agrupan YouTube, GIPHY y Dailymotion, conservando los cursores de cada fuente.
 
 ## Evidencia
 
+Video de demostración de la aplicación:
+
+<video controls playsinline width="720">
+  <source src="https://github.com/user-attachments/assets/cbe2ba88-b0c1-4e0d-a317-9fe3de8a1053" type="video/mp4">
+  Tu navegador no puede reproducir este video.
+</video>
 
 ## Funcionalidades
 
