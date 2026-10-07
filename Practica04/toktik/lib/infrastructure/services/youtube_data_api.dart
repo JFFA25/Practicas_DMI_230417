@@ -22,6 +22,18 @@ class YoutubeDataApi {
   Future<List<VideoPost>> searchShorts(
     String query, {
     int maxResults = 10,
+    String? pageToken,
+  }) async =>
+      (await searchShortsPage(
+        query,
+        maxResults: maxResults,
+        pageToken: pageToken,
+      )).videos;
+
+  Future<YoutubeVideoPage> searchShortsPage(
+    String query, {
+    int maxResults = 10,
+    String? pageToken,
   }) async {
     _checkConfiguration();
     final normalizedQuery = query.trim();
@@ -32,13 +44,17 @@ class YoutubeDataApi {
     final searchQuery = normalizedQuery.toLowerCase().contains('short')
         ? normalizedQuery
         : '$normalizedQuery shorts';
-    final searchData = await _get('search', {
+    final searchParameters = <String, String>{
       'part': 'snippet',
       'type': 'video',
       'videoDuration': 'short',
       'q': searchQuery,
       'maxResults': '$maxResults',
-    });
+    };
+    if (pageToken != null && pageToken.isNotEmpty) {
+      searchParameters['pageToken'] = pageToken;
+    }
+    final searchData = await _get('search', searchParameters);
     final searchItems = _items(searchData);
     final captionsById = <String, String>{};
     final videoIds = <String>[];
@@ -50,16 +66,26 @@ class YoutubeDataApi {
       captionsById[videoId] = _string(_object(item['snippet'])['title']);
     }
 
-    if (videoIds.isEmpty) return [];
+    final nextPageToken = _string(searchData['nextPageToken']);
+    if (videoIds.isEmpty) {
+      return YoutubeVideoPage(
+        videos: const [],
+        nextPageToken: nextPageToken.isEmpty ? null : nextPageToken,
+      );
+    }
 
     final videosData = await _get('videos', {
-      'part': 'statistics',
+      'part': 'snippet,statistics',
       'id': videoIds.join(','),
       'maxResults': '$maxResults',
     });
     final statisticsById = <String, Map<String, dynamic>>{
       for (final item in _items(videosData))
         _string(item['id']): _object(item['statistics']),
+    };
+    final descriptionsById = <String, String>{
+      for (final item in _items(videosData))
+        _string(item['id']): _string(_object(item['snippet'])['description']),
     };
 
     final videos = <VideoPost>[];
@@ -70,15 +96,21 @@ class YoutubeDataApi {
       videos.add(
         VideoPost(
           caption: captionsById[videoId] ?? '',
+          description: descriptionsById[videoId] ?? '',
           videoUrl: 'https://www.youtube.com/watch?v=$videoId',
           likes: _integer(statistics['likeCount']),
           comments: _integer(statistics['commentCount']),
           youtubeVideoId: videoId,
+          sourceId: videoId,
+          source: 'youtube',
         ),
       );
     }
 
-    return videos;
+    return YoutubeVideoPage(
+      videos: videos,
+      nextPageToken: nextPageToken.isEmpty ? null : nextPageToken,
+    );
   }
 
   Future<List<YoutubeComment>> getComments(String videoId) async {
@@ -152,6 +184,13 @@ class YoutubeDataApi {
   }
 
   void close() => _client.close();
+}
+
+class YoutubeVideoPage {
+  final List<VideoPost> videos;
+  final String? nextPageToken;
+
+  const YoutubeVideoPage({required this.videos, this.nextPageToken});
 }
 
 class YoutubeComment {

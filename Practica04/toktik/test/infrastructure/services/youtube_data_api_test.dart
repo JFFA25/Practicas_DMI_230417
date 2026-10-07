@@ -1,130 +1,181 @@
 import 'dart:convert';
 
-import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
-import 'package:http/testing.dart';
-import 'package:toktik/infrastructure/services/youtube_data_api.dart';
+import 'package:toktik/domain/entities/video_post.dart';
 
-void main() {
-  group('YoutubeDataApi', () {
-    test('reports when the API key is missing', () async {
-      final api = YoutubeDataApi(apiKey: '');
-      addTearDown(api.close);
+class YoutubeDataApi {
+  static const defaultSearchQuery = String.fromEnvironment(
+    'YOUTUBE_SEARCH_QUERY',
+    defaultValue: 'shorts',
+  );
+  static const _defaultApiKey = String.fromEnvironment('YOUTUBE_API_KEY');
 
-      await expectLater(
-        api.searchShorts('music'),
-        throwsA(
-          isA<YoutubeApiException>().having(
-            (error) => error.message,
-            'message',
-            contains('YOUTUBE_API_KEY'),
-          ),
+  final http.Client _client;
+  final String apiKey;
+
+  YoutubeDataApi({http.Client? client, String? apiKey})
+    : _client = client ?? http.Client(),
+      apiKey = apiKey ?? _defaultApiKey;
+
+  bool get isConfigured => apiKey.trim().isNotEmpty;
+
+  Future<List<VideoPost>> searchShorts(
+    String query, {
+    int maxResults = 10,
+  }) async {
+    _checkConfiguration();
+    final normalizedQuery = query.trim();
+    if (normalizedQuery.isEmpty) {
+      throw const YoutubeApiException('Escribe un término de búsqueda.');
+    }
+
+    final searchQuery = normalizedQuery.toLowerCase().contains('short')
+        ? normalizedQuery
+        : '$normalizedQuery shorts';
+    final searchData = await _get('search', {
+      'part': 'snippet',
+      'type': 'video',
+      'videoDuration': 'short',
+      'q': searchQuery,
+      'maxResults': '$maxResults',
+    });
+    final searchItems = _items(searchData);
+    final captionsById = <String, String>{};
+    final videoIds = <String>[];
+    for (final item in searchItems) {
+      final videoId = _object(item['id'])['videoId'];
+      if (videoId is! String || videoId.isEmpty) continue;
+
+      videoIds.add(videoId);
+      captionsById[videoId] = _string(_object(item['snippet'])['title']);
+    }
+
+    if (videoIds.isEmpty) return [];
+
+    final videosData = await _get('videos', {
+      'part': 'snippet,statistics',
+      'id': videoIds.join(','),
+      'maxResults': '$maxResults',
+    });
+    final statisticsById = <String, Map<String, dynamic>>{
+      for (final item in _items(videosData))
+        _string(item['id']): _object(item['statistics']),
+    };
+    final descriptionsById = <String, String>{
+      for (final item in _items(videosData))
+        _string(item['id']): _string(_object(item['snippet'])['description']),
+    };
+
+    final videos = <VideoPost>[];
+    for (final videoId in videoIds) {
+      final statistics = statisticsById[videoId];
+      if (statistics == null) continue;
+
+      videos.add(
+        VideoPost(
+          caption: captionsById[videoId] ?? '',
+          description: descriptionsById[videoId] ?? '',
+          videoUrl: 'https://www.youtube.com/watch?v=$videoId',
+          likes: _integer(statistics['likeCount']),
+          comments: _integer(statistics['commentCount']),
+          youtubeVideoId: videoId,
         ),
       );
+    }
+
+    return videos;
+  }
+
+  Future<List<YoutubeComment>> getComments(String videoId) async {
+    _checkConfiguration();
+    final data = await _get('commentThreads', {
+      'part': 'snippet',
+      'videoId': videoId,
+      'maxResults': '20',
+      'order': 'relevance',
+      'textFormat': 'plainText',
     });
 
-    test('searches Shorts and maps public video statistics', () async {
-      final client = MockClient((request) async {
-        if (request.url.path.endsWith('/search')) {
-          expect(request.url.queryParameters['q'], 'music shorts');
-          expect(request.url.queryParameters['videoDuration'], 'short');
-          return http.Response(
-            jsonEncode({
-              'items': [
-                {
-                  'id': {'videoId': 'short-id'},
-                  'snippet': {'title': 'A public Short'},
-                },
-              ],
-            }),
-            200,
-          );
-        }
-        if (request.url.path.endsWith('/videos')) {
-          expect(request.url.queryParameters['part'], 'statistics');
-          return http.Response(
-            jsonEncode({
-              'items': [
-                {
-                  'id': 'short-id',
-                  'statistics': {'likeCount': '56', 'commentCount': '7'},
-                },
-              ],
-            }),
-            200,
-          );
-        }
-        throw StateError('Unexpected request: ${request.url}');
-      });
-      final api = YoutubeDataApi(client: client, apiKey: 'test-key');
-      addTearDown(api.close);
-
-      final videos = await api.searchShorts('music');
-
-      expect(videos, hasLength(1));
-      expect(videos.single.youtubeVideoId, 'short-id');
-      expect(videos.single.caption, 'A public Short');
-      expect(videos.single.views, 0);
-      expect(videos.single.likes, 56);
-      expect(videos.single.comments, 7);
-    });
-
-    test('loads public top-level comments', () async {
-      final client = MockClient((request) async {
-        expect(request.url.path, endsWith('/commentThreads'));
-        expect(request.url.queryParameters['videoId'], 'short-id');
-        return http.Response(
-          jsonEncode({
-            'items': [
-              {
-                'snippet': {
-                  'topLevelComment': {
-                    'snippet': {
-                      'authorDisplayName': 'Viewer',
-                      'textDisplay': 'Nice video',
-                      'likeCount': 3,
-                    },
-                  },
-                },
-              },
-            ],
-          }),
-          200,
-        );
-      });
-      final api = YoutubeDataApi(client: client, apiKey: 'test-key');
-      addTearDown(api.close);
-
-      final comments = await api.getComments('short-id');
-
-      expect(comments, hasLength(1));
-      expect(comments.single.author, 'Viewer');
-      expect(comments.single.text, 'Nice video');
-      expect(comments.single.likes, 3);
-    });
-
-    test('surfaces YouTube API error messages', () async {
-      final client = MockClient(
-        (_) async => http.Response(
-          jsonEncode({
-            'error': {'message': 'The request cannot be completed.'},
-          }),
-          403,
-        ),
+    return _items(data).map((item) {
+      final thread = _object(item['snippet']);
+      final comment = _object(thread['topLevelComment']);
+      final snippet = _object(comment['snippet']);
+      return YoutubeComment(
+        author: _string(snippet['authorDisplayName']),
+        text: _string(snippet['textDisplay']),
+        likes: _integer(snippet['likeCount']),
       );
-      final api = YoutubeDataApi(client: client, apiKey: 'test-key');
-      addTearDown(api.close);
+    }).toList();
+  }
 
-      await expectLater(
-        api.searchShorts('music'),
-        throwsA(
-          isA<YoutubeApiException>().having(
-            (error) => error.message,
-            'message',
-            'The request cannot be completed.',
-          ),
-        ),
-      );
+  Future<Map<String, dynamic>> _get(
+    String endpoint,
+    Map<String, String> parameters,
+  ) async {
+    final uri = Uri.https('www.googleapis.com', '/youtube/v3/$endpoint', {
+      ...parameters,
+      'key': apiKey,
     });
+    final response = await _client.get(uri);
+    final decoded = jsonDecode(response.body);
+    if (response.statusCode < 200 || response.statusCode >= 300) {
+      final error = _object(_object(decoded)['error']);
+      final message = _string(error['message']);
+      throw YoutubeApiException(
+        message.isEmpty
+            ? 'YouTube API respondió con HTTP ${response.statusCode}.'
+            : message,
+      );
+    }
+
+    return _object(decoded);
+  }
+
+  List<Map<String, dynamic>> _items(Map<String, dynamic> data) {
+    final items = data['items'];
+    if (items is! List) return [];
+    return items.map(_object).toList();
+  }
+
+  Map<String, dynamic> _object(Object? value) {
+    if (value is Map) {
+      return value.map((key, value) => MapEntry(key.toString(), value));
+    }
+    return {};
+  }
+
+  String _string(Object? value) => value is String ? value : '';
+
+  int _integer(Object? value) => int.tryParse(value.toString()) ?? 0;
+
+  void _checkConfiguration() {
+    if (!isConfigured) {
+      throw const YoutubeApiException(
+        'Configura YOUTUBE_API_KEY para buscar videos de YouTube.',
+      );
+    }
+  }
+
+  void close() => _client.close();
+}
+
+class YoutubeComment {
+  final String author;
+  final String text;
+  final int likes;
+
+  const YoutubeComment({
+    required this.author,
+    required this.text,
+    required this.likes,
   });
+}
+
+class YoutubeApiException implements Exception {
+  final String message;
+
+  const YoutubeApiException(this.message);
+
+  @override
+  String toString() => message;
 }

@@ -1,12 +1,17 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
+import 'package:toktik/presentation/widgets/shared/expandable_caption.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 class YoutubeFullscreenPlayer extends StatefulWidget {
   final String videoId;
   final String caption;
+  final String description;
   final bool isActive;
+  final bool isMuted;
+  final Axis scrollDirection;
+  final VoidCallback? onDoubleTap;
   final ValueChanged<PointerSignalEvent> onPointerSignal;
   final ValueChanged<PointerDownEvent> onPointerDown;
 
@@ -24,7 +29,11 @@ class YoutubeFullscreenPlayer extends StatefulWidget {
     super.key,
     required this.videoId,
     required this.caption,
+    this.description = '',
     required this.isActive,
+    required this.isMuted,
+    this.scrollDirection = Axis.vertical,
+    this.onDoubleTap,
     required this.onPointerSignal,
     required this.onPointerDown,
     this.onSwipeNext,
@@ -39,7 +48,6 @@ class YoutubeFullscreenPlayer extends StatefulWidget {
 
 class _YoutubeFullscreenPlayerState extends State<YoutubeFullscreenPlayer> {
   YoutubePlayerController? _controller;
-  bool? _isMuted = true;
 
   @override
   void initState() {
@@ -61,6 +69,13 @@ class _YoutubeFullscreenPlayerState extends State<YoutubeFullscreenPlayer> {
         _controller?.pauseVideo();
       }
     }
+    if (oldWidget.isMuted != widget.isMuted) {
+      if (widget.isMuted) {
+        _controller?.mute();
+      } else {
+        _controller?.unMute();
+      }
+    }
   }
 
   void _createController() {
@@ -68,8 +83,8 @@ class _YoutubeFullscreenPlayerState extends State<YoutubeFullscreenPlayer> {
     _controller = YoutubePlayerController.fromVideoId(
       videoId: widget.videoId,
       autoPlay: true,
-      params: const YoutubePlayerParams(
-        mute: true,
+      params: YoutubePlayerParams(
+        mute: widget.isMuted,
         loop: true,
         showControls: false,
         showFullscreenButton: false,
@@ -97,19 +112,7 @@ class _YoutubeFullscreenPlayerState extends State<YoutubeFullscreenPlayer> {
     }
   }
 
-  Future<void> _toggleMute() async {
-    final controller = _controller;
-    if (controller == null) return;
-    final isMuted = _isMuted != true;
-    if (isMuted) {
-      await controller.mute();
-    } else {
-      await controller.unMute();
-    }
-    if (mounted) setState(() => _isMuted = isMuted);
-  }
-
-  void _handleVerticalDragEnd(DragEndDetails details) {
+  void _handleDragEnd(DragEndDetails details) {
     final velocity = details.primaryVelocity ?? 0;
     if (velocity < -150) {
       widget.onSwipeNext?.call();
@@ -142,7 +145,10 @@ class _YoutubeFullscreenPlayerState extends State<YoutubeFullscreenPlayer> {
               GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onTap: _togglePlayback,
-                onVerticalDragEnd: _handleVerticalDragEnd,
+                onDoubleTap: widget.onDoubleTap,
+                onHorizontalDragEnd: widget.scrollDirection == Axis.horizontal
+                    ? _handleDragEnd
+                    : null,
                 child: const SizedBox.expand(),
               ),
               YoutubeValueBuilder(
@@ -168,40 +174,11 @@ class _YoutubeFullscreenPlayerState extends State<YoutubeFullscreenPlayer> {
                 },
               ),
               Positioned(
-                bottom: 128,
-                left: 16,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: 0.42),
-                    shape: BoxShape.circle,
-                  ),
-                  child: IconButton(
-                    tooltip:
-                        _isMuted == true ? 'Activar sonido' : 'Silenciar',
-                    onPressed: _toggleMute,
-                    icon: Icon(
-                      _isMuted == true ? Icons.volume_off : Icons.volume_up,
-                      color: Colors.white,
-                      size: 25,
-                    ),
-                  ),
-                ),
-              ),
-              Positioned(
                 bottom: 48,
                 left: 20,
-                child: SizedBox(
-                  width: MediaQuery.sizeOf(context).width * 0.6,
-                  child: Text(
-                    widget.caption,
-                    maxLines: 2,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      color: Colors.white,
-                      shadows: const [
-                        Shadow(blurRadius: 8, color: Colors.black),
-                      ],
-                    ),
-                  ),
+                child: ExpandableCaption(
+                  title: widget.caption,
+                  description: widget.description,
                 ),
               ),
               if (widget.overlay != null) widget.overlay!,

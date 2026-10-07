@@ -1,0 +1,674 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Arquitectura de TokTik",
+    "quality_profile": "standard",
+    "visual_preset": "blueprint",
+    "viewBox": [
+      1640,
+      1000
+    ]
+  },
+  "components": [
+    {
+      "id": "screen",
+      "type": "frontend",
+      "label": "DiscoverScreen",
+      "sublabel": "Feed y tema",
+      "pos": [
+        45,
+        101
+      ],
+      "size": [
+        180,
+        62
+      ]
+    },
+    {
+      "id": "scroll-view",
+      "type": "frontend",
+      "label": "VideoScrollableView",
+      "sublabel": "Selección por fuente",
+      "pos": [
+        45,
+        262
+      ],
+      "size": [
+        205,
+        62
+      ]
+    },
+    {
+      "id": "players",
+      "type": "frontend",
+      "label": "Reproductores de video",
+      "sublabel": "Por origen de video",
+      "pos": [
+        45,
+        437
+      ],
+      "size": [
+        213,
+        71
+      ]
+    },
+    {
+      "id": "discover",
+      "type": "backend",
+      "label": "DiscoverProvider",
+      "sublabel": "Carga secciones",
+      "pos": [
+        308,
+        101
+      ],
+      "size": [
+        201,
+        62
+      ]
+    },
+    {
+      "id": "likes",
+      "type": "backend",
+      "label": "LikesProvider",
+      "sublabel": "Likes y favoritos",
+      "pos": [
+        308,
+        639
+      ],
+      "size": [
+        180,
+        62
+      ]
+    },
+    {
+      "id": "theme",
+      "type": "backend",
+      "label": "ThemeProvider",
+      "sublabel": "Tema estacional",
+      "pos": [
+        308,
+        719
+      ],
+      "size": [
+        180,
+        62
+      ]
+    },
+    {
+      "id": "feed-contract",
+      "type": "backend",
+      "label": "VideoFeedRepository",
+      "sublabel": "Contrato de dominio",
+      "pos": [
+        574,
+        101
+      ],
+      "size": [
+        189,
+        62
+      ]
+    },
+    {
+      "id": "video-post",
+      "type": "backend",
+      "label": "VideoPost",
+      "sublabel": "source",
+      "pos": [
+        574,
+        229
+      ],
+      "size": [
+        189,
+        62
+      ]
+    },
+    {
+      "id": "feed-impl",
+      "type": "backend",
+      "label": "VideoFeedRepositoryImpl",
+      "sublabel": "Agrega fuentes",
+      "pos": [
+        828,
+        316
+      ],
+      "size": [
+        209,
+        66
+      ]
+    },
+    {
+      "id": "local-source",
+      "type": "backend",
+      "label": "LocalVideoDatasourceImpl",
+      "sublabel": "Lee assets",
+      "pos": [
+        1115,
+        178
+      ],
+      "size": [
+        201,
+        59
+      ]
+    },
+    {
+      "id": "youtube-client",
+      "type": "backend",
+      "label": "YoutubeDataApi",
+      "sublabel": "Cliente YouTube",
+      "pos": [
+        1115,
+        276
+      ],
+      "size": [
+        201,
+        59
+      ]
+    },
+    {
+      "id": "giphy-client",
+      "type": "backend",
+      "label": "GiphyApi",
+      "sublabel": "Cliente GIPHY",
+      "pos": [
+        1115,
+        373
+      ],
+      "size": [
+        201,
+        59
+      ]
+    },
+    {
+      "id": "daily-client",
+      "type": "backend",
+      "label": "DailymotionApi",
+      "sublabel": "Cliente Dailymotion",
+      "pos": [
+        1115,
+        471
+      ],
+      "size": [
+        201,
+        59
+      ]
+    },
+    {
+      "id": "preferences",
+      "type": "backend",
+      "label": "VideoPreferencesDatasource",
+      "sublabel": "Persistencia local",
+      "pos": [
+        828,
+        639
+      ],
+      "size": [
+        209,
+        64
+      ]
+    },
+    {
+      "id": "assets",
+      "type": "database",
+      "label": "Assets de videos",
+      "sublabel": "assets/videos/",
+      "pos": [
+        1427,
+        178
+      ],
+      "size": [
+        168,
+        59
+      ]
+    },
+    {
+      "id": "youtube",
+      "type": "external",
+      "label": "YouTube Data API",
+      "sublabel": "API YouTube",
+      "pos": [
+        1427,
+        276
+      ],
+      "size": [
+        168,
+        59
+      ]
+    },
+    {
+      "id": "giphy",
+      "type": "external",
+      "label": "GIPHY API",
+      "sublabel": "API GIPHY",
+      "pos": [
+        1427,
+        373
+      ],
+      "size": [
+        168,
+        59
+      ]
+    },
+    {
+      "id": "dailymotion",
+      "type": "external",
+      "label": "Dailymotion API",
+      "sublabel": "API Dailymotion",
+      "pos": [
+        1427,
+        471
+      ],
+      "size": [
+        168,
+        59
+      ]
+    },
+    {
+      "id": "prefs-store",
+      "type": "database",
+      "label": "SharedPreferences",
+      "sublabel": "Likes · favoritos · tema",
+      "pos": [
+        1115,
+        639
+      ],
+      "size": [
+        221,
+        64
+      ]
+    },
+    {
+      "id": "launcher",
+      "type": "backend",
+      "label": "LauncherIconService",
+      "sublabel": "Icono estacional",
+      "pos": [
+        308,
+        912
+      ],
+      "size": [
+        201,
+        64
+      ]
+    },
+    {
+      "id": "channel",
+      "type": "messagebus",
+      "label": "MethodChannel",
+      "sublabel": "Puente nativo",
+      "pos": [
+        599,
+        912
+      ],
+      "size": [
+        205,
+        64
+      ]
+    },
+    {
+      "id": "android",
+      "type": "external",
+      "label": "Android",
+      "sublabel": "Alias configurados",
+      "pos": [
+        902,
+        912
+      ],
+      "size": [
+        213,
+        64
+      ]
+    },
+    {
+      "id": "ios",
+      "type": "external",
+      "label": "iOS",
+      "sublabel": "Iconos alternativos",
+      "pos": [
+        1214,
+        912
+      ],
+      "size": [
+        213,
+        64
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Presentación · Flutter",
+      "wraps": [
+        "screen",
+        "scroll-view",
+        "players"
+      ],
+      "pad": 18
+    },
+    {
+      "kind": "region",
+      "label": "Estado · Providers",
+      "wraps": [
+        "discover",
+        "likes",
+        "theme"
+      ],
+      "pad": 18
+    },
+    {
+      "kind": "region",
+      "label": "Dominio",
+      "wraps": [
+        "feed-contract",
+        "video-post"
+      ],
+      "pad": 18
+    },
+    {
+      "kind": "region",
+      "label": "Servicios externos",
+      "wraps": [
+        "youtube",
+        "giphy",
+        "dailymotion"
+      ],
+      "pad": 18
+    },
+    {
+      "kind": "region",
+      "label": "Integración de icono estacional · MethodChannel nativo",
+      "wraps": [
+        "launcher",
+        "channel",
+        "android",
+        "ios"
+      ],
+      "pad": 0
+    },
+    {
+      "kind": "region",
+      "label": "Assets locales",
+      "wraps": [
+        "assets"
+      ],
+      "pad": 18
+    },
+    {
+      "kind": "region",
+      "label": "Preferencias locales",
+      "wraps": [
+        "prefs-store"
+      ],
+      "pad": 18
+    }
+  ],
+  "connections": [
+    {
+      "id": "screen-discover",
+      "from": "screen",
+      "to": "discover",
+      "label": "consulta / cambia sección",
+      "variant": "emphasis",
+      "labelAt": [
+        267,
+        175
+      ]
+    },
+    {
+      "id": "screen-view",
+      "from": "screen",
+      "to": "scroll-view",
+      "label": "presenta videos",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [
+        148,
+        175
+      ]
+    },
+    {
+      "id": "view-players",
+      "from": "scroll-view",
+      "to": "players",
+      "label": "selecciona según fuente",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [
+        148,
+        336
+      ]
+    },
+    {
+      "id": "view-post",
+      "from": "scroll-view",
+      "to": "video-post",
+      "label": "presenta VideoPost",
+      "labelAt": [
+        222,
+        349
+      ]
+    },
+    {
+      "id": "provider-contract",
+      "from": "discover",
+      "to": "feed-contract",
+      "label": "consulta feed",
+      "variant": "emphasis",
+      "labelAt": [
+        545,
+        177
+      ]
+    },
+    {
+      "id": "contract-impl",
+      "from": "feed-contract",
+      "to": "feed-impl",
+      "label": "implementación",
+      "labelAt": [
+        795,
+        177
+      ]
+    },
+    {
+      "id": "post-repository",
+      "from": "video-post",
+      "to": "feed-contract",
+      "label": "tipo del feed",
+      "variant": "dashed",
+      "labelAt": [
+        668,
+        189
+      ]
+    },
+    {
+      "id": "impl-local",
+      "from": "feed-impl",
+      "to": "local-source",
+      "label": "carga videos locales"
+    },
+    {
+      "id": "impl-youtube",
+      "from": "feed-impl",
+      "to": "youtube-client",
+      "label": "consulta",
+      "labelAt": [
+        1046,
+        296
+      ]
+    },
+    {
+      "id": "impl-giphy",
+      "from": "feed-impl",
+      "to": "giphy-client",
+      "label": "consulta",
+      "labelAt": [
+        1046,
+        403
+      ]
+    },
+    {
+      "id": "impl-daily",
+      "from": "feed-impl",
+      "to": "daily-client",
+      "label": "consulta",
+      "labelAt": [
+        1046,
+        504
+      ]
+    },
+    {
+      "id": "assets-local",
+      "from": "local-source",
+      "to": "assets",
+      "label": "lee assets"
+    },
+    {
+      "id": "youtube-api",
+      "from": "youtube-client",
+      "to": "youtube",
+      "label": "HTTP API",
+      "labelAt": [
+        1374,
+        336
+      ]
+    },
+    {
+      "id": "giphy-api",
+      "from": "giphy-client",
+      "to": "giphy",
+      "label": "HTTP API",
+      "labelAt": [
+        1374,
+        434
+      ]
+    },
+    {
+      "id": "daily-api",
+      "from": "daily-client",
+      "to": "dailymotion",
+      "label": "HTTP API",
+      "labelAt": [
+        1374,
+        531
+      ]
+    },
+    {
+      "id": "view-likes",
+      "from": "scroll-view",
+      "to": "likes",
+      "label": "toggleLike",
+      "labelAt": [
+        295,
+        349
+      ]
+    },
+    {
+      "id": "likes-preferences",
+      "from": "likes",
+      "to": "preferences",
+      "label": "persiste likes / favoritos",
+      "labelAt": [
+        656,
+        648
+      ],
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "theme-preferences",
+      "from": "theme",
+      "to": "preferences",
+      "label": "persiste tema / preferencias",
+      "labelAt": [
+        574,
+        771
+      ],
+      "fromSide": "right",
+      "toSide": "bottom",
+      "via": [
+        [
+          533,
+          750
+        ],
+        [
+          533,
+          771
+        ],
+        [
+          932.5,
+          771
+        ],
+        [
+          932.5,
+          703
+        ]
+      ]
+    },
+    {
+      "id": "preferences-store",
+      "from": "preferences",
+      "to": "prefs-store",
+      "label": "guarda localmente",
+      "labelAt": [
+        1074,
+        717
+      ]
+    },
+    {
+      "id": "theme-launcher",
+      "from": "theme",
+      "to": "launcher",
+      "label": "al cargar / cambiar tema",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [
+        410,
+        800
+      ]
+    },
+    {
+      "id": "launcher-channel",
+      "from": "launcher",
+      "to": "channel",
+      "label": "invoca método nativo",
+      "labelAt": [
+        545,
+        990
+      ]
+    },
+    {
+      "id": "channel-android",
+      "from": "channel",
+      "to": "android",
+      "label": "activa alias",
+      "variant": "dashed",
+      "labelAt": [
+        855,
+        990
+      ]
+    },
+    {
+      "id": "channel-ios",
+      "from": "channel",
+      "to": "ios",
+      "label": "icono alternativo",
+      "variant": "dashed",
+      "labelAt": [
+        1132,
+        990
+      ],
+      "fromSide": "top",
+      "toSide": "top",
+      "via": [
+        [
+          701.5,
+          773
+        ],
+        [
+          1320.5,
+          773
+        ]
+      ]
+    }
+  ]
+}

@@ -32,8 +32,9 @@ List<Map<String, dynamic>> videoPosts = [
   {
     'description': 'El Señor Enjambre',
     'videoUrl': 'assets/videos/6.mp4',
-    'likes': 10,
+    'likes': 0,
     'views': 330,
+    'comments': 0,
   },
   {
     'description': 'Yo cuando Enjambre',

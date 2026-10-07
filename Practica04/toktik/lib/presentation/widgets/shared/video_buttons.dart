@@ -5,7 +5,12 @@ import 'package:toktik/domain/entities/video_post.dart';
 
 class VideoButtons extends StatelessWidget {
   final VideoPost video;
+  final int likeCount;
   final VoidCallback? onCommentsPressed;
+  final VoidCallback onLikePressed;
+  final VoidCallback onMutePressed;
+  final bool isLiked;
+  final bool isMuted;
   final bool canGoPrevious;
   final bool canGoNext;
   final VoidCallback onPreviousPressed;
@@ -14,6 +19,11 @@ class VideoButtons extends StatelessWidget {
   const VideoButtons({
     super.key,
     required this.video,
+    required this.likeCount,
+    required this.onLikePressed,
+    required this.onMutePressed,
+    required this.isLiked,
+    required this.isMuted,
     required this.canGoPrevious,
     required this.canGoNext,
     required this.onPreviousPressed,
@@ -32,10 +42,11 @@ class VideoButtons extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         _MetricButton(
-          value: video.likes,
-          iconData: Icons.favorite,
+          value: likeCount,
+          iconData: isLiked ? Icons.favorite : Icons.favorite_border,
           label: 'Me gusta',
-          iconColor: Colors.redAccent,
+          iconColor: isLiked ? Colors.redAccent : Colors.white,
+          onPressed: onLikePressed,
         ),
         if (video.youtubeVideoId == null) ...[
           const SizedBox(height: 16),
@@ -44,6 +55,13 @@ class VideoButtons extends StatelessWidget {
             iconData: Icons.visibility_outlined,
             label: 'Vistas',
           ),
+          if (video.source == 'local')
+            _MetricButton(
+              value: video.comments,
+              iconData: Icons.mode_comment_outlined,
+              label: 'Comentarios',
+              onPressed: onCommentsPressed,
+            ),
         ],
         if (video.youtubeVideoId != null) ...[
           const SizedBox(height: 16),
@@ -61,7 +79,15 @@ class VideoButtons extends StatelessWidget {
           tooltip: 'Siguiente video',
           onPressed: canGoNext ? onNextPressed : null,
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 8),
+        _MetricButton(
+          value: 0,
+          iconData: isMuted ? Icons.volume_off : Icons.volume_up,
+          label: isMuted ? 'Activar sonido' : 'Silenciar',
+          showValue: false,
+          onPressed: onMutePressed,
+        ),
+        const SizedBox(height: 12),
         SpinPerfect(
           infinite: true,
           duration: const Duration(seconds: 5),
@@ -129,6 +155,7 @@ class _MetricButton extends StatelessWidget {
   final String label;
   final Color iconColor;
   final VoidCallback? onPressed;
+  final bool showValue;
 
   const _MetricButton({
     required this.value,
@@ -136,6 +163,7 @@ class _MetricButton extends StatelessWidget {
     required this.label,
     this.iconColor = Colors.white,
     this.onPressed,
+    this.showValue = true,
   });
 
   @override
@@ -158,17 +186,19 @@ class _MetricButton extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 5),
-          Text(
-            HumanFormats.humanReadbleNumber(value.toDouble()),
-            maxLines: 1,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 13,
-              fontWeight: FontWeight.w700,
-              shadows: [Shadow(blurRadius: 4, color: Colors.black)],
+          if (showValue) ...[
+            Text(
+              HumanFormats.humanReadbleNumber(value.toDouble()),
+              maxLines: 1,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+                shadows: [Shadow(blurRadius: 4, color: Colors.black)],
+              ),
             ),
-          ),
-          const SizedBox(height: 2),
+            const SizedBox(height: 2),
+          ],
           Text(
             label,
             maxLines: 1,

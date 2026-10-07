@@ -1,73 +1,157 @@
-# Práctica 04 - TokTik
+# Práctica 04 — TokTik
 
-## Objetivo de la práctica
+## Descripción
 
-Desarrollar una aplicación de videos cortos con Flutter que integre videos locales y videos de YouTube en un feed vertical. La aplicación reproduce el elemento activo y permite navegar entre videos con gestos y controles en pantalla.
+TokTik es una aplicación Flutter de videos cortos. Reúne publicaciones locales
+y contenido de proveedores externos en feeds independientes, permite
+interactuar con los videos y personaliza la experiencia con temas estacionales.
+La app separa presentación, lógica de dominio, repositorios y fuentes de datos.
+
 
 ## Diagrama de arquitectura
 
+### Arquitectura general
+
+Flujo por capas: presentación, estado y dominio, repositorios/datasources, APIs
+externas, persistencia local e integración nativa para los iconos estacionales.
+
+[Abrir diagrama interactivo en GitHub Pages](https://jffa25.github.io/Practicas_DMI_230417/Practica04/toktik/arquitectura-toktik/arquitectura-toktik.html)
+
+[![Vista previa del diagrama de arquitectura](./arquitectura-toktik/arquitectura-toktik.visual-check.2048x1320.dark.png)](https://jffa25.github.io/Practicas_DMI_230417/Practica04/toktik/arquitectura-toktik/arquitectura-toktik.html)
+
+### Consulta y paginación de videos
+
+El diagrama separa la carga inicial de la paginación; las consultas paralelas
+agrupan YouTube, GIPHY y Dailymotion, conservando los cursores de cada fuente.
+
+[Abrir diagrama interactivo en GitHub Pages](https://jffa25.github.io/Practicas_DMI_230417/Practica04/toktik/arquitectura-toktik/consulta-paginacion-discover-toktik.html)
+
+[![Vista previa del diagrama de consulta y paginación](./arquitectura-toktik/consulta-paginacion-discover-toktik.visual-check.2048x1320.dark.png)](https://jffa25.github.io/Practicas_DMI_230417/Practica04/toktik/arquitectura-toktik/consulta-paginacion-discover-toktik.html)
+
+## Iconos
+
+| TokTik| TokTik Hallowen | TokTik Navidad|
+|:---:|:---:|:---:|
+| ![OG](./images/TokTik_OG.png) | ![Hallowen](./images/TokTik_Hallowen.jpg) | ![Navidad](./images/TokTik_Navidad.png) |
+
+
+## Evidencia
 
 
 ## Funcionalidades
 
-- Reproducir videos locales y de YouTube en un mismo feed vertical.
-- Desplazarse entre videos mediante gestos táctiles.
-- Navegar con botones anterior y siguiente; en escritorio también con flechas y rueda del mouse.
-- Pausar el video anterior y reproducir el video de la página activa.
-- Mostrar likes y vistas para los videos locales.
-- Mostrar likes y cantidad de comentarios para los videos de YouTube.
-- Consultar comentarios públicos de YouTube.
-- Mantener el aspecto original de los videos locales.
-- Conservar los videos locales cuando la API no está disponible.
+### Feeds y reproducción
 
-## Tecnologías utilizadas
+- **Discover:** combina videos locales con resultados de YouTube, GIPHY y
+  Dailymotion. Carga más resultados al acercarse al final del feed y evita
+  repetir videos al anexar páginas.
+- **For You:** presenta una selección de tendencias de las fuentes disponibles.
+- **Favorites:** muestra los videos marcados con «Me gusta».
+- Los tres feeds se recorren verticalmente; el cambio de sección y los botones
+  de navegación permiten pasar entre Discover, For You y Favorites.
+- Reproduce videos incluidos en la app, videos de YouTube, GIFs/videos de GIPHY
+  y videos de Dailymotion.
+- Los fallos de un proveedor no impiden mostrar resultados disponibles de los
+  otros proveedores ni los videos locales.
 
-- Flutter y Dart
-- Material Design
-- `provider` para administrar el estado del feed
-- `video_player` para reproducir videos locales
-- `youtube_player_iframe` para reproducir videos de YouTube
-- `http` para consultar YouTube Data API v3
+### Interacción y preferencias
 
-## Descripción de la solución
+- El botón de sonido activa o silencia el video y mantiene esa elección al
+  cambiar de video durante la sesión.
+- Tocar el corazón cambia el estado de «Me gusta»; un doble toque sobre el
+  video también lo marca como favorito.
+- Los estados de «Me gusta» y sus conteos se guardan localmente con
+  `SharedPreferences`, por lo que sobreviven al cierre de la app mientras no se
+  borren sus datos.
+- Las descripciones extensas se pueden expandir con «... más» y leer con
+  desplazamiento vertical.
+- Hay un video local de prueba con cero likes y cero comentarios para comprobar
+  el estado inicial y la persistencia del conteo.
 
-`VideoPost` representa los videos locales y los resultados de YouTube. `DiscoverProvider` carga los videos locales, solicita Shorts a `YoutubeDataApi` y combina ambas listas para mostrarlas en el feed.
+### Temas por temporada e icono
 
-`VideoScrollableView` construye el feed con un `PageView` vertical. Según el contenido de cada elemento, utiliza `FullScreenPlayer` para un asset local o `YoutubeFullscreenPlayer` para un video de YouTube. `VideoButtons` presenta las estadísticas y la navegación; para YouTube, permite abrir `VideoCommentsSheet`.
+- Incluye los temas **Normal**, **Halloween**, **Christmas** y
+  **Valentine's Day**, con sus paletas, tipografías, iconografía y avisos
+  auditivos.
+- El modo automático selecciona el tema usando la fecha local del dispositivo:
+  Halloween en octubre, Christmas en diciembre, Valentine's Day en febrero y
+  Normal el resto del año.
+- Para probar otra temporada, abre el botón de tema en la parte superior y
+  selecciona una opción. La selección manual se guarda y permanece tras cerrar
+  y volver a abrir la app, hasta elegir otro tema o regresar a **Automático por
+  fecha**.
+- El icono de inicio del dispositivo se actualiza para corresponder con el tema
+  seleccionado y se vuelve a aplicar al iniciar la app.
+- El aviso auditivo que acompaña el cambio de tema se puede activar o desactivar
+  desde el mismo menú.
 
-Los datos de los videos locales se encuentran en `lib/shared/data/local_video_post.dart`. Los archivos de video deben colocarse en `assets/videos/` con los nombres `1.mp4` a `8.mp4`.
+## Arquitectura
 
-Para obtener contenido de YouTube, se debe habilitar YouTube Data API v3 en Google Cloud Console y guardar la clave y el término de búsqueda en un archivo local `env.json`:
+La interfaz consume proveedores de estado de presentación. `DiscoverProvider`
+obtiene las secciones mediante el contrato `VideoFeedRepository`; su
+implementación combina los resultados de `LocalVideoDatasourceImpl`,
+`YoutubeDataApi`, `GiphyApi` y `DailymotionApi`. Discover maneja la paginación
+de las fuentes que ofrecen continuación.
+
+`LikesProvider` gestiona los likes, los conteos y la lista de favoritos.
+`ThemeProvider` resuelve la temporada automática o manual, las preferencias de
+sonido y la selección del icono. Ambos persisten preferencias mediante
+`VideoPreferencesDatasource` y `SharedPreferences`.
+
+## Tecnologías principales
+
+- **Flutter y Dart:** interfaz multiplataforma.
+- **Provider:** estado de presentación.
+- **Repositorios y datasources:** separación entre dominio y fuentes de video.
+- **SharedPreferences:** persistencia local de likes, temas y preferencias.
+- **video_player:** reproducción de videos locales y archivos MP4 remotos.
+- **youtube_player_iframe:** reproducción de YouTube.
+- **webview_flutter:** integración del reproductor de Dailymotion.
+- **http:** solicitudes a las API de video.
+
+## Configuración
+
+Los videos locales están en `assets/videos/`. Para usar YouTube y GIPHY,
+crea un archivo `env.json` en la raíz de este proyecto (`toktik`) con las claves
+de API correspondientes:
 
 ```json
 {
-  "YOUTUBE_API_KEY": "TU_CLAVE",
-  "YOUTUBE_SEARCH_QUERY": "musica"
+  "YOUTUBE_API_KEY": "TU_CLAVE_DE_YOUTUBE",
+  "YOUTUBE_SEARCH_QUERY": "musica",
+  "GIPHY_API_KEY": "TU_CLAVE_DE_GIPHY",
+  "GIPHY_SEARCH_QUERY": "funny"
 }
 ```
 
-El archivo `env.json` está excluido del repositorio. La clave incluida en una app compilada puede extraerse; debe restringirse a YouTube Data API v3 y, para producción, conviene realizar las solicitudes desde un backend.
+El archivo `env.json` es opcional para iniciar la aplicación y ver los videos
+locales. Si faltan claves, las fuentes que las necesitan mostrarán un aviso.
+Dailymotion se consulta mediante su API pública.
 
-## Resultados obtenidos
+No agregues claves reales al control de versiones. Las claves incluidas en una
+aplicación cliente pueden extraerse; para producción, restrínjelas o utiliza un
+backend.
 
-| Contenido | Reproductor | Información mostrada |
-| --- | --- | --- |
-| Video local | `video_player` | Likes y vistas |
-| Video de YouTube | `youtube_player_iframe` | Likes y comentarios disponibles |
+## Ejecutar y validar
 
-Ambos tipos de contenido se presentan dentro de la pantalla `DiscoverScreen` y comparten la navegación vertical del feed.
-
-## Conclusiones
-
-La práctica integra reproducción de video local, consumo de una API y administración de estado en una sola interfaz. El feed unificado permite alternar entre distintas fuentes de contenido, conservando controles y navegación consistentes.
-
-## Cómo ejecutar el proyecto
-
-Desde la carpeta `yes_no_app`, ejecuta:
+Desde la carpeta `Practica04/toktik`:
 
 ```bash
 flutter pub get
-flutter run
+flutter run --dart-define-from-file=env.json
+```
+
+Para iniciar sin `env.json`, ejecuta `flutter run`. Para validar el proyecto:
+
+```bash
+flutter analyze
+flutter test
+```
+
+Para generar una compilación de depuración Android:
+
+```bash
+flutter build apk --debug
 ```
 
 ## Autor
