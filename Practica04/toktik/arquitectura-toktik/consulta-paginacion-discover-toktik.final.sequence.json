@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "Consulta y paginación de Discover en TokTik",
+    "output": "consulta-paginacion-discover-toktik.html",
+    "viewBox": [920, 900],
+    "column_fit": "spread",
+    "visual_preset": "blueprint",
+    "quality_profile": "showcase"
+  },
+  "participants": [
+    { "id": "interfaz", "type": "frontend", "label": "DiscoverScreen", "sublabel": "VideoScrollableView" },
+    { "id": "discover", "type": "backend", "label": "DiscoverProvider", "sublabel": "estado · cursores" },
+    { "id": "repository", "type": "backend", "label": "Repositorio", "sublabel": "VideoFeedRepositoryImpl" },
+    { "id": "youtube", "type": "external", "label": "YoutubeDataApi", "sublabel": "YouTube Data API" },
+    { "id": "giphy", "type": "external", "label": "GiphyApi", "sublabel": "GIPHY API" },
+    { "id": "dailymotion", "type": "external", "label": "DailymotionApi", "sublabel": "Dailymotion API" }
+  ],
+  "segments": [
+    { "from": 150, "to": 420, "label": "Carga inicial" },
+    { "from": 490, "to": 815, "label": "Paginación de Discover" }
+  ],
+  "messages": [
+    { "id": "open-discover", "from": "interfaz", "to": "discover", "y": 170, "label": "Interfaz TokTik solicita Discover", "variant": "emphasis" },
+    { "id": "load-initial", "from": "discover", "to": "repository", "y": 202, "label": "VideoFeedRepositoryImpl.getDiscoverVideos(query)" },
+    { "id": "query-youtube", "from": "repository", "to": "youtube", "y": 240, "label": "YoutubeDataApi.searchShortsPage(query) → YouTube Data API · paralelo" },
+    { "id": "query-giphy", "from": "repository", "to": "giphy", "y": 268, "label": "GiphyApi.searchVideosPage(query, offset: 0) → GIPHY API · paralelo" },
+    { "id": "query-dailymotion", "from": "repository", "to": "dailymotion", "y": 296, "label": "DailymotionApi.searchVideosPage(query, page: 1) → Dailymotion API · paralelo" },
+    { "id": "youtube-results", "from": "youtube", "to": "repository", "y": 336, "label": "videos + nextPageToken", "variant": "return" },
+    { "id": "giphy-results", "from": "giphy", "to": "repository", "y": 368, "label": "videos + siguiente offset", "variant": "return" },
+    { "id": "dailymotion-results", "from": "dailymotion", "to": "repository", "y": 400, "label": "videos + nextPage", "variant": "return" },
+    { "id": "initial-feed", "from": "repository", "to": "discover", "y": 440, "label": "intercala remotos + videos locales; devuelve feed y cursores", "variant": "return", "note": "Si falla una API, conserva las otras fuentes y los videos locales. La paginación aplica solo a Discover; no a For You ni Favorites." },
+    { "id": "publish-feed", "from": "discover", "to": "interfaz", "y": 470, "label": "publica videos para mostrarlos", "variant": "return" },
+    { "id": "near-end", "from": "interfaz", "to": "discover", "y": 510, "label": "VideoScrollableView: loadMoreDiscover() cerca del final" },
+    { "id": "load-next", "from": "discover", "to": "repository", "y": 540, "label": "getMoreDiscoverVideos(query, cursores guardados)" },
+    { "id": "page-youtube", "from": "repository", "to": "youtube", "y": 574, "label": "searchShortsPage(query, pageToken: nextPageToken)" },
+    { "id": "page-giphy", "from": "repository", "to": "giphy", "y": 602, "label": "searchVideosPage(query, offset: offset)" },
+    { "id": "page-dailymotion", "from": "repository", "to": "dailymotion", "y": 630, "label": "searchVideosPage(query, page: page)" },
+    { "id": "youtube-page", "from": "youtube", "to": "repository", "y": 668, "label": "videos + nextPageToken actualizado", "variant": "return" },
+    { "id": "giphy-page", "from": "giphy", "to": "repository", "y": 698, "label": "videos + offset actualizado", "variant": "return" },
+    { "id": "dailymotion-page", "from": "dailymotion", "to": "repository", "y": 728, "label": "videos + nextPage actualizado", "variant": "return" },
+    { "id": "append-pages", "from": "repository", "to": "discover", "y": 768, "label": "devuelve páginas y cursores actualizados", "variant": "return" },
+    { "id": "dedupe-append", "from": "discover", "to": "interfaz", "y": 808, "label": "filtra storageId repetidos; anexa videos nuevos", "variant": "return" }
+  ]
+}

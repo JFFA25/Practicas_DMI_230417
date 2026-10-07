@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Arquitectura de TokTik</title>
+<style>
+:root{color-scheme:light;--ink:#173653;--muted:#54718a;--line:#7898b1;--grid:#dce8f0;--paper:#f7fbfe;--blue:#e8f3fa;--violet:#f0edfb;--green:#eaf5ef;--amber:#fff4df;--external:#fff0ed}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.4 "Segoe UI",Arial,sans-serif;background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px}.page{max-width:1600px;margin:auto;padding:26px 30px 34px}header{display:flex;align-items:end;justify-content:space-between;margin-bottom:18px}h1{font-size:30px;letter-spacing:.02em;margin:0}.stamp{font:11px ui-monospace,monospace;letter-spacing:.12em;color:var(--muted);border:1px solid #9ab0c2;padding:7px 10px;border-radius:4px}.board{background:rgba(255,255,255,.75);border:1px solid #afc3d2;border-radius:8px;box-shadow:0 8px 28px #234b6512;overflow:auto}svg{display:block;width:100%;min-width:1050px;height:auto}.layer{fill:#ffffff80;stroke:#9ab2c5;stroke-dasharray:5 5;stroke-width:1.3}.layer-title{font-size:12px;font-weight:700;letter-spacing:1.4px;fill:#486981}.node rect{stroke-width:1.4;rx:7}.node text{fill:var(--ink);text-anchor:middle}.node .name{font-size:15px;font-weight:700}.node .sub{font-size:11.5px;fill:#506f86}.ui rect{fill:var(--blue);stroke:#5484a4}.state rect{fill:var(--violet);stroke:#8175ad}.domain rect{fill:var(--green);stroke:#58906d}.infra rect{fill:#eef4f8;stroke:#6d8799}.storage rect{fill:var(--amber);stroke:#b38c45}.external rect{fill:var(--external);stroke:#bf7869}.native rect{fill:#edf0f5;stroke:#718398}.edge{fill:none;stroke:#486b84;stroke-width:1.6;marker-end:url(#arrow)}.edge.soft{stroke:#8399a9;stroke-dasharray:5 4}.edge-label{font-size:10.5px;fill:#314f65;paint-order:stroke;stroke:#fff;stroke-width:5px;stroke-linejoin:round;text-anchor:middle}.note{font-size:10.5px;fill:#58758a}.source-tag{font-size:11px;font-weight:700;letter-spacing:.7px;fill:#8a473d}footer{display:flex;gap:18px;flex-wrap:wrap;padding:12px 4px 0;color:var(--muted);font-size:12px}.key{display:inline-flex;align-items:center;gap:6px}.dot{width:11px;height:11px;border:1px solid #789;border-radius:3px;background:#e8f3fa}.dot.state{background:#f0edfb}.dot.domain{background:#eaf5ef}.dot.storage{background:#fff4df}.dot.ext{background:#fff0ed}
+</style></head><body><main class="page"><header><h1>Arquitectura de TokTik</h1><div class="stamp">FLUTTER · CAPAS Y DEPENDENCIAS</div></header><section class="board" aria-label="Diagrama de arquitectura"><svg viewBox="0 0 1560 970" role="img" aria-labelledby="title desc"><title id="title">Arquitectura de TokTik</title><desc id="desc">Capas de presentación, estado, dominio e infraestructura con almacenamiento local, tres APIs externas y canal nativo Android e iOS.</desc><defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#486b84"/></marker></defs>
+<!-- Capas organizadas en columnas -->
+<rect class="layer" x="22" y="38" width="254" height="676" rx="10"/><text class="layer-title" x="40" y="64">PRESENTACIÓN · FLUTTER</text>
+<rect class="layer" x="296" y="38" width="260" height="676" rx="10"/><text class="layer-title" x="314" y="64">ESTADO · PROVIDERS</text>
+<rect class="layer" x="576" y="38" width="234" height="676" rx="10"/><text class="layer-title" x="594" y="64">DOMINIO</text>
+<rect class="layer" x="830" y="38" width="336" height="676" rx="10"/><text class="layer-title" x="848" y="64">INFRAESTRUCTURA · FLUTTER</text>
+<rect class="layer" x="1186" y="38" width="352" height="676" rx="10"/><text class="layer-title" x="1204" y="64">SERVICIOS Y ALMACENAMIENTO</text>
+<rect class="layer" x="22" y="742" width="1516" height="202" rx="10"/><text class="layer-title" x="40" y="768">ICONO ESTACIONAL · INTEGRACIÓN NATIVA</text>
+<!-- edges behind nodes -->
+<path class="edge" d="M258 151H314"/><text class="edge-label" x="286" y="140">consulta estado</text>
+<path class="edge" d="M149 180V243"/><text class="edge-label" x="199" y="215">presenta feed</text>
+<path class="edge" d="M149 295V354"/><text class="edge-label" x="205" y="329">elige reproductor</text>
+<path class="edge" d="M258 269H286V281H314"/><text class="edge-label" x="286" y="258">toggleLike</text>
+<path class="edge" d="M436 180V214H693V241"/><text class="edge-label" x="562" y="205">consulta feed</text>
+<path class="edge" d="M810 270H846"/><text class="edge-label" x="828" y="258">implementa</text>
+<path class="edge" d="M1006 302V350H921V389"/><text class="edge-label" x="967" y="340">videos locales</text>
+<path class="edge" d="M1006 302V482H921V521"/><text class="edge-label" x="967" y="469">YouTube</text>
+<path class="edge" d="M1006 302V614H921V653"/><text class="edge-label" x="967" y="601">GIPHY</text>
+<path class="edge" d="M1006 302V676H1070V653"/><text class="edge-label" x="1095" y="691">Dailymotion</text>
+<path class="edge" d="M1030 414H1204"/><text class="edge-label" x="1117" y="403">lee assets</text>
+<path class="edge" d="M1030 546H1204"/><text class="edge-label" x="1117" y="535">HTTP API · YouTube</text>
+<path class="edge" d="M1030 612H1204"/><text class="edge-label" x="1117" y="601">HTTP API · GIPHY</text>
+<path class="edge" d="M1166 678H1204"/><text class="edge-label" x="1185" y="667">HTTP API</text>
+<path class="edge" d="M436 318V704H998V836"/><text class="edge-label" x="680" y="697">lee / guarda likes y favoritos</text>
+<path class="edge" d="M436 458V717H1020V836"/><text class="edge-label" x="861" y="710">lee / guarda tema y preferencias</text>
+<path class="edge" d="M1082 878H1204"/><text class="edge-label" x="1143" y="866">SharedPreferences</text>
+<path class="edge" d="M436 458V790H476V836"/><text class="edge-label" x="411" y="782">actualiza icono</text>
+<path class="edge" d="M476 878H622"/><text class="edge-label" x="549" y="866">MethodChannel</text>
+<path class="edge soft" d="M842 878H1038"/><text class="edge-label" x="940" y="866">Android: alias configurados</text>
+<path class="edge soft" d="M842 892H1290V930H1410V920"/><text class="edge-label" x="1128" y="927">iOS: icono alternativo</text>
+<!-- nodes -->
+<g class="node ui"><rect x="48" y="112" width="202" height="68"/><text class="name" x="149" y="141">DiscoverScreen</text><text class="sub" x="149" y="161">pantalla de descubrimiento</text></g>
+<g class="node ui"><rect x="48" y="227" width="202" height="68"/><text class="name" x="149" y="256">VideoScrollableView</text><text class="sub" x="149" y="276">feed paginado de videos</text></g>
+<g class="node ui"><rect x="48" y="354" width="202" height="76"/><text class="name" x="149" y="383">Reproductores de video</text><text class="sub" x="149" y="404">YouTube · GIPHY · Dailymotion · local</text></g>
+<g class="node state"><rect x="322" y="112" width="228" height="68"/><text class="name" x="436" y="141">DiscoverProvider</text><text class="sub" x="436" y="161">secciones y carga del feed</text></g>
+<g class="node state"><rect x="322" y="250" width="228" height="68"/><text class="name" x="436" y="279">LikesProvider</text><text class="sub" x="436" y="299">me gusta y favoritos</text></g>
+<g class="node state"><rect x="322" y="390" width="228" height="68"/><text class="name" x="436" y="419">ThemeProvider</text><text class="sub" x="436" y="439">tema y preferencias de tema</text></g>
+<g class="node domain"><rect x="600" y="112" width="186" height="68"/><text class="name" x="693" y="141">VideoPost</text><text class="sub" x="693" y="161">entidad de dominio</text></g>
+<g class="node domain"><rect x="590" y="241" width="206" height="61"/><text class="name" x="693" y="267">VideoFeedRepository</text><text class="sub" x="693" y="286">contrato del dominio</text></g>
+<g class="node infra"><rect x="846" y="241" width="320" height="61"/><text class="name" x="1006" y="267">VideoFeedRepositoryImpl</text><text class="sub" x="1006" y="286">combina fuentes locales y remotas</text></g>
+<g class="node infra"><rect x="846" y="389" width="184" height="50"/><text class="name" x="938" y="411">LocalVideoDatasourceImpl</text><text class="sub" x="938" y="429">lectura local</text></g>
+<g class="node infra"><rect x="846" y="521" width="184" height="50"/><text class="name" x="938" y="543">YoutubeDataApi</text><text class="sub" x="938" y="561">cliente remoto</text></g>
+<g class="node infra"><rect x="846" y="587" width="184" height="50"/><text class="name" x="938" y="609">GiphyApi</text><text class="sub" x="938" y="627">cliente remoto</text></g>
+<g class="node infra"><rect x="1040" y="653" width="126" height="50"/><text class="name" x="1103" y="675">DailymotionApi</text><text class="sub" x="1103" y="693">cliente remoto</text></g>
+<g class="node storage"><rect x="1204" y="389" width="316" height="50"/><text class="name" x="1362" y="411">Assets de videos</text><text class="sub" x="1362" y="429">assets/videos/</text></g>
+<g class="node external"><rect x="1204" y="521" width="316" height="50"/><text class="source-tag" x="1362" y="542">YOUTUBE</text><text class="name" x="1362" y="561">YouTube Data API</text></g>
+<g class="node external"><rect x="1204" y="587" width="316" height="50"/><text class="source-tag" x="1362" y="608">GIPHY</text><text class="name" x="1362" y="627">GIPHY API</text></g>
+<g class="node external"><rect x="1204" y="653" width="316" height="50"/><text class="source-tag" x="1362" y="674">DAILYMOTION</text><text class="name" x="1362" y="693">Dailymotion API</text></g>
+<g class="node infra"><rect x="900" y="836" width="182" height="84"/><text class="name" x="991" y="864">VideoPreferencesDatasource</text><text class="sub" x="991" y="885">likes · favoritos · tema</text><text class="sub" x="991" y="902">y preferencias persistidas</text></g>
+<g class="node storage"><rect x="1204" y="836" width="316" height="84"/><text class="name" x="1362" y="868">SharedPreferences</text><text class="sub" x="1362" y="889">likes · favoritos · tema seleccionado</text><text class="sub" x="1362" y="907">y preferencias de tema</text></g>
+<g class="node infra"><rect x="322" y="836" width="154" height="84"/><text class="name" x="399" y="865">LauncherIconService</text><text class="sub" x="399" y="887">solicita cambio</text><text class="sub" x="399" y="904">de icono estacional</text></g>
+<g class="node native"><rect x="622" y="836" width="220" height="84"/><text class="name" x="732" y="867">MethodChannel</text><text class="sub" x="732" y="890">Flutter ↔ Android / iOS</text></g>
+<g class="node native"><rect x="1038" y="836" width="208" height="84"/><text class="name" x="1142" y="867">Android</text><text class="sub" x="1142" y="890">activa alias configurados</text></g>
+<g class="node native"><rect x="1300" y="836" width="220" height="84"/><text class="name" x="1410" y="867">iOS</text><text class="sub" x="1410" y="890">iconos alternativos</text></g>
+<text class="note" x="48" y="727">VideoScrollableView presenta cada VideoPost y delega la reproducción según su fuente.</text>
+</svg></section><footer><span class="key"><i class="dot"></i> Interfaz</span><span class="key"><i class="dot state"></i> Estado</span><span class="key"><i class="dot domain"></i> Dominio</span><span class="key"><i class="dot"></i> Infraestructura</span><span class="key"><i class="dot storage"></i> Almacenamiento</span><span class="key"><i class="dot ext"></i> Servicios externos</span></footer></main></body></html>

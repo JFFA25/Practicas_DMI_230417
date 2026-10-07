@@ -1,0 +1,233 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Arquitectura de TokTik",
+    "output": "arquitectura-toktik.html",
+    "quality_profile": "showcase",
+    "visual_preset": "blueprint"
+  },
+  "layout": {
+    "mode": "grid",
+    "origin": [70, 140],
+    "cols": 5,
+    "cellW": 190,
+    "cellH": 80,
+    "gapX": 70,
+    "gapY": 140
+  },
+  "components": [
+    {
+      "id": "discover_screen",
+      "type": "frontend",
+      "label": "DiscoverScreen",
+      "sublabel": "secciones + ajustes",
+      "row": 1,
+      "col": 0,
+      "size": [190, 80]
+    },
+    {
+      "id": "video_feed",
+      "type": "frontend",
+      "label": "VideoScrollableView",
+      "sublabel": "feed vertical + reproductores",
+      "row": 1,
+      "col": 1,
+      "size": [190, 80]
+    },
+    {
+      "id": "providers",
+      "type": "backend",
+      "label": "TokTikProviders",
+      "sublabel": "Discover · Likes · Theme",
+      "row": 1,
+      "col": 2,
+      "size": [190, 80]
+    },
+    {
+      "id": "video_post",
+      "type": "backend",
+      "label": "VideoPost",
+      "sublabel": "entidad de dominio",
+      "row": 0,
+      "col": 3,
+      "size": [190, 80]
+    },
+    {
+      "id": "repository",
+      "type": "backend",
+      "label": "VideoFeedRepository",
+      "sublabel": "combina fuentes + páginas",
+      "row": 1,
+      "col": 3,
+      "size": [190, 80]
+    },
+    {
+      "id": "remote_sources",
+      "type": "backend",
+      "label": "VideoDataSources",
+      "sublabel": "clientes HTTP · paginación",
+      "row": 1,
+      "col": 4,
+      "size": [190, 80]
+    },
+    {
+      "id": "video_apis",
+      "type": "cloud",
+      "label": "APIs de video",
+      "sublabel": "YouTube · GIPHY · Dailymotion",
+      "row": 0,
+      "col": 4,
+      "size": [190, 80]
+    },
+    {
+      "id": "local_source",
+      "type": "backend",
+      "label": "LocalVideoDatasource",
+      "sublabel": "catálogo MP4 incluido",
+      "row": 2,
+      "col": 4,
+      "size": [190, 80]
+    },
+    {
+      "id": "video_assets",
+      "type": "database",
+      "label": "Assets de video",
+      "sublabel": "archivos locales de la app",
+      "row": 2,
+      "col": 3,
+      "size": [190, 80]
+    },
+    {
+      "id": "preferences",
+      "type": "database",
+      "label": "Preferencias",
+      "sublabel": "SharedPreferences · likes · tema",
+      "row": 2,
+      "col": 2,
+      "size": [190, 80]
+    },
+    {
+      "id": "launcher_icons",
+      "type": "backend",
+      "label": "LauncherIconService",
+      "sublabel": "MethodChannel → icono nativo",
+      "row": 2,
+      "col": 1,
+      "size": [190, 80]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Presentación",
+      "wraps": ["discover_screen", "video_feed"]
+    },
+    {
+      "kind": "region",
+      "label": "Providers",
+      "wraps": ["providers"]
+    },
+    {
+      "kind": "region",
+      "label": "Dominio",
+      "wraps": ["video_post"]
+    },
+    {
+      "kind": "region",
+      "label": "Repositorios + datasources",
+      "wraps": ["repository", "remote_sources"]
+    },
+    {
+      "kind": "region",
+      "label": "APIs externas",
+      "wraps": ["video_apis"]
+    },
+    {
+      "kind": "region",
+      "label": "Contenido local",
+      "wraps": ["local_source", "video_assets"]
+    },
+    {
+      "kind": "region",
+      "label": "Persistencia local",
+      "wraps": ["preferences"]
+    },
+    {
+      "kind": "region",
+      "label": "Integración nativa",
+      "wraps": ["launcher_icons"]
+    }
+  ],
+  "connections": [
+    {
+      "id": "screen-to-feed",
+      "from": "discover_screen",
+      "to": "video_feed",
+      "label": "renderiza"
+    },
+    {
+      "id": "feed-to-providers",
+      "from": "video_feed",
+      "to": "providers",
+      "label": "feed + likes"
+    },
+    {
+      "id": "providers-to-repository",
+      "from": "providers",
+      "to": "repository",
+      "label": "carga feed"
+    },
+    {
+      "id": "repository-to-domain",
+      "from": "repository",
+      "to": "video_post",
+      "label": "mapea modelo",
+      "fromSide": "top",
+      "toSide": "bottom",
+      "labelDy": -20
+    },
+    {
+      "id": "repository-to-remote",
+      "from": "repository",
+      "to": "remote_sources",
+      "label": "consulta remoto",
+      "labelDy": 71,
+      "labelDx": -50
+    },
+    {
+      "id": "remote-to-apis",
+      "from": "remote_sources",
+      "to": "video_apis",
+      "label": "HTTP + cursores",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "repository-to-local",
+      "from": "repository",
+      "to": "local_source",
+      "label": "mezcla videos locales"
+    },
+    {
+      "id": "local-to-assets",
+      "from": "video_assets",
+      "to": "local_source"
+    },
+    {
+      "id": "providers-to-preferences",
+      "from": "providers",
+      "to": "preferences",
+      "label": "guarda likes + tema",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDy": 24
+    },
+    {
+      "id": "providers-to-launcher",
+      "from": "providers",
+      "to": "launcher_icons",
+      "label": "cambia icono"
+    }
+  ]
+}
