@@ -109,6 +109,8 @@ git commit -m "Práctica Appetize: documentación y evidencias"
 git push origin practica-appetize
 ```
 
+![Merge](/Practica-Appetize/images/evidencia.png)
+
 Integración mediante merge / Pull Request:
 
 ![Merge](evidencias/github-merge.png)
