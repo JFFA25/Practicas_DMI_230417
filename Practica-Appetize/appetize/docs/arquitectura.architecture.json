@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Arquitectura de Pokédex Mini",
+    "output": "arquitectura.html",
+    "quality_profile": "showcase",
+    "visual_preset": "blueprint",
+    "legend": {
+      "mode": "auto",
+      "entries": {
+        "frontend": { "label": "Interfaz Flutter (widgets)" },
+        "backend": { "label": "Configuración y utilidades" },
+        "external": { "label": "Servicio externo" },
+        "cloud": { "label": "Build y salida" }
+      }
+    },
+    "views": [
+      {
+        "id": "flujo-datos",
+        "label": "Flujo de datos",
+        "focus": ["home", "list", "card", "detail", "pokeapi"],
+        "note": "Home abre la lista; el filtro y el buscador consultan PokeAPI y la tarjeta abre el detalle."
+      },
+      {
+        "id": "publicacion",
+        "label": "Publicación",
+        "focus": ["app", "apk", "android", "appetize"],
+        "note": "El código Flutter se compila en el APK release y se sube a Appetize.io."
+      }
+    ]
+  },
+  "components": [
+    { "id": "deps", "type": "backend", "label": "pubspec.yaml", "tag": "http · launcher icons (dev)", "pos": [50, 170], "size": [150, 62] },
+
+    { "id": "app", "type": "frontend", "label": "PokedexApp", "tag": "MaterialApp · tema system", "pos": [290, 170], "size": [150, 62] },
+    { "id": "splash", "type": "frontend", "label": "SplashScreen", "tag": "bienvenida · 1.8 s", "pos": [490, 170], "size": [150, 62] },
+    { "id": "home", "type": "frontend", "label": "HomeScreen", "tag": "NavigationBar · 2 pestañas", "pos": [690, 170], "size": [150, 62] },
+    { "id": "list", "type": "frontend", "label": "PokemonListScreen", "tag": "buscador · chips · GridView", "pos": [890, 170], "size": [150, 62] },
+
+    { "id": "utils", "type": "backend", "label": "Utilidades", "tag": "colores · nombres en español", "pos": [490, 340], "size": [150, 62] },
+    { "id": "register", "type": "frontend", "label": "RegisterScreen", "tag": "validación local", "pos": [690, 340], "size": [150, 62] },
+    { "id": "card", "type": "frontend", "label": "_PokemonCard", "tag": "tarjeta · Image.network", "pos": [890, 340], "size": [150, 62] },
+    { "id": "detail", "type": "frontend", "label": "DetailScreen", "tag": "tipos · stats · habilidades", "pos": [1090, 340], "size": [150, 62] },
+
+    { "id": "pokeapi", "type": "external", "label": "PokeAPI", "tag": "https://pokeapi.co/api/v2/", "pos": [1320, 170], "size": [190, 62] },
+    { "id": "sprites", "type": "external", "label": "Sprites en GitHub", "tag": "raw.githubusercontent.com/PokeAPI/sprites", "pos": [1320, 340], "size": [190, 62] },
+
+    { "id": "android", "type": "backend", "label": "android/", "tag": "AndroidManifest · INTERNET", "pos": [50, 520], "size": [150, 62] },
+    { "id": "apk", "type": "cloud", "label": "app-release.apk", "tag": "flutter build apk --release", "pos": [290, 520], "size": [170, 62] },
+    { "id": "appetize", "type": "external", "label": "Appetize.io", "tag": "Android virtual · enlace público", "pos": [560, 520], "size": [170, 62] }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "Dependencias y recursos", "wraps": ["deps"], "pad": 22 },
+    { "kind": "region", "label": "Flutter · lib/ · Código fuente Dart", "wraps": ["app", "splash", "home", "list", "utils", "register", "card", "detail"], "pad": 22 },
+    { "kind": "region", "label": "Servicios externos", "wraps": ["pokeapi", "sprites"], "pad": 22 },
+    { "kind": "region", "label": "Targets y salida compilada", "wraps": ["android", "apk", "appetize"], "pad": 22 }
+  ],
+  "connections": [
+    { "id": "deps-app", "from": "deps", "to": "app", "label": "dependencias", "labelAt": [245, 185], "fromSide": "right", "toSide": "left" },
+    { "id": "inicio", "from": "app", "to": "splash", "label": "inicia", "labelAt": [465, 185], "variant": "emphasis" },
+    { "id": "splash-home", "from": "splash", "to": "home", "label": "tras 1.8 s", "labelAt": [665, 150] },
+    { "id": "home-list", "from": "home", "to": "list", "label": "Pokédex", "labelAt": [865, 185] },
+    { "id": "home-register", "from": "home", "to": "register", "label": "Registro", "labelAt": [805, 290], "fromSide": "bottom", "toSide": "top" },
+
+    { "id": "app-utils", "from": "app", "to": "utils", "label": "utilidades", "labelAt": [430, 278], "fromSide": "bottom", "toSide": "top", "via": [[365, 290], [565, 290]] },
+
+    { "id": "list-pokeapi", "from": "list", "to": "pokeapi", "label": "http GET: lista o tipo", "labelAt": [1180, 185], "variant": "emphasis", "fromSide": "right", "toSide": "left" },
+    { "id": "pokeapi-list", "from": "pokeapi", "to": "list", "label": "JSON: id y nombre", "labelAt": [1160, 140], "variant": "dashed", "fromSide": "top", "toSide": "top", "via": [[1415, 120], [965, 120]] },
+
+    { "id": "list-card", "from": "list", "to": "card", "label": "muestra", "labelAt": [1005, 290], "fromSide": "bottom", "toSide": "top" },
+    { "id": "card-detail", "from": "card", "to": "detail", "label": "toque", "labelAt": [1065, 355], "fromSide": "right", "toSide": "left" },
+    { "id": "detail-pokeapi", "from": "detail", "to": "pokeapi", "label": "http GET: /pokemon/{id}", "labelAt": [1300, 268], "fromSide": "top", "toSide": "bottom", "via": [[1165, 250], [1415, 250]] },
+
+    { "id": "detail-sprites", "from": "detail", "to": "sprites", "label": "Image.network", "labelAt": [1280, 355], "fromSide": "right", "toSide": "left" },
+
+    { "id": "app-apk", "from": "app", "to": "apk", "label": "flutter build apk --release", "labelAt": [450, 463], "fromSide": "left", "toSide": "top", "via": [[250, 201], [250, 490], [375, 490]] },
+    { "id": "android-apk", "from": "android", "to": "apk", "label": "target Android", "labelAt": [245, 535], "fromSide": "right", "toSide": "left" },
+    { "id": "apk-appetize", "from": "apk", "to": "appetize", "label": "subida del APK", "labelAt": [510, 535], "fromSide": "right", "toSide": "left" }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "Flujo de datos", "items": ["La lista carga 60 Pokémon desde PokeAPI.", "El filtro por tipo consulta /type/{tipo}.", "El buscador filtra localmente por nombre."] },
+    { "dot": "emerald", "title": "Sin backend propio", "items": ["Solo consume PokeAPI (pública, sin llaves) y no guarda datos.", "El formulario de registro valida y muestra un diálogo local."] },
+    { "dot": "violet", "title": "Publicación", "items": ["flutter build apk --release genera app-release.apk.", "El APK se prueba en Appetize.io, sin pasar por Google Play."] }
+  ]
+}
