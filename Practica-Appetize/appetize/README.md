@@ -120,7 +120,7 @@ git push origin practica-appetize
 
 Integración mediante merge / Pull Request:
 
-![Merge](evidencias/github-merge.png)
+![Merge](/Practica-Appetize/images/merge.png)
 
 ## Conclusión
 
