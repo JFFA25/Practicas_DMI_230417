@@ -1,0 +1,14 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.toktik">
+    <application>
+        <!-- Solo en release: quita el icono de MainActivity (el de desarrollo)
+             para que el unico icono sea el del alias de la tematica activa. -->
+        <activity android:name=".MainActivity" android:exported="true">
+            <intent-filter tools:node="remove">
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>

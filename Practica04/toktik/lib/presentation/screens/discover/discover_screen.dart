@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:toktik/presentation/providers/discover_provider.dart';
 import 'package:toktik/presentation/providers/likes_provider.dart';
 import 'package:toktik/presentation/providers/theme_provider.dart';
+import 'package:toktik/presentation/widgets/shared/theme_splash.dart';
 import 'package:toktik/presentation/widgets/shared/video_scrollable_view.dart';
 
 class DiscoverScreen extends StatelessWidget {
@@ -21,6 +22,20 @@ class DiscoverScreen extends StatelessWidget {
     );
   }
 
+  /// Cambia el tema envuelto en la splash screen de la temática de destino.
+  Future<void> _applyThemeWithSplash(
+    BuildContext context, {
+    required SeasonalTheme target,
+    required Future<void> Function() apply,
+  }) async {
+    try {
+      await showThemeSplash(context, target: target, apply: apply);
+    } catch (error) {
+      if (!context.mounted) return;
+      _showError(context, error);
+    }
+  }
+
   Future<void> _showThemeSettings(
     BuildContext context,
     ThemeProvider themes,
@@ -28,8 +43,14 @@ class DiscoverScreen extends StatelessWidget {
     await showModalBottomSheet<void>(
       context: context,
       showDragHandle: true,
-      builder: (sheetContext) => SafeArea(
-        child: Padding(
+      // Sin esto la hoja se limita a ~9/16 de la pantalla y el contenido se
+      // desborda ("BOTTOM OVERFLOWED BY xx PIXELS") en ventanas/teléfonos bajos.
+      isScrollControlled: true,
+      useSafeArea: true,
+      builder: (sheetContext) => ListenableBuilder(
+        listenable: themes,
+        builder: (_, _) => SafeArea(
+         child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(16, 4, 16, 20),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -51,12 +72,11 @@ class DiscoverScreen extends StatelessWidget {
                     : null,
                 onTap: () async {
                   Navigator.pop(sheetContext);
-                  try {
-                    await themes.useAutomaticTheme();
-                  } catch (error) {
-                    if (!context.mounted) return;
-                    _showError(context, error);
-                  }
+                  await _applyThemeWithSplash(
+                    context,
+                    target: SeasonalTheme.forDate(DateTime.now()),
+                    apply: themes.useAutomaticTheme,
+                  );
                 },
               ),
               for (final season in SeasonalTheme.values)
@@ -71,12 +91,11 @@ class DiscoverScreen extends StatelessWidget {
                       : null,
                   onTap: () async {
                     Navigator.pop(sheetContext);
-                    try {
-                      await themes.selectTheme(season);
-                    } catch (error) {
-                      if (!context.mounted) return;
-                      _showError(context, error);
-                    }
+                    await _applyThemeWithSplash(
+                      context,
+                      target: season,
+                      apply: () => themes.selectTheme(season),
+                    );
                   },
                 ),
               const Divider(),
@@ -99,6 +118,7 @@ class DiscoverScreen extends StatelessWidget {
               ),
             ],
           ),
+         ),
         ),
       ),
     );

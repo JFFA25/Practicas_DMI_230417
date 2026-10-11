@@ -23,6 +23,14 @@ enum SeasonalTheme {
     SeasonalTheme.valentinesDay => '💝',
   };
 
+  /// Icono de la temática que se muestra en la splash screen al cambiar de tema.
+  String get splashAsset => switch (this) {
+    SeasonalTheme.normal => 'assets/splash/normal.png',
+    SeasonalTheme.halloween => 'assets/splash/halloween.png',
+    SeasonalTheme.christmas => 'assets/splash/christmas.png',
+    SeasonalTheme.valentinesDay => 'assets/splash/valentines.png',
+  };
+
   Color get primaryColor => switch (this) {
     SeasonalTheme.normal => const Color(0xFF16B8A6),
     SeasonalTheme.halloween => const Color(0xFFFF7A18),

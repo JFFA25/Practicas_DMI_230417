@@ -22,6 +22,16 @@
               android:resource="@style/NormalTheme"
               />
 
+            <!-- `flutter run` solo busca la actividad de arranque en <activity>
+                 (no mira los <activity-alias>), asi que se declara aqui.
+                 En debug/profile aparece un icono extra de TokTik; en release
+                 src/release/AndroidManifest.xml quita este filtro y solo
+                 quedan los iconos de los alias de abajo. -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+
         </activity>
 
         <!-- Cada alias declara el icono que Android muestra en el lanzador. -->
