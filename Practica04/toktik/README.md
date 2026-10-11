@@ -30,17 +30,20 @@ local.
 
 ## Iconos
 
-| TokTik| TokTik Hallowen | TokTik Navidad|
+| TokTik | TokTik Halloween | TokTik Navidad |
 |:---:|:---:|:---:|
-| ![OG](./images/TokTik_OG.png) | ![Hallowen](./images/TokTik_Hallowen.jpg) | ![Navidad](./images/TokTik_Navidad.png) |
+| ![OG](./images/TokTik_OG.png) | ![Halloween](./images/TokTik_Hallowen.jpg) | ![Navidad](./images/TokTik_Navidad.png) |
 
 
 ## Evidencia
 
-Vista previa animada; haz clic para abrir el video completo:
+### Demostración de la app
 
-[![Vista previa del video de TokTik](./images/demo-toktik.gif)](https://github.com/user-attachments/assets/cbe2ba88-b0c1-4e0d-a317-9fe3de8a1053)
+https://github.com/user-attachments/assets/cbe2ba88-b0c1-4e0d-a317-9fe3de8a1053
 
+### Pantalla de carga
+
+https://github.com/user-attachments/assets/1d6402f7-22cc-43c9-9ab7-0ef70a23de4d
 
 
 ## Funcionalidades
