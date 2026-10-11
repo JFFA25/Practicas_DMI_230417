@@ -2,6 +2,13 @@
 
 App Flutter que consume [PokeAPI](https://pokeapi.co/): lista de Pokémon con buscador y filtro por tipo, pantalla de detalle y formulario de registro con validación.
 
+
+## Diagrama de Arquitectura
+
+[Ver diagrama interactivo en GitHub Pages](https://jffa25.github.io/Practicas_DMI_230417/Practica-Appetize/appetize/docs/arquitectura.html)
+
+[![Captura del diagrama de arquitectura](./docs/arquitectura.png)](https://jffa25.github.io/Practicas_DMI_230417/Practica-Appetize/appetize/docs/arquitectura.html)
+
 # Práctica: publicación y validación con Appetize
 
 ## Enlace de la app publicada
