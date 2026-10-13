@@ -1,8 +1,8 @@
 ## Pruebas funcionales en Appetize
 
-**Aplicación:** TokTik v1.0.0
-**Enlace público:** https://appetize.io/app/b_kjmr2ovfh7mk2zp5a4iuxcyrzi
-**Dispositivo:**  Pixel 7 - Android 13.0
+**Aplicación:** TokTik v1.0.0<br>
+**Enlace público:** https://appetize.io/app/b_kjmr2ovfh7mk2zp5a4iuxcyrzi<br>
+**Dispositivo:**  Pixel 7 - Android 13.0<br>
 
 ### 1. Carga de las APIs
 
@@ -22,8 +22,8 @@
 **Resultado esperado:** se muestra el splash con el ícono de la temática y luego pasa al contenido.
 
 
-![Splash al abrir la app](./images/splash.png)
-![Splash al cambiar de tema](./images/splash2.png)
+![Splash al abrir la app](/Practica-Appetize/images/Splash.png)
+![Splash al cambiar de tema](/Practica-Appetize/images/Splash2.png)
 
 
 
