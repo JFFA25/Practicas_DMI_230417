@@ -51,7 +51,6 @@
 
 ![Video sin like](./images/No_Favoritos.png)
 ![Video con like](./images/Favorito.png)
-![Sección de Favoritos](./images/prueba-04-favoritos.png)
 ![Local Storage](./images/local.png)
 
 > Nota: al iniciar una sesión nueva en Appetize la app arranca desde cero, por lo que la persistencia se prueba dentro de la misma sesión.
