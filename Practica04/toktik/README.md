@@ -46,6 +46,15 @@ https://github.com/user-attachments/assets/cbe2ba88-b0c1-4e0d-a317-9fe3de8a1053
 https://github.com/user-attachments/assets/1d6402f7-22cc-43c9-9ab7-0ef70a23de4d
 
 
+## Hallowen - This is Halloween
+
+https://github.com/user-attachments/assets/63db6921-4204-4d13-812d-e5aea25ccfd8
+
+## Navidad - Free Fire 2018 Navidad Theme
+
+https://github.com/user-attachments/assets/7d94f900-3edb-446f-8475-d26ca06511b2
+
+
 ## Funcionalidades
 
 ### Feeds y reproducción

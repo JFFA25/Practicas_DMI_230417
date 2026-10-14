@@ -29,6 +29,7 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   animate_do: ^3.0.2
+  audioplayers: ^6.1.0
   cupertino_icons: ^1.0.2
   flutter:
     sdk: flutter
@@ -62,6 +63,7 @@ flutter:
   assets:
     - assets/videos/
     - assets/splash/
+    - assets/audio/
 
   fonts:
     - family: Poppins

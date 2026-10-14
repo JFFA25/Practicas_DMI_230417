@@ -5,6 +5,7 @@ import 'package:toktik/presentation/providers/discover_provider.dart';
 import 'package:toktik/presentation/providers/likes_provider.dart';
 import 'package:toktik/presentation/providers/theme_provider.dart';
 import 'package:toktik/presentation/screens/discover/discover_screen.dart';
+import 'package:toktik/presentation/widgets/shared/theme_splash.dart';
 
 void main() => runApp(const MyApp());
 
@@ -33,7 +34,9 @@ class MyApp extends StatelessWidget {
           title: 'TokTik',
           debugShowCheckedModeBanner: false,
           theme: AppTheme(themes.theme).getTheme(),
-          home: const DiscoverScreen(),
+          // La splash (con la canción de la temática) sale al abrir la app y
+          // después deja ver el feed.
+          home: const StartupSplashGate(child: DiscoverScreen()),
         ),
       ),
     );
