@@ -41,17 +41,28 @@ Las imágenes del tutorial y el indicador de carga se guardan en `assets/images/
 - `animate_do` para animaciones de entrada y carga
 - Imágenes remotas de `picsum.photos`
 
-## Diagrama de arquitectura
-
-[Ver el diagrama interactivo en GitHub Pages](https://jffa25.github.io/Practicas_DMI_230417/Practica05/arquitectura/arquitectura-practica05.html)
 
 ## Evidencia de funcionamiento
 
-Agrega las capturas de la aplicación en los espacios siguientes.
+Capturas de la aplicación ejecutándose en un dispositivo Android físico.
 
-| Inicio y navegación | Demostraciones de widgets | Tema y estado |
-|:---:|:---:|:---:|
-| ![Inicio](/Practica05/images/1.jpeg) | ![Widgets](/Practica05/images/2.jpeg)| ![Tema](/Practica05/images/3.jpeg) |
+<table>
+  <tr>
+    <th align="center">Inicio y navegación</th>
+    <th align="center">Demostraciones de widgets</th>
+    <th align="center">Tema y estado</th>
+  </tr>
+  <tr>
+    <td align="center"><img src="/Practica05/images/1.jpeg" alt="Menú principal" width="250"/></td>
+    <td align="center"><img src="/Practica05/images/2.jpeg" alt="Progress Indicators" width="250"/></td>
+    <td align="center"><img src="/Practica05/images/3.jpeg" alt="Cambio de tema" width="250"/></td>
+  </tr>
+  <tr>
+    <td align="center">Menú con la lista de demostraciones</td>
+    <td align="center">Indicadores de progreso</td>
+    <td align="center">Selector de color con Riverpod</td>
+  </tr>
+</table>
 
 ## Cómo ejecutar el proyecto
 
