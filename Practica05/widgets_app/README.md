@@ -51,7 +51,7 @@ Agrega las capturas de la aplicación en los espacios siguientes.
 
 | Inicio y navegación | Demostraciones de widgets | Tema y estado |
 |:---:|:---:|:---:|
-| *Espacio para captura* | *Espacio para captura* | *Espacio para captura* |
+| ![Inicio](/Practica05/images/1.jpeg) | ![Widgets](/Practica05/images/2.jpeg)| ![Tema](/Practica05/images/3.jpeg) |
 
 ## Cómo ejecutar el proyecto
 
