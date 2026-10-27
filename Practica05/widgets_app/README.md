@@ -57,11 +57,19 @@ Capturas de la aplicación ejecutándose en un dispositivo Android físico.
     <td align="center"><img src="/Practica05/images/2.jpeg" alt="Progress Indicators" width="250"/></td>
     <td align="center"><img src="/Practica05/images/3.jpeg" alt="Cambio de tema" width="250"/></td>
   </tr>
-  <tr>
-    <td align="center">Menú con la lista de demostraciones</td>
-    <td align="center">Indicadores de progreso</td>
-    <td align="center">Selector de color con Riverpod</td>
+    <tr>
+    <td align="center"><img src="/Practica05/images/4.jpeg" alt="Menú principal" width="250"/></td>
+    <td align="center"><img src="/Practica05/images/5.jpeg" alt="Progress Indicators" width="250"/></td>
+    <td align="center"><img src="/Practica05/images/6.jpeg" alt="Cambio de tema" width="250"/></td>
   </tr>
+    <tr>
+    <td align="center"><img src="/Practica05/images/7.jpeg" alt="Menú principal" width="250"/></td>
+    <td align="center"><img src="/Practica05/images/8.jpeg" alt="Progress Indicators" width="250"/></td>
+    <td align="center"><img src="/Practica05/images/9.jpeg" alt="Cambio de tema" width="250"/></td>
+  </tr>
+    <tr>
+    <td align="center"><img src="/Practica05/images/10.jpeg" alt="Menú principal" width="250"/></td>
+    <td align="center"><img src="/Practica05/images/11.jpeg" alt="Progress Indicators" width="250"/></td>
 </table>
 
 ## Cómo ejecutar el proyecto
