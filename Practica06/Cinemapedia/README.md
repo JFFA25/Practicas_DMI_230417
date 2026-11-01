@@ -31,10 +31,10 @@ película con su reparto, tráilers y películas similares.
     <th>Favoritos</th>
   </tr>
   <tr>
-    <td align="center"><img src="assets/images/LoadScreen.gif" alt="Pantalla de Carga" width="210" height="450" style="object-fit: cover;" /></td>
-    <td align="center"><img src="assets/images/Inicio.jpeg" alt="Inicio" width="210" height="450" style="object-fit: cover;" /></td>
-    <td align="center"><img src="assets/images/Descripcion.jpeg" alt="Detalle" width="210" height="450" style="object-fit: cover;" /></td>
-    <td align="center"><img src="assets/images/Favoritos.jpeg" alt="Favoritos" width="210" height="450" style="object-fit: cover;" /></td>
+    <td align="center"><img src="assets/images/LoadScreen.gif" alt="Pantalla de Carga" style="width: 215px; height: 465px; object-fit: cover; display: block;" /></td>
+    <td align="center"><img src="assets/images/Inicio.jpeg" alt="Inicio" style="width: 215px; height: 465px; object-fit: cover; display: block;" /></td>
+    <td align="center"><img src="assets/images/Descripcion.jpeg" alt="Detalle" style="width: 215px; height: 465px; object-fit: cover; display: block;" /></td>
+    <td align="center"><img src="assets/images/Favoritos.jpeg" alt="Favoritos" style="width: 215px; height: 465px; object-fit: cover; display: block;" /></td>
   </tr>
 </table>
 
