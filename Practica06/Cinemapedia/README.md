@@ -25,16 +25,16 @@ película con su reparto, tráilers y películas similares.
 
 <table>
   <tr>
-    <th align="center">Pantalla de Carga</th>
-    <th align="center">Inicio y Navegación</th>
-    <th align="center">Detalles de la Película</th>
-    <th align="center">Favoritos</th>
+    <th>Pantalla de Carga</th>
+    <th>Inicio y Navegación</th>
+    <th>Detalles de la Película</th>
+    <th>Favoritos</th>
   </tr>
   <tr>
-<td align="center" valign="top"><img src="/Practica06/Cinemapedia/assets/images/LoadScreen.gif" alt="Pantalla de Carga" width="250" height="544"/></td>
-<td align="center" valign="top"><img src="/Practica06/Cinemapedia/assets/images/Inicio.jpeg" alt="Menú principal" width="250" height="544"/></td>
-<td align="center" valign="top"><img src="/Practica06/Cinemapedia/assets/images/Descripcion.jpeg" alt="Detalles de la Película" width="250" height="544"/></td>
-<td align="center" valign="top"><img src="/Practica06/Cinemapedia/assets/images/Favoritos.jpeg" alt="Favoritos" width="250" height="544"/></td>
+    <td align="center"><img src="assets/images/LoadScreen.gif" alt="Pantalla de Carga" width="250" /></td>
+    <td align="center"><img src="assets/images/Inicio.jpeg" alt="Inicio" width="250" /></td>
+    <td align="center"><img src="assets/images/Descripcion.jpeg" alt="Detalle" width="250" /></td>
+    <td align="center"><img src="assets/images/Favoritos.jpeg" alt="Favoritos" width="250" /></td>
   </tr>
 </table>
 
