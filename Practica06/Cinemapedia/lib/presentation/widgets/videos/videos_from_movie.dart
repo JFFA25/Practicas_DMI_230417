@@ -75,33 +75,28 @@ class _YouTubeVideoPlayer extends StatefulWidget {
 
 class _YouTubeVideoPlayerState extends State<_YouTubeVideoPlayer> {
 
-  late YoutubePlayerController _controller;  
+  late YoutubePlayerController _controller;
 
   @override
   void initState() {
     super.initState();
-    
-    _controller = YoutubePlayerController(
-      initialVideoId: widget.youtubeId,
-      flags: const YoutubePlayerFlags(
-        hideThumbnail: true,
-        showLiveFullscreenButton: false,
-        mute: false,
-        autoPlay: false,
-        disableDragSeek: true,
-        loop: false,
-        isLive: false,
-        forceHD: false,
+
+    _controller = YoutubePlayerController.fromVideoId(
+      videoId: widget.youtubeId,
+      autoPlay: false,
+      params: const YoutubePlayerParams(
+        showControls: true,
+        showFullscreenButton: true,
+        strictRelatedVideos: false,
         enableCaption: false,
+        mute: false,
       ),
     );
   }
 
-
-
   @override
   void dispose() {
-    _controller.dispose();
+    _controller.close();
     super.dispose();
   }
 

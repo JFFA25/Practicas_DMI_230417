@@ -23,10 +23,18 @@ película con su reparto, tráilers y películas similares.
 
 ## Capturas
 
-| Inicio | Detalle de película | Favoritos |
-| :---: | :---: | :---: |
-| ![Inicio](docs/screenshots/inicio.png) | ![Detalle](docs/screenshots/detalle.png) | ![Favoritos](docs/screenshots/favoritos.png) |
-
+<table>
+  <tr>
+    <th align="center">Inicio</th>
+    <th align="center">Detalles de la Pelicula</th>
+    <th align="center">Favoritos</th>
+  </tr>
+  <tr>
+    <td align="center"><img src="/Practica06/Cinemapedia/assets/images/Inicio.jpeg" alt="Menú principal" width="250"/></td>
+    <td align="center"><img src="/Practica06/Cinemapedia/assets/images/Descripcion.jpeg" alt="Detalles de la Pelicula" width="250"/></td>
+    <td align="center"><img src="/Practica06/Cinemapedia/assets/images/Favoritos.jpeg" alt="Favoritos" width="250"/></td>
+  </tr>
+</table>
 ## Funcionalidades
 
 - **Pantalla de carga animada:** la "C" de Cinemapedia se dibuja sobre fondo negro, aparece el
