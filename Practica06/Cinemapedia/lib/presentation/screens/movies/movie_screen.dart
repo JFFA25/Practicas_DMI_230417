@@ -9,6 +9,7 @@ import 'package:cinemapedia/domain/entities/movie.dart';
 import 'package:cinemapedia/presentation/providers/providers.dart';
 
 
+
 class MovieScreen extends ConsumerStatefulWidget {
 
   static const name = 'movie-screen';
@@ -218,22 +219,17 @@ class _CustomSliverAppBar extends ConsumerWidget {
       foregroundColor: Colors.white,
       actions: [
           IconButton(onPressed: () async {
-            
             // ref.read(localStorageRepositoryProvider)
             //   .toggleFavorite(movie);
-            await ref.read( favoriteMoviesProvider.notifier )
-              .toggleFavorite(movie);
-            
+            await ref.read(favoriteMoviesProvider.notifier).toggleFavorite(movie);
             ref.invalidate(isFavoriteProvider(movie.id));
-
-
-          }, 
+          },
           icon: isFavoriteFuture.when(
-            loading: () => const CircularProgressIndicator(strokeWidth: 2 ),
-            data: (isFavorite) => isFavorite 
-              ? const Icon( Icons.favorite_rounded, color: Colors.red )
-              : const Icon( Icons.favorite_border ), 
-            error: (_, __) => throw UnimplementedError(), 
+            loading: () => const CircularProgressIndicator(strokeWidth: 2),
+            data: (isFavorite) => isFavorite
+                ? const Icon(Icons.favorite_rounded, color: Colors.red)
+                : const Icon(Icons.favorite_border),
+            error: (error, stackTrace) => throw UnimplementedError(),
           ),
           
           // const Icon( Icons.favorite_border )

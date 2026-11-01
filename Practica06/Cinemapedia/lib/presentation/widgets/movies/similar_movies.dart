@@ -22,8 +22,8 @@ class SimilarMovies extends ConsumerWidget {
     final similarMoviesFuture = ref.watch(similarMoviesProvider(movieId));
 
     return similarMoviesFuture.when(
-      data: ( movies) => _Recomendations( movies: movies ), 
-      error: (_ , __) => const Center(child: Text('No se pudo cargar películas similares') ), 
+      data: (movies) => _Recomendations(movies: movies),
+      error: (error, stackTrace) => const Center(child: Text('No se pudo cargar películas similares')),
       loading: () => const Center(child: CircularProgressIndicator(strokeWidth: 2)),
     );
   }

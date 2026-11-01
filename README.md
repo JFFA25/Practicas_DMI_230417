@@ -54,7 +54,8 @@ Cada práctica incluye el código fuente, una breve descripción del objetivo de
 | 03  | [Yes, No, Maybe](/Practica03/yes_no_app/README.md) | Chat Flutter con respuestas automáticas y GIFs mediante la API yesno.wtf. |     30      | 🟢 Completada |
 | 04  | [TokTik](/Practica04/toktik/README.md)| El alumno creara una app de reproduccion de videos vertigales con el uso de providers y tematizacion temporal a halloween y Navidad |     30      | 🟢 Completada |
 | 4.1 | [Appetize - TokTik](/Practica-Appetize/README.md) | App Flutter - TokTik Reproduccion de videos vertigales con el uso de providers y tematizacion temporal a halloween y Navidad|     10      | 🟢 Completada  |
-| 05  | [Widgets App](/Practica05/widgets_app/README.md) | App Flutter con demostraciones de widgets Material 3, navegación con GoRouter y estado con Riverpod: botones, tarjetas, progreso, controles, animaciones, lista con actualización, contador y temas. |     --      | 🟢 Completada  |
+| 05  | [Widgets App](/Practica05/widgets_app/README.md) | App Flutter con demostraciones de widgets Material 3, navegación con GoRouter y estado con Riverpod: botones, tarjetas, progreso, controles, animaciones, lista con actualización, contador y temas. |     40     | 🟢 Completada  |
+| 06 | [Cinemapedia](/Practica06/Cinemapedia/README.md) | App Flutter con demostraciones de widgets Material 3, navegación con GoRouter y estado con Riverpod: botones, tarjetas, progreso, controles, animaciones, lista con actualización, contador y temas. |     --     | 🟡 En Proceso  |
 
 
 ## Manual de Flutter

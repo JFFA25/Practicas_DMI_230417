@@ -1,6 +1,7 @@
 import 'package:cinemapedia/domain/entities/actor.dart';
 import 'package:cinemapedia/presentation/providers/actors/actors_repository_provider.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+// Cambiado a legacy.dart para mantener compatibilidad total con StateNotifierProvider
+import 'package:flutter_riverpod/legacy.dart'; 
 
 final actorsByMovieProvider = StateNotifierProvider<ActorsByMovieNotifier, Map<String, List<Actor>>>((ref) {
   final actorsRepository = ref.watch( actorsRepositoryProvider );

@@ -1,29 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:cinemapedia/presentation/providers/providers.dart';
 import 'package:cinemapedia/domain/entities/entities.dart';
+import 'package:cinemapedia/presentation/providers/providers.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-
-final FutureProviderFamily<List<Video>, int> videosFromMovieProvider = FutureProvider.family((ref, int movieId) {
+final videosFromMovieProvider = FutureProvider.family<List<Video>, int>((ref, int movieId) {
   final movieRepository = ref.watch(movieRepositoryProvider);
   return movieRepository.getYoutubeVideosById(movieId);
 });
 
 class VideosFromMovie extends ConsumerWidget {
-
   final int movieId;
 
   const VideosFromMovie({super.key, required this.movieId});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref ) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final moviesFromVideo = ref.watch(videosFromMovieProvider(movieId));
 
     return moviesFromVideo.when(
-      data: ( videos ) => _VideosList( videos: videos ),
-      error: (_ , __) => const Center(child: Text('No se pudo cargar películas similares') ), 
+      data: (videos) => _VideosList(videos: videos),
+      error: (error, stackTrace) => const Center(child: Text('No se pudo cargar películas similares')),
       loading: () => const Center(child: CircularProgressIndicator(strokeWidth: 2)),
     );
   }

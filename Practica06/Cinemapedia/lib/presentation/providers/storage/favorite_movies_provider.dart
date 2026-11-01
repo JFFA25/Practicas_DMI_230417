@@ -1,6 +1,7 @@
 import 'package:cinemapedia/domain/repositories/local_storage_repository.dart';
 import 'package:cinemapedia/presentation/providers/providers.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+// Cambiado a legacy.dart para mantener compatibilidad total con StateNotifierProvider
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:cinemapedia/domain/entities/movie.dart';
 
 
@@ -61,4 +62,3 @@ class StorageMoviesNotifier extends StateNotifier<Map<int, Movie>> {
 
 
 }
-
