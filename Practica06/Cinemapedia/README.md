@@ -31,10 +31,10 @@ película con su reparto, tráilers y películas similares.
     <th align="center">Favoritos</th>
   </tr>
   <tr>
-    <td align="center" valign="top"><img src="/Practica06/Cinemapedia/assets/images/LoadScreen.gif" alt="Pantalla de Carga" width="250"/></td>
-    <td align="center" valign="top"><img src="/Practica06/Cinemapedia/assets/images/Inicio.jpeg" alt="Menú principal" width="250"/></td>
-    <td align="center" valign="top"><img src="/Practica06/Cinemapedia/assets/images/Descripcion.jpeg" alt="Detalles de la Película" width="250"/></td>
-    <td align="center" valign="top"><img src="/Practica06/Cinemapedia/assets/images/Favoritos.jpeg" alt="Favoritos" width="250"/></td>
+<td align="center" valign="top"><img src="/Practica06/Cinemapedia/assets/images/LoadScreen.gif" alt="Pantalla de Carga" width="250" height="544"/></td>
+<td align="center" valign="top"><img src="/Practica06/Cinemapedia/assets/images/Inicio.jpeg" alt="Menú principal" width="250" height="544"/></td>
+<td align="center" valign="top"><img src="/Practica06/Cinemapedia/assets/images/Descripcion.jpeg" alt="Detalles de la Película" width="250" height="544"/></td>
+<td align="center" valign="top"><img src="/Practica06/Cinemapedia/assets/images/Favoritos.jpeg" alt="Favoritos" width="250" height="544"/></td>
   </tr>
 </table>
 
@@ -43,7 +43,7 @@ película con su reparto, tráilers y películas similares.
 - **Pantalla de carga animada:** la "C" de Cinemapedia se dibuja sobre fondo negro, aparece el
   nombre y hace zoom hacia la pantalla principal.
 - **Carrusel de estrenos** con autoplay y flechas para cambiar de película.
-- **Listas horizontales** con scroll infinito: *En cines*, *Próximamente* y *Mejor calificadas*.
+- **Listas horizontales** con scroll infinito: _En cines_, _Próximamente_ y _Mejor calificadas_.
 - **Populares** en una vista de cuadrícula tipo masonry.
 - **Detalle de película:** sinopsis, géneros, reparto, tráilers de YouTube y películas similares.
 - **Búsqueda** de películas con sugerencias en tiempo real.
@@ -71,29 +71,29 @@ fondo negro.
 
 ![Paleta de colores](/Practica06/Cinemapedia/assets/images/Colors.png)
 
-| Color | Hex | Uso |
-| --- | :---: | --- |
-| Morado base | `#8C5A9B` | Cuerpo de la "C" y color principal de la marca |
-| Morado oscuro | `#5F3A70` | Sombra de la punta inferior de la "C" |
-| Morado claro | `#A97DBB` | Brillo de la punta superior de la "C" |
-| Negro | `#000000` | Fondo de la app, de la pantalla de carga y del icono |
-| Blanco | `#FFFFFF` | Textos e iconos sobre fondo oscuro |
-| Amarillo calificación | `#F9A825` | Estrellas y puntuación de las películas |
+| Color                 |    Hex    | Uso                                                  |
+| --------------------- | :-------: | ---------------------------------------------------- |
+| Morado base           | `#8C5A9B` | Cuerpo de la "C" y color principal de la marca       |
+| Morado oscuro         | `#5F3A70` | Sombra de la punta inferior de la "C"                |
+| Morado claro          | `#A97DBB` | Brillo de la punta superior de la "C"                |
+| Negro                 | `#000000` | Fondo de la app, de la pantalla de carga y del icono |
+| Blanco                | `#FFFFFF` | Textos e iconos sobre fondo oscuro                   |
+| Amarillo calificación | `#F9A825` | Estrellas y puntuación de las películas              |
 
 ## Tecnologías
 
-| Para qué | Paquete |
-| --- | --- |
-| Estado | `flutter_riverpod` |
-| Navegación | `go_router` |
-| Peticiones HTTP | `dio` |
-| Base de datos local | `isar_community` |
-| Carrusel | `card_swiper` |
-| Animaciones | `animate_do` |
-| Cuadrícula | `flutter_staggered_grid_view` |
-| Tráilers | `youtube_player_flutter` |
-| Variables de entorno | `flutter_dotenv` |
-| Fechas | `intl` |
+| Para qué             | Paquete                       |
+| -------------------- | ----------------------------- |
+| Estado               | `flutter_riverpod`            |
+| Navegación           | `go_router`                   |
+| Peticiones HTTP      | `dio`                         |
+| Base de datos local  | `isar_community`              |
+| Carrusel             | `card_swiper`                 |
+| Animaciones          | `animate_do`                  |
+| Cuadrícula           | `flutter_staggered_grid_view` |
+| Tráilers             | `youtube_player_flutter`      |
+| Variables de entorno | `flutter_dotenv`              |
+| Fechas               | `intl`                        |
 
 ## Requisitos
 
@@ -120,9 +120,6 @@ fondo negro.
    ```
 
 > **La web no está soportada:** Isar no corre en navegador.
-
-
-
 
 ## Créditos
 
