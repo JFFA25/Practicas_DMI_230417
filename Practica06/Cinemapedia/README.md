@@ -58,7 +58,7 @@ fondo negro.
 
 ## Paleta de colores
 
-![Paleta de colores](/assets/images/Colors.png)
+![Paleta de colores](/Practica06/Cinemapedia/assets/images/Colors.png)
 
 | Color | Hex | Uso |
 | --- | :---: | --- |
