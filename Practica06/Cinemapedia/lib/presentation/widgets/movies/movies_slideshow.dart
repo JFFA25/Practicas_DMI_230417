@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:card_swiper/card_swiper.dart';
+import 'package:cinemapedia/config/i18n/app_strings.dart';
 import 'package:cinemapedia/domain/entities/movie.dart';
 import 'package:go_router/go_router.dart';
 
@@ -25,6 +26,7 @@ class _MoviesSlideshowState extends State<MoviesSlideshow> {
   Widget build(BuildContext context) {
 
     final colors = Theme.of(context).colorScheme;
+    final t = AppStrings.of(context);
 
     return SizedBox(
       height: 210,
@@ -49,22 +51,27 @@ class _MoviesSlideshowState extends State<MoviesSlideshow> {
           ),
 
           // Flechas para cambiar de película (el bottom: 30 compensa el espacio de los puntos)
+          // Siempre de izquierda a derecha (también en árabe) para que cada flecha
+          // apunte hacia donde realmente se mueve el carrusel.
           Positioned.fill(
             bottom: 30,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _ArrowButton(
-                  icon: Icons.chevron_left_rounded,
-                  tooltip: 'Anterior',
-                  onPressed: () => _controller.previous(),
-                ),
-                _ArrowButton(
-                  icon: Icons.chevron_right_rounded,
-                  tooltip: 'Siguiente',
-                  onPressed: () => _controller.next(),
-                ),
-              ],
+            child: Directionality(
+              textDirection: TextDirection.ltr,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _ArrowButton(
+                    icon: Icons.chevron_left_rounded,
+                    tooltip: t.previous,
+                    onPressed: () => _controller.previous(),
+                  ),
+                  _ArrowButton(
+                    icon: Icons.chevron_right_rounded,
+                    tooltip: t.next,
+                    onPressed: () => _controller.next(),
+                  ),
+                ],
+              ),
             ),
           ),
         ],

@@ -23,13 +23,55 @@ película con su reparto, tráilers y películas similares.
 
 ## Capturas
 
-<table>
+<table style="width: 100%; max-width: 750px; border-collapse: collapse; margin: 0 auto; color: white;">
+  <!-- Primera Fila: 3 pantallas -->
   <tr>
-    <th>Pantalla de Carga</th>
-    <th>Inicio y Navegación</th>
-    <th>Detalles de la Película</th>
-    <th>Favoritos</th>
+    <th style="padding: 10px; text-align: center; width: 33.33%;">Pantalla de Carga</th>
+    <th style="padding: 10px; text-align: center; width: 33.33%;">Inicio y Navegación</th>
+    <th style="padding: 10px; text-align: center; width: 33.33%;">Detalles de la Película</th>
   </tr>
+  <tr>
+    <td align="center" style="padding: 10px;">
+      <img src="assets/images/LoadScreen.gif" alt="Pantalla de Carga" style="width: 215px; height: 462px; object-fit: cover; display: block; border-radius: 12px;" />
+    </td>
+    <td align="center" style="padding: 10px;">
+      <img src="assets/images/Inicio.jpeg" alt="Inicio" style="width: 215px; height: 462px; object-fit: cover; display: block; border-radius: 12px;" />
+    </td>
+    <td align="center" style="padding: 10px;">
+      <img src="assets/images/Descripcion.jpeg" alt="Detalle" style="width: 215px; height: 462px; object-fit: cover; display: block; border-radius: 12px;" />
+    </td>
+  </tr>
+
+  <!-- Segunda Fila: Pantalla restante -->
+  <tr>
+    <th style="padding: 25px 10px 10px 10px; text-align: center;">Favoritos</th>
+    <th></th>
+    <th></th>
+  </tr>
+  <tr>
+    <td align="center" style="padding: 10px;">
+      <img src="assets/images/Favoritos.jpeg" alt="Favoritos" style="width: 215px; height: 462px; object-fit: cover; display: block; border-radius: 12px;" />
+    </td>
+    <!-- Celdas vacías para mantener la alineación de la cuadrícula -->
+    <td></td>
+    <td></td>
+  </tr>
+</table>
+
+
+
+
+## Idiomas
+
+<table>
+<tr>
+  <th>Español - ES</th>
+  <th>Inglés - EN</th>
+  <th>Alemán - DE</th>
+  <th>Chino - ZH</th>
+  <th>Árabe - AR</th>
+</tr>
+
   <tr>
     <td align="center"><img src="assets/images/LoadScreen.gif" alt="Pantalla de Carga" style="width: 215px; height: 465px; object-fit: cover; display: block;" /></td>
     <td align="center"><img src="assets/images/Inicio.jpeg" alt="Inicio" style="width: 215px; height: 465px; object-fit: cover; display: block;" /></td>
@@ -37,7 +79,6 @@ película con su reparto, tráilers y películas similares.
     <td align="center"><img src="assets/images/Favoritos.jpeg" alt="Favoritos" style="width: 215px; height: 465px; object-fit: cover; display: block;" /></td>
   </tr>
 </table>
-
 
 ## Funcionalidades
 

@@ -1,6 +1,5 @@
 import 'package:cinemapedia/presentation/providers/providers.dart';
-// Cambiado a legacy.dart para mantener compatibilidad total con StateNotifierProvider
-import 'package:flutter_riverpod/legacy.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cinemapedia/domain/entities/movie.dart';
 
 final movieInfoProvider = StateNotifierProvider<MovieMapNotifier, Map<String, Movie>>((ref) {
@@ -32,6 +31,7 @@ class MovieMapNotifier extends StateNotifier<Map<String,Movie>> {
   Future<void> loadMovie( String movieId ) async {
     if ( state[movieId] != null ) return;
     final movie = await getMovie( movieId );
+    if ( !mounted ) return;
     state = { ...state, movieId: movie };
   }
 

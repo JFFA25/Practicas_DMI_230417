@@ -1,7 +1,6 @@
 import 'package:cinemapedia/domain/entities/movie.dart';
 import 'package:cinemapedia/presentation/providers/movies/movies_repository_provider.dart';
-// Cambiado a legacy.dart para mantener compatibilidad total con StateNotifierProvider
-import 'package:flutter_riverpod/legacy.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 
 final nowPlayingMoviesProvider = StateNotifierProvider<MoviesNotifier, List<Movie>>((ref) {
@@ -53,6 +52,9 @@ class MoviesNotifier extends StateNotifier<List<Movie>> {
 
     currentPage++;
     final List<Movie> movies = await fetchMoreMovies( page: currentPage );
+
+    // Si cambió el idioma mientras cargaba, este notifier ya fue descartado
+    if ( !mounted ) return;
     state = [...state, ...movies];
     
     await Future.delayed(const Duration(milliseconds: 300));
@@ -61,3 +63,4 @@ class MoviesNotifier extends StateNotifier<List<Movie>> {
 
 
 }
+

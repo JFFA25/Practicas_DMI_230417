@@ -1,27 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:cinemapedia/domain/entities/entities.dart';
+import 'package:cinemapedia/config/i18n/app_strings.dart';
 import 'package:cinemapedia/presentation/providers/providers.dart';
+import 'package:cinemapedia/domain/entities/entities.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-final videosFromMovieProvider = FutureProvider.family<List<Video>, int>((ref, int movieId) {
+
+final FutureProviderFamily<List<Video>, int> videosFromMovieProvider = FutureProvider.family((ref, int movieId) {
   final movieRepository = ref.watch(movieRepositoryProvider);
   return movieRepository.getYoutubeVideosById(movieId);
 });
 
 class VideosFromMovie extends ConsumerWidget {
+
   final int movieId;
 
   const VideosFromMovie({super.key, required this.movieId});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context, WidgetRef ref ) {
     final moviesFromVideo = ref.watch(videosFromMovieProvider(movieId));
 
     return moviesFromVideo.when(
-      data: (videos) => _VideosList(videos: videos),
-      error: (error, stackTrace) => const Center(child: Text('No se pudo cargar películas similares')),
+      data: ( videos ) => _VideosList( videos: videos ),
+      error: (_ , __) => Center(child: Text(AppStrings.of(context).videosError) ), 
       loading: () => const Center(child: CircularProgressIndicator(strokeWidth: 2)),
     );
   }
@@ -47,7 +50,7 @@ class _VideosList extends StatelessWidget {
         // ignore: prefer_const_constructors
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: const Text('Videos', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+          child: Text(AppStrings.of(context).videos, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
         ),
         
         //* Aunque tengo varios videos, sólo quiero mostrar el primero
@@ -74,7 +77,6 @@ class _YouTubeVideoPlayer extends StatefulWidget {
 }
 
 class _YouTubeVideoPlayerState extends State<_YouTubeVideoPlayer> {
-
   late YoutubePlayerController _controller;
 
   @override

@@ -12,6 +12,8 @@ export 'movies/similar_movies.dart';
 export 'shared/custom_appbar.dart';
 export 'shared/custom_bottom_navigation.dart';
 export 'shared/cinemapedia_logo.dart';
+export 'shared/flag_icon.dart';
+export 'shared/side_menu.dart';
 
 export 'shared/full_screen_loader.dart';
 

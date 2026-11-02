@@ -11,11 +11,15 @@ import 'package:dio/dio.dart';
 
 class ActorMovieDbDatasource extends ActorsDatasource {
 
-  final dio = Dio(BaseOptions(
+  final String language;
+
+  ActorMovieDbDatasource({ this.language = 'es-MX' });
+
+  late final Dio dio = Dio(BaseOptions(
     baseUrl: 'https://api.themoviedb.org/3',
     queryParameters: {
       'api_key': Environment.theMovieDbKey,
-      'language': 'es-MX'
+      'language': language
     }
   ));
 

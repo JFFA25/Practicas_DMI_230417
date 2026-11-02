@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:cinemapedia/config/helpers/human_formats.dart';
+import 'package:cinemapedia/config/i18n/app_strings.dart';
 import 'package:cinemapedia/presentation/providers/providers.dart';
 import 'package:cinemapedia/presentation/widgets/widgets.dart';
 
@@ -17,7 +19,10 @@ class HomeViewState extends ConsumerState<HomeView> with AutomaticKeepAliveClien
   @override
   void initState() {
     super.initState();
-    
+    _loadFirstPages();
+  }
+
+  void _loadFirstPages() {
     ref.read( nowPlayingMoviesProvider.notifier ).loadNextPage();
     ref.read( popularMoviesProvider.notifier ).loadNextPage();
     ref.read( topRatedMoviesProvider.notifier ).loadNextPage();
@@ -28,6 +33,20 @@ class HomeViewState extends ConsumerState<HomeView> with AutomaticKeepAliveClien
   @override
   Widget build(BuildContext context) {
     super.build(context);
+
+    //* Al cambiar de idioma los providers se reinician: hay que volver a pedir los datos
+    ref.listen( languageProvider, (previous, next) {
+      if ( previous == next ) return;
+
+      // En un microtask para que Riverpod ya haya recreado los providers
+      // con el nuevo idioma antes de pedir la primera página.
+      Future.microtask(() {
+        if ( mounted ) _loadFirstPages();
+      });
+    });
+
+    final t = AppStrings.of(context);
+    final languageCode = Localizations.localeOf(context).languageCode;
 
     final initialLoading = ref.watch(initialLoadingProvider);
     if ( initialLoading ) return const FullScreenLoader();
@@ -59,16 +78,16 @@ class HomeViewState extends ConsumerState<HomeView> with AutomaticKeepAliveClien
               
                     MovieHorizontalListview(
                       movies: nowPlayingMovies,
-                      title: 'En cines',
-                      subTitle: 'Lunes 20',
+                      title: t.nowPlaying,
+                      subTitle: HumanFormats.today(languageCode),
                       loadNextPage: () =>ref.read(nowPlayingMoviesProvider.notifier).loadNextPage()
                       
                     ),
               
                     MovieHorizontalListview(
                       movies: upcomingMovies,
-                      title: 'Próximamente',
-                      subTitle: 'En este mes',
+                      title: t.upcoming,
+                      subTitle: t.upcomingSub,
                       loadNextPage: () =>ref.read(upcomingMoviesProvider.notifier).loadNextPage()
                     ),
               
@@ -82,8 +101,8 @@ class HomeViewState extends ConsumerState<HomeView> with AutomaticKeepAliveClien
               
                     MovieHorizontalListview(
                       movies: topRatedMovies,
-                      title: 'Mejor calificadas',
-                      subTitle: 'Desde siempre',
+                      title: t.topRated,
+                      subTitle: t.topRatedSub,
                       loadNextPage: () =>ref.read(topRatedMoviesProvider.notifier).loadNextPage()
                     ),
 

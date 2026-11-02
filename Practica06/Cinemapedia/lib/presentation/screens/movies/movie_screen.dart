@@ -1,4 +1,5 @@
 import 'package:cinemapedia/config/helpers/human_formats.dart';
+import 'package:cinemapedia/config/i18n/app_strings.dart';
 import 'package:cinemapedia/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,7 +8,6 @@ import 'package:animate_do/animate_do.dart';
 import 'package:cinemapedia/domain/entities/movie.dart';
 
 import 'package:cinemapedia/presentation/providers/providers.dart';
-
 
 
 class MovieScreen extends ConsumerStatefulWidget {
@@ -143,6 +143,10 @@ class _TitleAndOverview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final t = AppStrings.of(context);
+    final languageCode = Localizations.localeOf(context).languageCode;
+
     return Padding(
       padding: const EdgeInsets.symmetric( horizontal: 8, vertical: 15),
       child: Row(
@@ -175,9 +179,9 @@ class _TitleAndOverview extends StatelessWidget {
 
                 Row(
                   children: [
-                    const Text('Estreno:', style: TextStyle(fontWeight: FontWeight.bold)),
+                    Text(t.releaseDate, style: const TextStyle(fontWeight: FontWeight.bold)),
                     const SizedBox(width: 5 ),
-                    Text(HumanFormats.shortDate(movie.releaseDate))
+                    Flexible(child: Text(HumanFormats.shortDate(movie.releaseDate, languageCode)))
                   ],
                 )
               ],
@@ -219,17 +223,22 @@ class _CustomSliverAppBar extends ConsumerWidget {
       foregroundColor: Colors.white,
       actions: [
           IconButton(onPressed: () async {
+            
             // ref.read(localStorageRepositoryProvider)
             //   .toggleFavorite(movie);
-            await ref.read(favoriteMoviesProvider.notifier).toggleFavorite(movie);
+            await ref.read( favoriteMoviesProvider.notifier )
+              .toggleFavorite(movie);
+            
             ref.invalidate(isFavoriteProvider(movie.id));
-          },
+
+
+          }, 
           icon: isFavoriteFuture.when(
-            loading: () => const CircularProgressIndicator(strokeWidth: 2),
-            data: (isFavorite) => isFavorite
-                ? const Icon(Icons.favorite_rounded, color: Colors.red)
-                : const Icon(Icons.favorite_border),
-            error: (error, stackTrace) => throw UnimplementedError(),
+            loading: () => const CircularProgressIndicator(strokeWidth: 2 ),
+            data: (isFavorite) => isFavorite 
+              ? const Icon( Icons.favorite_rounded, color: Colors.red )
+              : const Icon( Icons.favorite_border ), 
+            error: (_, __) => throw UnimplementedError(), 
           ),
           
           // const Icon( Icons.favorite_border )

@@ -11,11 +11,16 @@ import 'package:cinemapedia/domain/entities/entities.dart';
 
 class MoviedbDatasource extends MoviesDatasource {
 
-  final dio = Dio(BaseOptions(
+  /// Código de idioma de The Movie DB, p. ej. 'es-MX', 'en-US', 'de-DE'...
+  final String language;
+
+  MoviedbDatasource({ this.language = 'es-MX' });
+
+  late final Dio dio = Dio(BaseOptions(
     baseUrl: 'https://api.themoviedb.org/3',
     queryParameters: {
       'api_key': Environment.theMovieDbKey,
-      'language': 'es-MX'
+      'language': language
     }
   ));
 
@@ -34,6 +39,72 @@ class MoviedbDatasource extends MoviesDatasource {
   }
 
 
+  // ------------------------------------------------------------------
+  //  Respaldo en inglés
+  //
+  //  Cuando una película no tiene traducción en el idioma elegido, The Movie DB
+  //  devuelve el título ORIGINAL (p. ej. en español) y la sinopsis vacía.
+  //  En ese caso se pide también la versión en inglés y se usa como respaldo.
+  // ------------------------------------------------------------------
+
+  String get _languageCode => language.split('-').first;
+
+  bool _needsTitleFallback( Movie m ) =>
+      m.title == m.originalTitle &&
+      m.originalLanguage != _languageCode &&
+      m.originalLanguage != 'en';
+
+  bool _needsOverviewFallback( Movie m ) => m.overview.trim().isEmpty;
+
+  bool _needsFallback( Movie m ) =>
+      _needsTitleFallback(m) || _needsOverviewFallback(m);
+
+  Movie _mergeEnglish( Movie m, Movie en ) => Movie(
+    adult: m.adult,
+    backdropPath: m.backdropPath,
+    genreIds: m.genreIds,
+    id: m.id,
+    originalLanguage: m.originalLanguage,
+    originalTitle: m.originalTitle,
+    overview: ( _needsOverviewFallback(m) && en.overview.trim().isNotEmpty ) ? en.overview : m.overview,
+    popularity: m.popularity,
+    posterPath: m.posterPath,
+    releaseDate: m.releaseDate,
+    title: ( _needsTitleFallback(m) && en.title.trim().isNotEmpty ) ? en.title : m.title,
+    video: m.video,
+    voteAverage: m.voteAverage,
+    voteCount: m.voteCount,
+  );
+
+  Future<List<Movie>> _withEnglishFallback(
+    List<Movie> movies,
+    String path,
+    [ Map<String, dynamic>? params ]
+  ) async {
+
+    if ( language.startsWith('en') || !movies.any(_needsFallback) ) return movies;
+
+    try {
+      final response = await dio.get( path, queryParameters: {
+        ...?params,
+        'language': 'en-US',
+      });
+
+      final english = { for ( final m in _jsonToMovies(response.data) ) m.id: m };
+
+      return movies.map((m) {
+        final en = english[m.id];
+        if ( en == null || !_needsFallback(m) ) return m;
+        return _mergeEnglish(m, en);
+      }).toList();
+
+    } catch (_) {
+      // Si falla el respaldo se deja lo que ya se tenía
+      return movies;
+    }
+  }
+
+
   @override
   Future<List<Movie>> getNowPlaying({int page = 1}) async {
     
@@ -43,7 +114,8 @@ class MoviedbDatasource extends MoviesDatasource {
       }
     );
     
-    return _jsonToMovies(response.data);
+    final movies = _jsonToMovies(response.data);
+    return _withEnglishFallback(movies, '/movie/now_playing', { 'page': page });
   }
   
   @override
@@ -55,7 +127,8 @@ class MoviedbDatasource extends MoviesDatasource {
       }
     );
 
-    return _jsonToMovies(response.data);    
+    final movies = _jsonToMovies(response.data);
+    return _withEnglishFallback(movies, '/movie/popular', { 'page': page });    
   }
 
   @override
@@ -67,7 +140,8 @@ class MoviedbDatasource extends MoviesDatasource {
       }
     );
 
-    return _jsonToMovies(response.data);    
+    final movies = _jsonToMovies(response.data);
+    return _withEnglishFallback(movies, '/movie/top_rated', { 'page': page });    
   }
 
    @override
@@ -79,7 +153,8 @@ class MoviedbDatasource extends MoviesDatasource {
       }
     );
 
-    return _jsonToMovies(response.data);    
+    final movies = _jsonToMovies(response.data);
+    return _withEnglishFallback(movies, '/movie/upcoming', { 'page': page });    
   }
 
 
@@ -91,6 +166,18 @@ class MoviedbDatasource extends MoviesDatasource {
     
     final movieDetails = MovieDetails.fromJson( response.data );
     final Movie movie = MovieMapper.movieDetailsToEntity(movieDetails);
+
+    // Título/sinopsis en inglés si no existen en el idioma elegido
+    if ( !language.startsWith('en') && _needsFallback(movie) ) {
+      try {
+        final enResponse = await dio.get('/movie/$id', queryParameters: { 'language': 'en-US' });
+        final english = MovieMapper.movieDetailsToEntity( MovieDetails.fromJson( enResponse.data ) );
+        return _mergeEnglish(movie, english);
+      } catch (_) {
+        return movie;
+      }
+    }
+
     return movie;
   }
   
@@ -113,13 +200,19 @@ class MoviedbDatasource extends MoviesDatasource {
   @override
   Future<List<Movie>> getSimilarMovies(int movieId) async {
     final response = await dio.get('/movie/$movieId/similar');
-    return _jsonToMovies(response.data);
+    final movies = _jsonToMovies(response.data);
+    return _withEnglishFallback(movies, '/movie/$movieId/similar');
   }
 
   
   @override
   Future<List<Video>> getYoutubeVideosById(int movieId) async {
-    final response = await dio.get('/movie/$movieId/videos');
+    // Si no hay tráiler en el idioma elegido, se usa el de inglés o el sin idioma
+    final response = await dio.get('/movie/$movieId/videos',
+      queryParameters: {
+        'include_video_language': '${ language.split('-').first },en,null'
+      }
+    );
     final moviedbVideosReponse = MoviedbVideosResponse.fromJson(response.data);
     final videos = <Video>[];
 

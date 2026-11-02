@@ -23,8 +23,9 @@ class SearchMovieDelegate extends SearchDelegate<Movie?>{
   SearchMovieDelegate({
     required this.searchMovies,
     required this.initialMovies,
+    required String searchLabel,
   }):super(
-    searchFieldLabel: 'Buscar películas',
+    searchFieldLabel: searchLabel,
     // textInputAction: TextInputAction.done
   );
 

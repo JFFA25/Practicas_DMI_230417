@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cinemapedia/presentation/providers/providers.dart';
 import 'package:go_router/go_router.dart';
+import 'package:cinemapedia/config/i18n/app_strings.dart';
 
 
 class FavoritesView extends ConsumerStatefulWidget {
@@ -49,19 +50,20 @@ class FavoritesViewState extends ConsumerState<FavoritesView> with AutomaticKeep
 
     if ( favoriteMovies.isEmpty ) {
       final colors = Theme.of(context).colorScheme;
+      final t = AppStrings.of(context);
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Icon( Icons.favorite_outline_sharp, size: 60, color: colors.primary ),
-            Text('Ohhh no!!', style: TextStyle( fontSize: 30, color: colors.primary)),
-            const Text('No tienes películas favoritas', style: TextStyle( fontSize: 20 )),
+            Text(t.noFavTitle, style: TextStyle( fontSize: 30, color: colors.primary)),
+            Text(t.noFavBody, style: const TextStyle( fontSize: 20 )),
 
             const SizedBox(height: 20),
             FilledButton.tonal(
               onPressed: () => context.go('/home/0'), 
-              child: const Text('Empieza a buscar')
+              child: Text(t.startSearching)
             )
           ],
         ),
