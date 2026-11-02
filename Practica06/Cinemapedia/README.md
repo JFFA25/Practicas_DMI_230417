@@ -199,11 +199,11 @@ fondo negro.
 
 ## Arquitectura
 
-**[Ver el diagrama interactivo en GitHub Pages](../Arquitectura/Arquitectura_de_Cinemapedia.html)**: Vistas guiadas (flujo de películas, cambio de idioma, favoritos, pósters y tráiler), detalle de cada caja y modo presentación.
+**[Ver el diagrama interactivo en GitHub Pages](https://jffa25.github.io/Practicas_DMI_230417/Practica06/Arquitectura/Arquitectura_de_Cinemapedia.html)**: Vistas guiadas (flujo de películas, cambio de idioma, favoritos, pósters y tráiler), detalle de cada caja y modo presentación.
 
 <div align="center">
 
-<a href="../Arquitectura/Arquitectura_de_Cinemapedia.html">
+<a href="https://jffa25.github.io/Practicas_DMI_230417/Practica06/Arquitectura/Arquitectura_de_Cinemapedia.html">
   <img src="../Arquitectura/Arquitectura-Cinemapedia-dark.png" alt="Diagrama de arquitectura de Cinemapedia" width="900" />
 </a>
 
