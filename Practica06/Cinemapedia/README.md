@@ -49,14 +49,13 @@ películas que llegan de la API.
 
   <!-- Segunda fila: Favoritos y menú lateral -->
   <tr>
-    <th style="padding: 10px; text-align: center; width: 33.33%;">Elenco</th>
+    <th style="padding: 25px 10px 10px 10px; text-align: center; width: 33.33%;">Elenco</th>
     <th style="padding: 25px 10px 10px 10px; text-align: center;">Favoritos</th>
     <th style="padding: 25px 10px 10px 10px; text-align: center;">Menú Lateral</th>
-    <th></th>
   </tr>
   <tr>
-      <td align="center" style="padding: 10px;">
-      <img src="assets/images/Detalles.jpeg" alt="Favoritos" width="215" style="width: 215px; height: 462px; object-fit: cover; display: block; border-radius: 12px;" />
+    <td align="center" style="padding: 10px;">
+      <img src="assets/images/Detalles.jpeg" alt="Elenco" width="215" style="width: 215px; height: 462px; object-fit: cover; display: block; border-radius: 12px;" />
     </td>
     <td align="center" style="padding: 10px;">
       <img src="assets/images/Favoritos.jpeg" alt="Favoritos" width="215" style="width: 215px; height: 462px; object-fit: cover; display: block; border-radius: 12px;" />
@@ -94,8 +93,7 @@ La app cambia de idioma desde el menú lateral, y se traducen los textos y los d
   <tr>
     <th style="padding: 25px 10px 10px 10px; text-align: center;">CN (中文)</th>
     <th style="padding: 25px 10px 10px 10px; text-align: center;">EG (العربية)</th>
-     <th style="padding: 25px 10px 10px 10px; text-align: center;">APK</th>
-    <th></th>
+    <th style="padding: 25px 10px 10px 10px; text-align: center;">APK</th>
   </tr>
   <tr>
     <td align="center" style="padding: 10px;">
@@ -104,8 +102,8 @@ La app cambia de idioma desde el menú lateral, y se traducen los textos y los d
     <td align="center" style="padding: 10px;">
       <img src="assets/images/Arabe.jpeg" alt="العربية" width="215" style="width: 215px; height: 462px; object-fit: cover; display: block; border-radius: 12px;" />
     </td>
-        <td align="center" style="padding: 10px;">
-      <img src="assets/images/APK.jpeg" alt="Español" width="215" style="width: 215px; height: 462px; object-fit: cover; display: block; border-radius: 12px;" />
+    <td align="center" style="padding: 10px;">
+      <img src="assets/images/APK.jpeg" alt="APK" width="215" style="width: 215px; height: 462px; object-fit: cover; display: block; border-radius: 12px;" />
     </td>
   </tr>
 </table>
@@ -198,6 +196,24 @@ fondo negro.
 | Tráilers             | `youtube_player_flutter`         |
 | Variables de entorno | `flutter_dotenv`                 |
 | Fechas e idiomas     | `intl` y `flutter_localizations` |
+
+## Arquitectura
+
+**[Ver el diagrama interactivo en GitHub Pages](../Arquitectura/Arquitectura_de_Cinemapedia.html)**: Vistas guiadas (flujo de películas, cambio de idioma, favoritos, pósters y tráiler), detalle de cada caja y modo presentación.
+
+<div align="center">
+
+<a href="../Arquitectura/Arquitectura_de_Cinemapedia.html">
+  <img src="../Arquitectura/Arquitectura-Cinemapedia-dark.png" alt="Diagrama de arquitectura de Cinemapedia" width="900" />
+</a>
+
+</div>
+
+La app se divide en capas: **configuración y arranque**, **presentación y estado** (pantallas, vistas,
+widgets y providers de Riverpod), **dominio e infraestructura** (contratos, repositorios, datasources y
+mappers), **servicios externos** (The Movie DB, imágenes de TMDB y YouTube) y **almacenamiento local**
+con Isar. Los providers piden las películas al repositorio, que las trae de The Movie DB y las
+convierte a entidades con mappers.
 
 ## Requisitos
 
