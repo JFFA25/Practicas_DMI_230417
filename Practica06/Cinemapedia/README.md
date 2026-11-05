@@ -35,18 +35,15 @@ películas que llegan de la API.
 No necesitas instalar nada: puedes abrir Cinemapedia en un celular Android virtual directamente
 desde el navegador.
 
-
-
 ### [**Abrir Cinemapedia en Appetize**](https://appetize.io/app/b_dqbrzni6n2opryfcgrwoifjnvq)
 
-[Cinemapedia](https://appetize.io)
 
 > El plan gratuito de Appetize limita el tiempo de uso por sesión y por mes. Si la sesión no
 > inicia, es posible que ya se hayan agotado los minutos del mes.
 
 ## Cinemapedia v0.1.0 en Appetize
 
-![Cinemapedia APK - Appetize ](/assets/images/Cinemapedia-Appetize.png)
+![Cinemapedia APK - Appetize ](/Practica06/Cinemapedia/assets/images/Cinemapedia-Appetize.png)
 
 Captura de pantalla de la plataforma Appetize.io que muestra el panel de administración de la aplicación "Cinemapedia" (paquete com.example.cinemapedia). Se observa el detalle de la versión 0.1.0, el historial de compilación (Build History) con una carga registrada el 5 de noviembre de 2026, y los controles de simulación listos para iniciar la prueba del APK.
 
