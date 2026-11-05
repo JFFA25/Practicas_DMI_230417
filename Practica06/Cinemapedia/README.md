@@ -19,23 +19,6 @@ Descubre qué hay en cines, qué viene pronto y qué películas son las mejor ca
 
 </div>
 
-## Contenido
-
-- [Sobre la app](#sobre-la-app)
-- [Probar la app en línea](#probar-la-app-en-línea-appetize)
-- [Capturas](#capturas)
-- [Funcionalidades](#funcionalidades)
-- [Idiomas de la app](#idiomas-de-la-app)
-- [Icono de la app](#icono-de-la-app)
-- [Paleta de colores](#paleta-de-colores)
-- [Tecnologías](#tecnologías)
-- [Arquitectura](#arquitectura)
-- [Requisitos](#requisitos)
-- [Cómo ejecutarlo](#cómo-ejecutarlo)
-- [Generar el APK](#generar-el-apk)
-- [Créditos](#créditos)
-
-
 ## Sobre la app
 
 **Cinemapedia** es una aplicación de películas hecha con Flutter que consume la API de
@@ -52,20 +35,11 @@ películas que llegan de la API.
 No necesitas instalar nada: puedes abrir Cinemapedia en un celular Android virtual directamente
 desde el navegador.
 
-<div align="center">
+
 
 ### [**Abrir Cinemapedia en Appetize**](https://appetize.io/app/b_dqbrzni6n2opryfcgrwoifjnvq)
 
 [Cinemapedia](https://appetize.io)
-
-
-</div>
-
-| Dato                | Valor                         |
-| ------------------- | ----------------------------- |
-| **Plataforma**      | Android                       |
-| **Paquete**         | `com.example.cinemapedia`     |
-| **Archivo**         | `Cinemapedia.apk` (release)   |
 
 > El plan gratuito de Appetize limita el tiempo de uso por sesión y por mes. Si la sesión no
 > inicia, es posible que ya se hayan agotado los minutos del mes.
