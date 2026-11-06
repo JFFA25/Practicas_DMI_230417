@@ -49,5 +49,10 @@ class MovieRepositoryImpl extends MoviesRepository {
     return datasource.getYoutubeVideosById(movieId);
   }
 
+  @override
+  Future<String> getCertification(int movieId) {
+    return datasource.getCertification(movieId);
+  }
+
 
 }

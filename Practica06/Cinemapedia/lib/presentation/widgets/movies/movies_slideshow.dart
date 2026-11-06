@@ -143,10 +143,66 @@ class _Slide extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           child: GestureDetector(
             onTap: () => context.push('/home/0/movie/${ movie.id }'),
-            child: FadeInImage(
-              fit: BoxFit.cover,
-              placeholder: const AssetImage('assets/loaders/bottle-loader.gif'),
-              image: NetworkImage(movie.backdropPath),
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+
+                // Imagen de fondo
+                FadeInImage(
+                  fit: BoxFit.cover,
+                  placeholder: const AssetImage('assets/loaders/bottle-loader.gif'),
+                  image: NetworkImage(movie.backdropPath),
+                ),
+
+                // Título y descripción corta sobre un degradado negro para que se lean bien
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  child: DecoratedBox(
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [ Colors.transparent, Colors.black87 ],
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB( 16, 28, 16, 10 ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            movie.title,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          if ( movie.overview.trim().isNotEmpty )
+                            Padding(
+                              padding: const EdgeInsets.only( top: 2 ),
+                              child: Text(
+                                movie.overview,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: 12,
+                                  height: 1.25,
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           )
         )

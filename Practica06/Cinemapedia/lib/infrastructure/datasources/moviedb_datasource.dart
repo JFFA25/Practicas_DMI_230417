@@ -226,5 +226,39 @@ class MoviedbDatasource extends MoviesDatasource {
     return videos;
   }
 
+  // ------------------------------------------------------------------
+  //  Clasificación de edad
+  //
+  //  The Movie DB guarda la clasificación por país en /release_dates
+  //  (MX: A, B, B15, C...  US: PG-13, R...  DE: 0, 6, 12, 16, 18).
+  //  Se toma la del país del idioma elegido, prefiriendo la de estreno en
+  //  cines (type 3). Si ese país no tiene dato se devuelve ''.
+  // ------------------------------------------------------------------
+  @override
+  Future<String> getCertification(int movieId) async {
+    try {
+      final response = await dio.get('/movie/$movieId/release_dates');
+      final country = language.split('-').last.toUpperCase();
+      final results = (response.data['results'] as List?) ?? const [];
+
+      for ( final entry in results ) {
+        if ( entry['iso_3166_1'] != country ) continue;
+
+        final dates = ((entry['release_dates'] as List?) ?? const [])
+            .where((d) => ((d['certification'] as String?) ?? '').trim().isNotEmpty)
+            .toList();
+        if ( dates.isEmpty ) return '';
+
+        final theatrical = dates.where((d) => d['type'] == 3).toList();
+        final chosen = theatrical.isNotEmpty ? theatrical.first : dates.first;
+        return (chosen['certification'] as String).trim();
+      }
+
+      return '';
+    } catch (_) {
+      return '';
+    }
+  }
+
 
 }

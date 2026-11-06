@@ -35,31 +35,40 @@ películas que llegan de la API.
 No necesitas instalar nada: puedes abrir Cinemapedia en un celular Android virtual directamente
 desde el navegador.
 
+<div align="center">
+
 ### [**Abrir Cinemapedia en Appetize**](https://appetize.io/app/b_dqbrzni6n2opryfcgrwoifjnvq)
 
+**Cinemapedia:** [https://appetize.io/app/b_dqbrzni6n2opryfcgrwoifjnvq](https://appetize.io/app/b_dqbrzni6n2opryfcgrwoifjnvq)
+
+</div>
 
 > El plan gratuito de Appetize limita el tiempo de uso por sesión y por mes. Si la sesión no
 > inicia, es posible que ya se hayan agotado los minutos del mes.
 
-## Cinemapedia v0.1.0 en Appetize
+### Cinemapedia v0.1.0 en Appetize
 
-![Cinemapedia APK - Appetize ](/Practica06/Cinemapedia/assets/images/Cinemapedia-Appetize.png)
+![Cinemapedia v0.1.0 en Appetize](assets/images/Cinemapedia-Appetize.png)
 
-Captura de pantalla de la plataforma Appetize.io que muestra el panel de administración de la aplicación "Cinemapedia" (paquete com.example.cinemapedia). Se observa el detalle de la versión 0.1.0, el historial de compilación (Build History) con una carga registrada el 5 de noviembre de 2026, y los controles de simulación listos para iniciar la prueba del APK.
+Captura del panel de Appetize.io con la app "Cinemapedia" (paquete `com.example.cinemapedia`): se ve
+la versión 0.1.0, el historial de builds con la carga del 5 de noviembre de 2026 y los controles
+para iniciar la prueba del APK.
 
 ## Capturas
 
 <div align="center">
 
-| Pantalla de carga | Inicio y navegación | Detalle de la película |
+| Pantalla de carga | Inicio y navegación | Menú Lateral |
 | :---: | :---: | :---: |
-| <img src="assets/images/LoadScreen.gif" alt="Pantalla de carga" width="215" /> | <img src="assets/images/Inicio.jpeg" alt="Inicio" width="215" /> | <img src="assets/images/Descripcion.jpeg" alt="Detalle" width="215" /> |
+| <img src="assets/images/LoadScreen.gif" alt="Pantalla de carga" width="215" /> | <img src="assets/images/Inicio.jpeg" alt="Inicio" width="215" /> |<img src="assets/images/Menu.jpeg" alt="Menú lateral" width="215" /> |
 
-| Elenco | Favoritos | Menú lateral |
+| Detalles de Pelicula | Elenco |Favoritos |
 | :---: | :---: | :---: |
-| <img src="assets/images/Detalles.jpeg" alt="Elenco" width="215" /> | <img src="assets/images/Favoritos.jpeg" alt="Favoritos" width="215" /> | <img src="assets/images/Menu.jpeg" alt="Menú lateral" width="215" /> |
+|  <img src="assets/images/Descripcion.jpeg" alt="Detalle" width="215" />|<img src="assets/images/Elenco.jpeg" alt="Elenco" width="215" /> |  <img src="assets/images/Favoritos.jpeg" alt="Favoritos" width="215" />  |
 
 </div>
+
+
 
 ### Idiomas
 
@@ -71,9 +80,9 @@ La app cambia de idioma desde el menú lateral, y se traducen los textos y los d
 | :---: | :---: | :---: |
 | <img src="assets/images/Inicio.jpeg" alt="Español" width="215" /> | <img src="assets/images/English.jpeg" alt="English" width="215" /> | <img src="assets/images/Aleman.jpeg" alt="Deutsch" width="215" /> |
 
-| CN (中文) | EG (العربية) |  APK |
+| CN (中文) | EG (العربية) |  Clasificacion |
 | :---: | :---: | :---: |
-| <img src="assets/images/Chino.jpeg" alt="中文" width="215" /> | <img src="assets/images/Arabe.jpeg" alt="العربية" width="215" /> | <img src="assets/images/APK.jpeg" alt="APK" width="215" /> |
+| <img src="assets/images/Chino.jpeg" alt="中文" width="215" /> | <img src="assets/images/Arabe.jpeg" alt="العربية" width="215" /> | <img src="assets/images/Clasificacion.jpeg" alt="APK" width="215" /> |
 
 </div>
 
@@ -82,10 +91,12 @@ La app cambia de idioma desde el menú lateral, y se traducen los textos y los d
 - **Pantalla de carga animada:** la "C" de Cinemapedia se dibuja sobre fondo negro, aparece el
   nombre y hace zoom hacia la pantalla principal. Mientras cargan las películas, la "C" late
   en el centro de la pantalla.
-- **Carrusel de estrenos** con autoplay y flechas para cambiar de película.
+- **Carrusel de estrenos** con autoplay, flechas para cambiar de película y, sobre cada imagen,
+  el título con una descripción corta.
 - **Listas horizontales** con scroll infinito: _En cines_, _Próximamente_ y _Mejor calificadas_.
 - **Populares** en una vista de cuadrícula tipo masonry.
-- **Detalle de película:** sinopsis, géneros, reparto, tráilers de YouTube y películas similares.
+- **Detalle de película:** sinopsis, géneros, reparto, tráilers de YouTube, películas similares y
+  clasificación de edad según el país del idioma elegido (ver [Clasificación de edad](#clasificación-de-edad)).
 - **Búsqueda** de películas con sugerencias en tiempo real.
 - **Favoritos** guardados en el dispositivo (base de datos local con Isar).
 - **Menú lateral** que se abre con el botón de la barra o deslizando desde el borde de la pantalla.
@@ -100,11 +111,11 @@ sinopsis, géneros, reparto y tráilers). Las películas se recargan solas con e
 
 | Bandera | Idioma  | Código API |
 | :-----: | ------- | :--------: |
-| MX    | Español |  `es-MX`   |
-| US    | English |  `en-US`   |
-| DE    | Deutsch |  `de-DE`   |
-| CN    | 中文    |  `zh-CN`   |
-| EG    | العربية |  `ar-EG`   |
+|    MX   | Español |  `es-MX`   |
+|    US   | English |  `en-US`   |
+|    DE   | Deutsch |  `de-DE`   |
+|    CN   | 中文      |  `zh-CN`   |
+|    EG   | العربية |  `ar-EG`   |
 
 - **Respaldo en inglés:** si una película no tiene traducción en el idioma elegido, The Movie DB
   devuelve el título original y la sinopsis vacía. En ese caso la app pide también la versión en
@@ -124,6 +135,26 @@ sinopsis, géneros, reparto y tráilers). Las películas se recargan solas con e
 3. Si usa una bandera nueva, dibújala en `lib/presentation/widgets/shared/flag_icon.dart`.
 
 </details>
+
+## Clasificación de edad
+
+En el detalle de cada película, debajo de la fecha de estreno, se muestra la clasificación de edad
+**del país del idioma elegido**. Al cambiar el idioma en el menú lateral y abrir otra película, la
+etiqueta cambia al sistema de clasificación de ese país.
+
+| País | Sistema | Cómo se ve |
+| :--: | ------- | ---------- |
+| MX | Clasificación mexicana | `AA`, `A`, `B`, `B15`, `C`, `D` |
+| US | MPA | `G`, `PG`, `PG-13`, `R`, `NC-17` |
+| DE | FSK | `FSK 0`, `FSK 6`, `FSK 12`, `FSK 16`, `FSK 18` |
+| CN / EG | Sin dato en The Movie DB (normalmente) | `NR` |
+
+- **De dónde sale:** de `/movie/{id}/release_dates` de The Movie DB. Se toma la clasificación del
+  país y se prefiere la del estreno en cines.
+- **Sin clasificación:** si el país no tiene dato (o la película es muy nueva), se muestra **NR**
+  (sin clasificar).
+- **Dónde está en el código:** `getCertification` en `moviedb_datasource.dart`, el provider
+  `movie_certification_provider.dart` y el formato en `lib/config/helpers/age_rating.dart`.
 
 ## Icono de la app
 
@@ -149,8 +180,8 @@ fondo negro.
 
 ![Paleta de colores](assets/images/Colors.png)
 
-| Color                     |     Hex      | Uso                                                                                                                 |
-| :------------------------ | :----------: | :------------------------------------------------------------------------------------------------------------------ |
+| Color                     |    Hex    | Uso                                                                                                                 |
+| :------------------------ | :-------: | :------------------------------------------------------------------------------------------------------------------ |
 | **Morado base**           | `#8C5A9B` | Cuerpo de la "C", color de la marca y semilla del tema                                                              |
 | **Morado oscuro**         | `#5F3A70` | Sombra de la punta inferior de la "C"                                                                               |
 | **Morado claro**          | `#A97DBB` | Brillo de la punta superior de la "C" y color principal de la interfaz (puntos del carrusel, menú inferior, iconos) |
@@ -231,6 +262,13 @@ El archivo original queda en `build/app/outputs/flutter-apk/app-release.apk`.
 > **Para subirlo a Appetize** usa el APK completo, sin `--split-per-abi`. Ese parámetro genera un
 > APK por arquitectura y Appetize puede no abrirlo. Súbelo en <https://appetize.io/upload> o por
 > su API.
+
+### Subir una nueva versión a Appetize
+
+1. Entra a la página de tu app en Appetize y haz clic en **Upload New Build**.
+2. Sube el `Cinemapedia.apk` nuevo. Las versiones anteriores quedan en **Build History**.
+3. Cada build tiene su propio enlace: copia el **Play URL** nuevo desde **Share** y actualízalo en
+   este README.
 
 > El `.env` va dentro del APK, así que no lo subas a una tienda pública. Además, el APK sale
 > firmado con la llave de depuración: sirve para instalarlo y mostrarlo, no para publicarlo.

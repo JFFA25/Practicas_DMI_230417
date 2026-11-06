@@ -1,3 +1,4 @@
+import 'package:cinemapedia/config/helpers/age_rating.dart';
 import 'package:cinemapedia/config/helpers/human_formats.dart';
 import 'package:cinemapedia/config/i18n/app_strings.dart';
 import 'package:cinemapedia/presentation/widgets/widgets.dart';
@@ -130,7 +131,7 @@ class _Genres extends StatelessWidget {
   }
 }
 
-class _TitleAndOverview extends StatelessWidget {
+class _TitleAndOverview extends ConsumerWidget {
   const _TitleAndOverview({
     required this.movie,
     required this.size,
@@ -142,10 +143,15 @@ class _TitleAndOverview extends StatelessWidget {
   final TextTheme textStyles;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
 
     final t = AppStrings.of(context);
     final languageCode = Localizations.localeOf(context).languageCode;
+    final colors = Theme.of(context).colorScheme;
+
+    // Clasificación de edad según el país del idioma elegido (MX, US, DE...)
+    final country = ref.watch( languageProvider ).country;
+    final certification = ref.watch( movieCertificationProvider(movie.id) );
 
     return Padding(
       padding: const EdgeInsets.symmetric( horizontal: 8, vertical: 15),
@@ -183,13 +189,61 @@ class _TitleAndOverview extends StatelessWidget {
                     const SizedBox(width: 5 ),
                     Flexible(child: Text(HumanFormats.shortDate(movie.releaseDate, languageCode)))
                   ],
-                )
+                ),
+
+                const SizedBox(height: 6 ),
+
+                //* Clasificación de edad del país elegido
+                certification.when(
+                  loading: () => const SizedBox(height: 24),
+                  error: (_, __) => _AgeRatingBadge(label: t.ageRating, rating: AgeRatings.label(country, ''), country: country, color: colors.primary),
+                  data: (value) => _AgeRatingBadge(label: t.ageRating, rating: AgeRatings.label(country, value), country: country, color: colors.primary),
+                ),
               ],
             ),
           )
 
         ],
       ),
+    );
+  }
+}
+
+
+class _AgeRatingBadge extends StatelessWidget {
+
+  final String label;
+  final String rating;
+  final String country;
+  final Color color;
+
+  const _AgeRatingBadge({
+    required this.label,
+    required this.rating,
+    required this.country,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      crossAxisAlignment: WrapCrossAlignment.center,
+      spacing: 8,
+      children: [
+        Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
+        Container(
+          padding: const EdgeInsets.symmetric( horizontal: 8, vertical: 2 ),
+          decoration: BoxDecoration(
+            border: Border.all( color: color ),
+            borderRadius: BorderRadius.circular(6),
+          ),
+          child: Text(
+            rating,
+            style: TextStyle( color: color, fontWeight: FontWeight.bold ),
+          ),
+        ),
+        Text('($country)', style: const TextStyle( color: Colors.white54 )),
+      ],
     );
   }
 }

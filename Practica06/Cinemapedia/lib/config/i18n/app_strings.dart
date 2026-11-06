@@ -42,6 +42,7 @@ class AppStrings {
 
   // ---- Detalle
   String get releaseDate => _t('releaseDate');
+  String get ageRating => _t('ageRating');
   String get recommendations => _t('recommendations');
   String get videos => _t('videos');
   String get similarError => _t('similarError');
@@ -79,6 +80,7 @@ class AppStrings {
       'previous': 'Anterior',
       'next': 'Siguiente',
       'releaseDate': 'Estreno:',
+      'ageRating': 'Clasificación:',
       'recommendations': 'Recomendaciones',
       'videos': 'Videos',
       'similarError': 'No se pudo cargar películas similares',
@@ -113,6 +115,7 @@ class AppStrings {
       'previous': 'Previous',
       'next': 'Next',
       'releaseDate': 'Release date:',
+      'ageRating': 'Age rating:',
       'recommendations': 'Recommendations',
       'videos': 'Videos',
       'similarError': 'Could not load similar movies',
@@ -147,6 +150,7 @@ class AppStrings {
       'previous': 'Zurück',
       'next': 'Weiter',
       'releaseDate': 'Erscheinungsdatum:',
+      'ageRating': 'Altersfreigabe:',
       'recommendations': 'Empfehlungen',
       'videos': 'Videos',
       'similarError': 'Ähnliche Filme konnten nicht geladen werden',
@@ -181,6 +185,7 @@ class AppStrings {
       'previous': '上一部',
       'next': '下一部',
       'releaseDate': '上映日期：',
+      'ageRating': '年龄分级：',
       'recommendations': '推荐',
       'videos': '视频',
       'similarError': '无法加载相似电影',
@@ -215,6 +220,7 @@ class AppStrings {
       'previous': 'السابق',
       'next': 'التالي',
       'releaseDate': 'تاريخ الإصدار:',
+      'ageRating': 'التصنيف العمري:',
       'recommendations': 'توصيات',
       'videos': 'مقاطع الفيديو',
       'similarError': 'تعذّر تحميل الأفلام المشابهة',

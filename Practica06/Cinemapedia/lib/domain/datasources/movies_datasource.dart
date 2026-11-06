@@ -18,4 +18,8 @@ abstract class MoviesDatasource {
   Future<List<Movie>> getSimilarMovies( int movieId );
 
   Future<List<Video>> getYoutubeVideosById( int movieId );
+
+  /// Clasificación de edad de la película en el país del idioma elegido.
+  /// Devuelve '' si ese país no tiene clasificación.
+  Future<String> getCertification( int movieId );
 }
