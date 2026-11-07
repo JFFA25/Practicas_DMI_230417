@@ -35,12 +35,14 @@ class CustomAppbar extends ConsumerWidget {
 
                 final searchedMovies = ref.read( searchedMoviesProvider );
                 final searchQuery = ref.read(searchQueryProvider);
+                final isSeries = ref.read(catalogTypeProvider) == CatalogType.series;
+                final t = AppStrings.of(context);
                 
                 showSearch<Movie?>(
                   query: searchQuery,
                   context: context, 
                   delegate: SearchMovieDelegate(
-                    searchLabel: AppStrings.of(context).searchMovies,
+                    searchLabel: isSeries ? t.searchSeries : t.searchMovies,
                     initialMovies: searchedMovies,
                     searchMovies: ref.read( searchedMoviesProvider.notifier ).searchMoviesByQuery
                   )

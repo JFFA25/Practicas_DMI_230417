@@ -8,9 +8,11 @@ final searchQueryProvider = StateProvider<String>((ref) => '');
 final searchedMoviesProvider = StateNotifierProvider<SearchedMoviesNotifier, List<Movie>>((ref) {
 
   final movieRepository = ref.watch( movieRepositoryProvider );
+  final isSeries = ref.watch( catalogTypeProvider ) == CatalogType.series;
 
+  // Busca películas o series según el catálogo que se está viendo
   return SearchedMoviesNotifier(
-    searchMovies: movieRepository.searchMovies, 
+    searchMovies: isSeries ? movieRepository.searchSeries : movieRepository.searchMovies,
     ref: ref
   );
 });

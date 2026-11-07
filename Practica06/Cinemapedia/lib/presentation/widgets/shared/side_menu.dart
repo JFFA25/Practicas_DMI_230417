@@ -9,6 +9,10 @@ import 'package:cinemapedia/presentation/widgets/shared/flag_icon.dart';
 
 /// Menú lateral (drawer). Se abre con el botón de la barra o deslizando
 /// desde el borde de la pantalla, y se cierra deslizando hacia el borde.
+///
+/// Tiene un apartado de **Configuración** con:
+///  - Contenido: Películas o Series.
+///  - Idioma: español, inglés, alemán, chino y árabe (se recuerda al cerrar la app).
 class SideMenu extends ConsumerWidget {
   const SideMenu({super.key});
 
@@ -18,7 +22,8 @@ class SideMenu extends ConsumerWidget {
     final t = AppStrings.of(context);
     final colors = Theme.of(context).colorScheme;
     final textStyles = Theme.of(context).textTheme;
-    final current = ref.watch(languageProvider);
+    final currentLanguage = ref.watch(languageProvider);
+    final currentCatalog = ref.watch(catalogTypeProvider);
 
     return Drawer(
       backgroundColor: Colors.black,
@@ -42,38 +47,160 @@ class SideMenu extends ConsumerWidget {
 
             const Divider(height: 32),
 
-            //* Título de la sección
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.zero,
                 children: [
-                  Icon(Icons.language_rounded, color: colors.primary),
-                  const SizedBox(width: 10),
-                  Text(t.language, style: textStyles.titleMedium),
+
+                  //* Apartado de configuración
+                  Theme(
+                    // Quita las líneas que Flutter dibuja arriba y abajo del apartado
+                    data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                    child: ExpansionTile(
+                      initiallyExpanded: true,
+                      shape: const Border(),
+                      collapsedShape: const Border(),
+                      tilePadding: const EdgeInsets.symmetric(horizontal: 20),
+                      childrenPadding: EdgeInsets.zero,
+                      iconColor: colors.primary,
+                      collapsedIconColor: Colors.white70,
+                      leading: Icon(Icons.settings_outlined, color: colors.primary),
+                      title: Text(t.settings, style: textStyles.titleMedium),
+                      children: [
+
+                        //* Contenido: películas o series
+                        _SectionTitle(
+                          icon: Icons.video_library_outlined,
+                          title: t.content,
+                          subtitle: t.chooseContent,
+                        ),
+
+                        _CatalogTile(
+                          icon: Icons.movie_outlined,
+                          label: t.movies,
+                          selected: currentCatalog == CatalogType.movies,
+                          onTap: () => _changeCatalog(context, ref, CatalogType.movies),
+                        ),
+                        _CatalogTile(
+                          icon: Icons.tv_outlined,
+                          label: t.series,
+                          selected: currentCatalog == CatalogType.series,
+                          onTap: () => _changeCatalog(context, ref, CatalogType.series),
+                        ),
+
+                        const SizedBox(height: 12),
+
+                        //* Idioma
+                        _SectionTitle(
+                          icon: Icons.language_rounded,
+                          title: t.language,
+                          subtitle: t.chooseLanguage,
+                        ),
+
+                        for (final language in AppLanguages.all)
+                          _LanguageTile(
+                            language: language,
+                            selected: language == currentLanguage,
+                            onTap: () {
+                              changeLanguage(ref, language); // también lo guarda
+                              Navigator.of(context).pop();   // cierra el menú
+                            },
+                          ),
+
+                        const SizedBox(height: 12),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 4, 20, 12),
-              child: Text(
-                t.chooseLanguage,
-                style: textStyles.bodySmall?.copyWith(color: Colors.white60),
-              ),
-            ),
-
-            //* Lista de idiomas con bandera
-            for (final language in AppLanguages.all)
-              _LanguageTile(
-                language: language,
-                selected: language == current,
-                onTap: () {
-                  ref.read(languageProvider.notifier).state = language;
-                  Navigator.of(context).pop(); // cierra el menú
-                },
-              ),
           ],
         ),
       ),
+    );
+  }
+
+  void _changeCatalog(BuildContext context, WidgetRef ref, CatalogType type) {
+    ref.read(catalogTypeProvider.notifier).state = type;
+
+    // El texto de la última búsqueda era del otro catálogo
+    ref.read(searchQueryProvider.notifier).state = '';
+
+    Navigator.of(context).pop(); // cierra el menú
+  }
+}
+
+
+class _SectionTitle extends StatelessWidget {
+
+  final IconData icon;
+  final String title;
+  final String subtitle;
+
+  const _SectionTitle({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+
+    final colors = Theme.of(context).colorScheme;
+    final textStyles = Theme.of(context).textTheme;
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 4, 20, 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(icon, color: colors.primary, size: 20),
+              const SizedBox(width: 10),
+              Text(title, style: textStyles.titleSmall),
+            ],
+          ),
+          const SizedBox(height: 2),
+          Text(
+            subtitle,
+            style: textStyles.bodySmall?.copyWith(color: Colors.white60),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+
+class _CatalogTile extends StatelessWidget {
+
+  final IconData icon;
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+
+  const _CatalogTile({
+    required this.icon,
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+
+    final colors = Theme.of(context).colorScheme;
+
+    return ListTile(
+      selected: selected,
+      selectedColor: colors.primary,
+      selectedTileColor: Colors.white10,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 2),
+      leading: Icon(icon, size: 30),
+      title: Text(label),
+      trailing: selected ? const Icon(Icons.check_rounded) : null,
+      onTap: onTap,
     );
   }
 }

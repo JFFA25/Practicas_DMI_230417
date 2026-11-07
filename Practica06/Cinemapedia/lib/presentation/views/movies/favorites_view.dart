@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cinemapedia/presentation/providers/providers.dart';
 import 'package:go_router/go_router.dart';
+import 'package:cinemapedia/config/helpers/media_id.dart';
 import 'package:cinemapedia/config/i18n/app_strings.dart';
 
 
@@ -45,7 +46,11 @@ class FavoritesViewState extends ConsumerState<FavoritesView> with AutomaticKeep
   Widget build(BuildContext context) {
     super.build(context);
 
-    final favoriteMovies = ref.watch(favoriteMoviesProvider).values.toList();
+    // Se muestran los favoritos del catálogo que se está viendo (películas o series)
+    final isSeries = ref.watch( catalogTypeProvider ) == CatalogType.series;
+    final favoriteMovies = ref.watch(favoriteMoviesProvider).values
+        .where((movie) => MediaId.isSeries( movie.id ) == isSeries )
+        .toList();
 
 
     if ( favoriteMovies.isEmpty ) {
@@ -58,7 +63,7 @@ class FavoritesViewState extends ConsumerState<FavoritesView> with AutomaticKeep
           children: [
             Icon( Icons.favorite_outline_sharp, size: 60, color: colors.primary ),
             Text(t.noFavTitle, style: TextStyle( fontSize: 30, color: colors.primary)),
-            Text(t.noFavBody, style: const TextStyle( fontSize: 20 )),
+            Text(isSeries ? t.noFavSeriesBody : t.noFavBody, style: const TextStyle( fontSize: 20 )),
 
             const SizedBox(height: 20),
             FilledButton.tonal(
@@ -75,6 +80,7 @@ class FavoritesViewState extends ConsumerState<FavoritesView> with AutomaticKeep
 
     return Scaffold(
       body: MovieMasonry(
+        key: ValueKey('favorites-$isSeries'),
         loadNextPage: loadNextPage,
         movies: favoriteMovies
       )

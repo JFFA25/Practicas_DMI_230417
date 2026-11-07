@@ -54,5 +54,31 @@ class MovieRepositoryImpl extends MoviesRepository {
     return datasource.getCertification(movieId);
   }
 
+  // ---- Series
+
+  @override
+  Future<List<Movie>> getSeriesOnTheAir({int page = 1}) {
+    return datasource.getSeriesOnTheAir(page: page);
+  }
+
+  @override
+  Future<List<Movie>> getSeriesAiringToday({int page = 1}) {
+    return datasource.getSeriesAiringToday(page: page);
+  }
+
+  @override
+  Future<List<Movie>> getSeriesPopular({int page = 1}) {
+    return datasource.getSeriesPopular(page: page);
+  }
+
+  @override
+  Future<List<Movie>> getSeriesTopRated({int page = 1}) {
+    return datasource.getSeriesTopRated(page: page);
+  }
+
+  @override
+  Future<List<Movie>> searchSeries(String query) {
+    return datasource.searchSeries(query);
+  }
 
 }

@@ -15,7 +15,10 @@ class PopularViewState extends ConsumerState<PopularView> with AutomaticKeepAliv
   Widget build(BuildContext context ) {
     super.build(context);
     
-    final popularMovies = ref.watch( popularMoviesProvider );
+    final isSeries = ref.watch( catalogTypeProvider ) == CatalogType.series;
+    final popularProvider = isSeries ? popularSeriesProvider : popularMoviesProvider;
+
+    final popularMovies = ref.watch( popularProvider );
     
     if ( popularMovies.isEmpty ) {
       return const Center(child: CircularProgressIndicator(strokeWidth: 2));
@@ -23,7 +26,8 @@ class PopularViewState extends ConsumerState<PopularView> with AutomaticKeepAliv
     
     return Scaffold(
       body: MovieMasonry(
-        loadNextPage: () => ref.read(popularMoviesProvider.notifier).loadNextPage(),
+        key: ValueKey('popular-$isSeries'),
+        loadNextPage: () => ref.read(popularProvider.notifier).loadNextPage(),
         movies: popularMovies
       ),
     );

@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 
 import 'package:cinemapedia/config/constants/environment.dart';
+import 'package:cinemapedia/config/helpers/age_rating.dart';
+import 'package:cinemapedia/config/helpers/media_id.dart';
 import 'package:cinemapedia/domain/datasources/movies_datasource.dart';
 
 import 'package:cinemapedia/infrastructure/models/models.dart';
@@ -161,6 +163,12 @@ class MoviedbDatasource extends MoviesDatasource {
   @override
   Future<Movie> getMovieById( String id ) async {
 
+    // Las series llegan con id negativo (ver MediaId)
+    final numericId = int.tryParse( id );
+    if ( numericId != null && MediaId.isSeries( numericId ) ) {
+      return _getSeriesById( MediaId.tmdbId( numericId ) );
+    }
+
     final response = await dio.get('/movie/$id');
     if ( response.statusCode != 200 ) throw Exception('Movie with id: $id not found');
     
@@ -199,6 +207,13 @@ class MoviedbDatasource extends MoviesDatasource {
 
   @override
   Future<List<Movie>> getSimilarMovies(int movieId) async {
+
+    if ( MediaId.isSeries( movieId ) ) {
+      final path = '/tv/${ MediaId.tmdbId( movieId ) }/similar';
+      final response = await dio.get( path );
+      return _seriesWithEnglishFallback( _jsonToSeries( response.data ), path );
+    }
+
     final response = await dio.get('/movie/$movieId/similar');
     final movies = _jsonToMovies(response.data);
     return _withEnglishFallback(movies, '/movie/$movieId/similar');
@@ -208,7 +223,7 @@ class MoviedbDatasource extends MoviesDatasource {
   @override
   Future<List<Video>> getYoutubeVideosById(int movieId) async {
     // Si no hay tráiler en el idioma elegido, se usa el de inglés o el sin idioma
-    final response = await dio.get('/movie/$movieId/videos',
+    final response = await dio.get('/${ MediaId.kind( movieId ) }/${ MediaId.tmdbId( movieId ) }/videos',
       queryParameters: {
         'include_video_language': '${ language.split('-').first },en,null'
       }
@@ -229,36 +244,149 @@ class MoviedbDatasource extends MoviesDatasource {
   // ------------------------------------------------------------------
   //  Clasificación de edad
   //
-  //  The Movie DB guarda la clasificación por país en /release_dates
-  //  (MX: A, B, B15, C...  US: PG-13, R...  DE: 0, 6, 12, 16, 18).
-  //  Se toma la del país del idioma elegido, prefiriendo la de estreno en
-  //  cines (type 3). Si ese país no tiene dato se devuelve ''.
+  //  The Movie DB guarda la clasificación por país:
+  //   - Películas: /movie/{id}/release_dates  (MX: A, B, B15, C...  US: PG-13, R...  DE: 0, 6, 12, 16, 18)
+  //   - Series:    /tv/{id}/content_ratings   (US: TV-14, TV-MA...)
+  //  Se toma la del país del idioma elegido. Si ese país no tiene dato se devuelve ''.
+  //
+  //  Egipto (EG) no existe en The Movie DB: se usa la clasificación de EE. UU. como
+  //  equivalente (General, +12, +16, +18) y "BN" para lo prohibido (ver AgeRatings).
   // ------------------------------------------------------------------
   @override
   Future<String> getCertification(int movieId) async {
     try {
-      final response = await dio.get('/movie/$movieId/release_dates');
       final country = language.split('-').last.toUpperCase();
-      final results = (response.data['results'] as List?) ?? const [];
 
-      for ( final entry in results ) {
-        if ( entry['iso_3166_1'] != country ) continue;
-
-        final dates = ((entry['release_dates'] as List?) ?? const [])
-            .where((d) => ((d['certification'] as String?) ?? '').trim().isNotEmpty)
-            .toList();
-        if ( dates.isEmpty ) return '';
-
-        final theatrical = dates.where((d) => d['type'] == 3).toList();
-        final chosen = theatrical.isNotEmpty ? theatrical.first : dates.first;
-        return (chosen['certification'] as String).trim();
+      if ( country == 'EG' ) {
+        if ( AgeRatings.egyptBannedIds.contains( movieId ) ) return 'BN';
+        return AgeRatings.egyptFromUs( await _certificationFor( movieId, 'US' ) );
       }
 
-      return '';
+      return await _certificationFor( movieId, country );
     } catch (_) {
       return '';
     }
   }
 
+  Future<String> _certificationFor( int id, String country ) async {
+
+    final tmdbId = MediaId.tmdbId( id );
+
+    //* Series
+    if ( MediaId.isSeries( id ) ) {
+      final tvResponse = await dio.get('/tv/$tmdbId/content_ratings');
+      final tvResults = (tvResponse.data['results'] as List?) ?? const [];
+
+      for ( final entry in tvResults ) {
+        if ( entry['iso_3166_1'] == country ) {
+          return ((entry['rating'] as String?) ?? '').trim();
+        }
+      }
+      return '';
+    }
+
+    //* Películas: se prefiere la clasificación de estreno en cines (type 3)
+    final response = await dio.get('/movie/$tmdbId/release_dates');
+    final results = (response.data['results'] as List?) ?? const [];
+
+    for ( final entry in results ) {
+      if ( entry['iso_3166_1'] != country ) continue;
+
+      final dates = ((entry['release_dates'] as List?) ?? const [])
+          .where((d) => ((d['certification'] as String?) ?? '').trim().isNotEmpty)
+          .toList();
+      if ( dates.isEmpty ) return '';
+
+      final theatrical = dates.where((d) => d['type'] == 3).toList();
+      final chosen = theatrical.isNotEmpty ? theatrical.first : dates.first;
+      return (chosen['certification'] as String).trim();
+    }
+
+    return '';
+  }
+
+
+  // ------------------------------------------------------------------
+  //  Series
+  //
+  //  Se convierten al mismo Movie que usa toda la app, con el id en negativo
+  //  (ver MediaId). Tienen el mismo respaldo en inglés que las películas.
+  // ------------------------------------------------------------------
+
+  List<Movie> _jsonToSeries( Map<String, dynamic> json ) => TvMapper.listFromResponse( json );
+
+  Future<List<Movie>> _seriesWithEnglishFallback(
+    List<Movie> series,
+    String path,
+    [ Map<String, dynamic>? params ]
+  ) async {
+
+    if ( language.startsWith('en') || !series.any(_needsFallback) ) return series;
+
+    try {
+      final response = await dio.get( path, queryParameters: {
+        ...?params,
+        'language': 'en-US',
+      });
+
+      final english = { for ( final m in _jsonToSeries(response.data) ) m.id: m };
+
+      return series.map((m) {
+        final en = english[m.id];
+        if ( en == null || !_needsFallback(m) ) return m;
+        return _mergeEnglish(m, en);
+      }).toList();
+
+    } catch (_) {
+      return series;
+    }
+  }
+
+  Future<List<Movie>> _getSeriesList( String path, int page ) async {
+    final response = await dio.get( path, queryParameters: { 'page': page } );
+    final series = _jsonToSeries( response.data );
+    return _seriesWithEnglishFallback( series, path, { 'page': page } );
+  }
+
+  Future<Movie> _getSeriesById( int tmdbId ) async {
+
+    final response = await dio.get('/tv/$tmdbId');
+    if ( response.statusCode != 200 ) throw Exception('Series with id: $tmdbId not found');
+
+    final series = TvMapper.detailsToEntity( response.data );
+
+    if ( !language.startsWith('en') && _needsFallback(series) ) {
+      try {
+        final enResponse = await dio.get('/tv/$tmdbId', queryParameters: { 'language': 'en-US' });
+        return _mergeEnglish( series, TvMapper.detailsToEntity( enResponse.data ) );
+      } catch (_) {
+        return series;
+      }
+    }
+
+    return series;
+  }
+
+  @override
+  Future<List<Movie>> getSeriesOnTheAir({int page = 1}) => _getSeriesList('/tv/on_the_air', page);
+
+  @override
+  Future<List<Movie>> getSeriesAiringToday({int page = 1}) => _getSeriesList('/tv/airing_today', page);
+
+  @override
+  Future<List<Movie>> getSeriesPopular({int page = 1}) => _getSeriesList('/tv/popular', page);
+
+  @override
+  Future<List<Movie>> getSeriesTopRated({int page = 1}) => _getSeriesList('/tv/top_rated', page);
+
+  @override
+  Future<List<Movie>> searchSeries(String query) async {
+
+    if ( query.isEmpty ) return [];
+
+    final response = await dio.get('/search/tv', queryParameters: { 'query': query });
+
+    return _jsonToSeries( response.data );
+  }
 
 }

@@ -65,6 +65,18 @@ class AppStrings {
   String get language => _t('language');
   String get chooseLanguage => _t('chooseLanguage');
 
+  // ---- Configuración, películas y series
+  String get settings => _t('settings');
+  String get content => _t('content');
+  String get chooseContent => _t('chooseContent');
+  String get movies => _t('movies');
+  String get series => _t('series');
+  String get seriesOnAir => _t('seriesOnAir');
+  String get airingToday => _t('airingToday');
+  String get airingTodaySub => _t('airingTodaySub');
+  String get searchSeries => _t('searchSeries');
+  String get noFavSeriesBody => _t('noFavSeriesBody');
+
   static const Map<String, Map<String, String>> _values = {
 
     // ------------------------------------------------------------ Español
@@ -100,6 +112,16 @@ class AppStrings {
       'menu': 'Menú',
       'language': 'Idioma',
       'chooseLanguage': 'Elige el idioma de la app y de las películas',
+      'settings': 'Configuración',
+      'content': 'Contenido',
+      'chooseContent': 'Elige qué quieres ver',
+      'movies': 'Películas',
+      'series': 'Series',
+      'seriesOnAir': 'En emisión',
+      'airingToday': 'Se emiten hoy',
+      'airingTodaySub': 'Episodios nuevos',
+      'searchSeries': 'Buscar series',
+      'noFavSeriesBody': 'No tienes series favoritas',
     },
 
     // ------------------------------------------------------------ English
@@ -135,6 +157,16 @@ class AppStrings {
       'menu': 'Menu',
       'language': 'Language',
       'chooseLanguage': 'Choose the language of the app and the movies',
+      'settings': 'Settings',
+      'content': 'Content',
+      'chooseContent': 'Choose what you want to watch',
+      'movies': 'Movies',
+      'series': 'TV Series',
+      'seriesOnAir': 'On the air',
+      'airingToday': 'Airing today',
+      'airingTodaySub': 'New episodes',
+      'searchSeries': 'Search TV series',
+      'noFavSeriesBody': "You don't have any favorite series",
     },
 
     // ------------------------------------------------------------ Deutsch
@@ -170,6 +202,16 @@ class AppStrings {
       'menu': 'Menü',
       'language': 'Sprache',
       'chooseLanguage': 'Wähle die Sprache der App und der Filme',
+      'settings': 'Einstellungen',
+      'content': 'Inhalt',
+      'chooseContent': 'Wähle, was du sehen möchtest',
+      'movies': 'Filme',
+      'series': 'Serien',
+      'seriesOnAir': 'Läuft aktuell',
+      'airingToday': 'Heute im TV',
+      'airingTodaySub': 'Neue Folgen',
+      'searchSeries': 'Serien suchen',
+      'noFavSeriesBody': 'Du hast noch keine Lieblingsserien',
     },
 
     // ------------------------------------------------------------ 中文
@@ -205,6 +247,16 @@ class AppStrings {
       'menu': '菜单',
       'language': '语言',
       'chooseLanguage': '选择应用和电影的语言',
+      'settings': '设置',
+      'content': '内容',
+      'chooseContent': '选择你想看的内容',
+      'movies': '电影',
+      'series': '剧集',
+      'seriesOnAir': '正在播出',
+      'airingToday': '今日播出',
+      'airingTodaySub': '新剧集',
+      'searchSeries': '搜索剧集',
+      'noFavSeriesBody': '你还没有收藏的剧集',
     },
 
     // ------------------------------------------------------------ العربية
@@ -240,6 +292,16 @@ class AppStrings {
       'menu': 'القائمة',
       'language': 'اللغة',
       'chooseLanguage': 'اختر لغة التطبيق والأفلام',
+      'settings': 'الإعدادات',
+      'content': 'المحتوى',
+      'chooseContent': 'اختر ما تريد مشاهدته',
+      'movies': 'أفلام',
+      'series': 'مسلسلات',
+      'seriesOnAir': 'يُعرض حاليًا',
+      'airingToday': 'تُعرض اليوم',
+      'airingTodaySub': 'حلقات جديدة',
+      'searchSeries': 'ابحث عن مسلسل',
+      'noFavSeriesBody': 'ليس لديك مسلسلات مفضلة',
     },
   };
 }

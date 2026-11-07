@@ -10,6 +10,9 @@ import 'package:cinemapedia/config/theme/app_theme.dart';
 import 'package:cinemapedia/presentation/providers/language/language_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:cinemapedia/presentation/providers/settings/shared_preferences_provider.dart';
 
 Future<void> main() async{
 
@@ -20,8 +23,16 @@ Future<void> main() async{
   // Formatos de fecha de todos los idiomas (es, en, de, zh, ar)
   await initializeDateFormatting();
 
+  // Preferencias guardadas (aquí se recuerda el idioma elegido)
+  final prefs = await SharedPreferences.getInstance();
+
   runApp(
-    const ProviderScope(child: MainApp() )
+    ProviderScope(
+      overrides: [
+        sharedPreferencesProvider.overrideWithValue( prefs ),
+      ],
+      child: const MainApp(),
+    )
   );
 }
 

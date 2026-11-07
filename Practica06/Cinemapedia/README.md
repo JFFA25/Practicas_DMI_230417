@@ -26,6 +26,9 @@ Descubre qué hay en cines, qué viene pronto y qué películas son las mejor ca
 películas mejor calificadas, y permite ver el detalle de cada película con su reparto, tráilers y
 películas similares.
 
+Además de películas tiene **series**: desde el apartado de Configuración del menú lateral se elige
+qué catálogo ver.
+
 La app está disponible en **5 idiomas** (español de México, inglés, alemán, chino y árabe) y se
 cambia desde el menú lateral: se traducen tanto los textos de la app como los datos de las
 películas que llegan de la API.
@@ -60,7 +63,7 @@ para iniciar la prueba del APK.
 
 | Pantalla de carga | Inicio y navegación | Menú Lateral |
 | :---: | :---: | :---: |
-| <img src="assets/images/LoadScreen.gif" alt="Pantalla de carga" width="215" /> | <img src="assets/images/Inicio.jpeg" alt="Inicio" width="215" /> |<img src="assets/images/Menu.jpeg" alt="Menú lateral" width="215" /> |
+| <img src="assets/images/LoadScreen.gif" alt="Pantalla de carga" width="215" /> | <img src="assets/images/Inicio.jpeg" alt="Inicio" width="215" /> |<img src="assets/images/Nuevo_Menu.jpeg" alt="Menú lateral" width="215" /> |
 
 | Detalles de Pelicula | Elenco |Favoritos |
 | :---: | :---: | :---: |
@@ -68,11 +71,25 @@ para iniciar la prueba del APK.
 
 </div>
 
+### Series, Configuración y clasificación
 
+<div align="center">
+
+
+| Menú Lateral| Inicio de Series|Detalles de una Serie |
+| :---: | :---: | :---: |
+|  <img src="assets/images/Nuevo_Menu.jpeg" alt="Menu" width="215" />|<img src="assets/images/Inicio_Series.jpeg" alt="Inicio Serie" width="215" /> |  <img src="assets/images/Detalles_Series.jpeg" alt="Detalles_Serie" width="215" />  |
+
+
+| Series Populares| Series Favoritas|Clasificaion de Egipto|
+| :---: | :---: |:---: |
+|  <img src="assets/images/Series_Populares.jpeg" alt="Series_Populares" width="215" />| <img src="assets/images/Series_Favoritas.jpeg" alt="Series_Favoritas" width="215" />| <img src="assets/images/Egipto_Clasificacion.jpeg" alt="Egipto_Clasificacion" width="215" />|
+
+</div>
 
 ### Idiomas
 
-La app cambia de idioma desde el menú lateral, y se traducen los textos y los datos de las películas.
+La app cambia de idioma desde Configuración, en el menú lateral, y se traducen los textos y los datos de las películas.
 
 <div align="center">
 
@@ -82,7 +99,7 @@ La app cambia de idioma desde el menú lateral, y se traducen los textos y los d
 
 | CN (中文) | EG (العربية) |  Clasificacion |
 | :---: | :---: | :---: |
-| <img src="assets/images/Chino.jpeg" alt="中文" width="215" /> | <img src="assets/images/Arabe.jpeg" alt="العربية" width="215" /> | <img src="assets/images/Clasificacion.jpeg" alt="APK" width="215" /> |
+| <img src="assets/images/Chino.jpeg" alt="中文" width="215" /> | <img src="assets/images/Arabe.jpeg" alt="العربية" width="215" /> | <img src="assets/images/Clasificacion.jpeg" alt="Clasificación" width="215" /> |
 
 </div>
 
@@ -95,17 +112,21 @@ La app cambia de idioma desde el menú lateral, y se traducen los textos y los d
   el título con una descripción corta.
 - **Listas horizontales** con scroll infinito: _En cines_, _Próximamente_ y _Mejor calificadas_.
 - **Populares** en una vista de cuadrícula tipo masonry.
-- **Detalle de película:** sinopsis, géneros, reparto, tráilers de YouTube, películas similares y
+- **Detalle de película o serie:** sinopsis, géneros, reparto, tráilers de YouTube, películas similares y
   clasificación de edad según el país del idioma elegido (ver [Clasificación de edad](#clasificación-de-edad)).
-- **Búsqueda** de películas con sugerencias en tiempo real.
+- **Búsqueda** de películas o series con sugerencias en tiempo real.
 - **Favoritos** guardados en el dispositivo (base de datos local con Isar).
+- **Películas y series:** en _Configuración_, dentro del menú lateral, se elige qué catálogo ver. Las
+  series tienen sus propias secciones (_En emisión_, _Se emiten hoy_, _Mejor calificadas_ y
+  _Populares_), detalle con reparto, tráilers, similares y clasificación de edad, búsqueda y favoritos.
 - **Menú lateral** que se abre con el botón de la barra o deslizando desde el borde de la pantalla.
+  Incluye el apartado de **Configuración** con el contenido (películas o series) y el idioma.
 - **Selector de idioma** con banderas: español, inglés, alemán, chino y árabe (ver [Idiomas](#idiomas-de-la-app)).
 - **Tema oscuro** con fondo negro puro y acentos morados.
 
 ## Idiomas de la app
 
-Al elegir un idioma en el menú lateral cambia **todo**: los textos de la app (menú inferior,
+Al elegir un idioma en Configuración (menú lateral) cambia **todo**: los textos de la app (menú inferior,
 secciones, búsqueda, favoritos, pantalla de carga, detalle) y los datos de la API (títulos,
 sinopsis, géneros, reparto y tráilers). Las películas se recargan solas con el nuevo idioma.
 
@@ -122,7 +143,8 @@ sinopsis, géneros, reparto y tráilers). Las películas se recargan solas con e
   inglés y la usa como respaldo.
 - **Diseño de izquierda a derecha:** la pantalla no se voltea, ni siquiera en árabe.
 - **Fechas:** el formato de fecha del detalle y la etiqueta del día en _En cines_ siguen el idioma elegido.
-- El idioma elegido no se guarda: al cerrar la app vuelve a español (MX).
+- **El idioma se recuerda:** se guarda en el dispositivo (con `shared_preferences`) y al volver a abrir
+  la app sigue en el idioma que elegiste. La primera vez arranca en español (MX).
 - Los favoritos conservan el título y la sinopsis en el idioma en que se guardaron.
 
 <details>
@@ -138,23 +160,50 @@ sinopsis, géneros, reparto y tráilers). Las películas se recargan solas con e
 
 ## Clasificación de edad
 
-En el detalle de cada película, debajo de la fecha de estreno, se muestra la clasificación de edad
-**del país del idioma elegido**. Al cambiar el idioma en el menú lateral y abrir otra película, la
-etiqueta cambia al sistema de clasificación de ese país.
+En el detalle de cada película **y de cada serie**, debajo de la fecha de estreno, se muestra la
+clasificación de edad **del país del idioma elegido**. Al cambiar el idioma en Configuración y abrir
+otro título, la etiqueta cambia al sistema de clasificación de ese país.
 
 | País | Sistema | Cómo se ve |
 | :--: | ------- | ---------- |
 | MX | Clasificación mexicana | `AA`, `A`, `B`, `B15`, `C`, `D` |
-| US | MPA | `G`, `PG`, `PG-13`, `R`, `NC-17` |
+| US | MPA (películas) y TV Parental Guidelines (series) | `G`, `PG`, `PG-13`, `R`, `NC-17` / `TV-14`, `TV-MA`... |
 | DE | FSK | `FSK 0`, `FSK 6`, `FSK 12`, `FSK 16`, `FSK 18` |
-| CN / EG | Sin dato en The Movie DB (normalmente) | `NR` |
+| EG | Clasificación egipcia (ver abajo) | `General`, `+12`, `+16`, `+18`, `BN` |
+| CN | Sin dato en The Movie DB (normalmente) | `NR` |
 
-- **De dónde sale:** de `/movie/{id}/release_dates` de The Movie DB. Se toma la clasificación del
-  país y se prefiere la del estreno en cines.
-- **Sin clasificación:** si el país no tiene dato (o la película es muy nueva), se muestra **NR**
+- **De dónde sale:** de The Movie DB. En películas, `/movie/{id}/release_dates` (se prefiere la
+  clasificación de estreno en cines); en series, `/tv/{id}/content_ratings`.
+- **Sin clasificación:** si el país no tiene dato (o el título es muy nuevo), se muestra **NR**
   (sin clasificar).
 - **Dónde está en el código:** `getCertification` en `moviedb_datasource.dart`, el provider
   `movie_certification_provider.dart` y el formato en `lib/config/helpers/age_rating.dart`.
+
+### Egipto (EG)
+
+The Movie DB no tiene clasificaciones de Egipto, así que la app las muestra con las categorías del
+sistema egipcio:
+
+| Etiqueta | Significado |
+| :------: | ----------- |
+| `General` | Apta para todo público. |
+| `+12` | Menores de 12 años: prohibido el acceso a niños menores de 12 años si la obra contiene violencia moderada o situaciones sugerentes. |
+| `+16` | Menores de 16 años: restringido para menores de 16 años cuando incluye violencia intensa, crímenes, lenguaje fuerte o contenido adulto que no llega a ser explícito. |
+| `+18` | Solo adultos: exclusivo para mayores de 18 años. |
+| `BN` | Banned / prohibida: vetada para su exhibición pública. |
+
+Como la API no trae el dato de Egipto, la categoría se calcula con la clasificación de **EE. UU.** como
+equivalente aproximado (no es la clasificación oficial egipcia):
+
+| EE. UU. (película) | EE. UU. (serie) | Egipto |
+| :----------------: | :-------------: | :----: |
+| `G`, `PG` | `TV-Y`, `TV-Y7`, `TV-G` | `General` |
+| `PG-13` | `TV-PG` | `+12` |
+| `R` | `TV-14` | `+16` |
+| `NC-17` | `TV-MA` | `+18` |
+
+`BN` no se puede deducir de la API. Para marcar un título como prohibido se agrega su id de TMDB a
+`AgeRatings.egyptBannedIds` en `lib/config/helpers/age_rating.dart` (para una serie, su id en negativo).
 
 ## Icono de la app
 
@@ -202,6 +251,7 @@ fondo negro.
 | Cuadrícula           | `flutter_staggered_grid_view`    |
 | Tráilers             | `youtube_player_flutter`         |
 | Variables de entorno | `flutter_dotenv`                 |
+| Recordar el idioma   | `shared_preferences`             |
 | Fechas e idiomas     | `intl` y `flutter_localizations` |
 
 ## Arquitectura

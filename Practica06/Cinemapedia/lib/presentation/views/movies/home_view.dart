@@ -22,11 +22,20 @@ class HomeViewState extends ConsumerState<HomeView> with AutomaticKeepAliveClien
     _loadFirstPages();
   }
 
+  /// Pide la primera página de las listas del catálogo que se está viendo
+  /// (películas o series). Si una lista ya tiene datos no se vuelve a pedir.
   void _loadFirstPages() {
-    ref.read( nowPlayingMoviesProvider.notifier ).loadNextPage();
-    ref.read( popularMoviesProvider.notifier ).loadNextPage();
-    ref.read( topRatedMoviesProvider.notifier ).loadNextPage();
-    ref.read( upcomingMoviesProvider.notifier ).loadNextPage();
+    final isSeries = ref.read( catalogTypeProvider ) == CatalogType.series;
+
+    final providers = isSeries
+      ? [ onTheAirSeriesProvider, airingTodaySeriesProvider, popularSeriesProvider, topRatedSeriesProvider ]
+      : [ nowPlayingMoviesProvider, upcomingMoviesProvider, popularMoviesProvider, topRatedMoviesProvider ];
+
+    for ( final provider in providers ) {
+      if ( ref.read( provider ).isEmpty ) {
+        ref.read( provider.notifier ).loadNextPage();
+      }
+    }
   }
 
 
@@ -45,16 +54,32 @@ class HomeViewState extends ConsumerState<HomeView> with AutomaticKeepAliveClien
       });
     });
 
+    //* Al cambiar entre películas y series se piden las listas del nuevo catálogo
+    ref.listen( catalogTypeProvider, (previous, next) {
+      if ( previous == next ) return;
+
+      Future.microtask(() {
+        if ( mounted ) _loadFirstPages();
+      });
+    });
+
     final t = AppStrings.of(context);
     final languageCode = Localizations.localeOf(context).languageCode;
 
+    final isSeries = ref.watch( catalogTypeProvider ) == CatalogType.series;
+
     final initialLoading = ref.watch(initialLoadingProvider);
     if ( initialLoading ) return const FullScreenLoader();
-    
-    final slideShowMovies = ref.watch( moviesSlideshowProvider );
-    final nowPlayingMovies = ref.watch( nowPlayingMoviesProvider );
-    final topRatedMovies = ref.watch( topRatedMoviesProvider );
-    final upcomingMovies = ref.watch( upcomingMoviesProvider );
+
+    // Mismas secciones para películas y series, con listas distintas
+    final firstProvider  = isSeries ? onTheAirSeriesProvider : nowPlayingMoviesProvider;
+    final secondProvider = isSeries ? airingTodaySeriesProvider : upcomingMoviesProvider;
+    final thirdProvider  = isSeries ? topRatedSeriesProvider : topRatedMoviesProvider;
+
+    final slideShowMovies = ref.watch( isSeries ? seriesSlideshowProvider : moviesSlideshowProvider );
+    final firstMovies  = ref.watch( firstProvider );
+    final secondMovies = ref.watch( secondProvider );
+    final thirdMovies  = ref.watch( thirdProvider );
 
     return CustomScrollView(
       slivers: [
@@ -74,21 +99,23 @@ class HomeViewState extends ConsumerState<HomeView> with AutomaticKeepAliveClien
               
                     // const CustomAppbar(),
               
-                    MoviesSlideshow(movies: slideShowMovies ),
+                    MoviesSlideshow(key: ValueKey('slideshow-$isSeries'), movies: slideShowMovies ),
               
                     MovieHorizontalListview(
-                      movies: nowPlayingMovies,
-                      title: t.nowPlaying,
+                      key: ValueKey('first-$isSeries'),
+                      movies: firstMovies,
+                      title: isSeries ? t.seriesOnAir : t.nowPlaying,
                       subTitle: HumanFormats.today(languageCode),
-                      loadNextPage: () =>ref.read(nowPlayingMoviesProvider.notifier).loadNextPage()
+                      loadNextPage: () => ref.read(firstProvider.notifier).loadNextPage()
                       
                     ),
               
                     MovieHorizontalListview(
-                      movies: upcomingMovies,
-                      title: t.upcoming,
-                      subTitle: t.upcomingSub,
-                      loadNextPage: () =>ref.read(upcomingMoviesProvider.notifier).loadNextPage()
+                      key: ValueKey('second-$isSeries'),
+                      movies: secondMovies,
+                      title: isSeries ? t.airingToday : t.upcoming,
+                      subTitle: isSeries ? t.airingTodaySub : t.upcomingSub,
+                      loadNextPage: () => ref.read(secondProvider.notifier).loadNextPage()
                     ),
               
                     //* Ya no estará aquí, ahora es parte del menú inferior
@@ -100,10 +127,11 @@ class HomeViewState extends ConsumerState<HomeView> with AutomaticKeepAliveClien
                     // ),
               
                     MovieHorizontalListview(
-                      movies: topRatedMovies,
+                      key: ValueKey('third-$isSeries'),
+                      movies: thirdMovies,
                       title: t.topRated,
                       subTitle: t.topRatedSub,
-                      loadNextPage: () =>ref.read(topRatedMoviesProvider.notifier).loadNextPage()
+                      loadNextPage: () => ref.read(thirdProvider.notifier).loadNextPage()
                     ),
 
                     const SizedBox( height: 10 ),
