@@ -15,7 +15,7 @@ Descubre qué hay en cines, qué viene pronto y qué películas son las mejor ca
 
 <br />
 
-[![Probar en Appetize](https://img.shields.io/badge/Probar%20la%20app%20en%20Appetize-8C5A9B?style=for-the-badge&logo=android&logoColor=white)](https://appetize.io/app/b_dqbrzni6n2opryfcgrwoifjnvq)
+[![Probar en Appetize](https://img.shields.io/badge/Probar%20la%20app%20en%20Appetize-8C5A9B?style=for-the-badge&logo=android&logoColor=white)](https://appetize.io/app/b_yvc3qtmopdddgbgdt2bv2eh72e)
 
 </div>
 
@@ -40,9 +40,9 @@ desde el navegador.
 
 <div align="center">
 
-### [**Abrir Cinemapedia en Appetize**](https://appetize.io/app/b_dqbrzni6n2opryfcgrwoifjnvq)
+### [**Abrir Cinemapedia en Appetize**](https://appetize.io/app/b_yvc3qtmopdddgbgdt2bv2eh72e)
 
-**Cinemapedia:** [https://appetize.io/app/b_dqbrzni6n2opryfcgrwoifjnvq](https://appetize.io/app/b_dqbrzni6n2opryfcgrwoifjnvq)
+**Cinemapedia:** [https://appetize.io/app/b_yvc3qtmopdddgbgdt2bv2eh72e](https://appetize.io/app/b_yvc3qtmopdddgbgdt2bv2eh72e)
 
 </div>
 
