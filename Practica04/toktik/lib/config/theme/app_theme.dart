@@ -1,33 +1,36 @@
 import 'package:flutter/material.dart';
-import 'package:toktik/presentation/providers/theme_provider.dart';
 
 class AppTheme {
-  AppTheme(this.season);
 
-  final SeasonalTheme season;
+  // Morado de la marca (el mismo de la "C" del icono)
+  static const Color brandPurple = Color(0xFF8C5A9B);
+  static const Color brandPurpleLight = Color(0xFFA97DBB);
 
-  ThemeData getTheme() => ThemeData(
-    useMaterial3: true,
-    brightness: Brightness.dark,
-    fontFamily: season.fontFamily,
-    // Si la fuente temática no tiene un carácter (acentos, signos), se usa Poppins.
-    fontFamilyFallback: const ['Poppins'],
-    colorScheme: ColorScheme.fromSeed(
-      seedColor: season.primaryColor,
-      secondary: season.secondaryColor,
+  ThemeData getTheme() {
+
+    // Esquema generado a partir del morado de la marca, con superficie negra pura.
+    // `primary` (puntos del carrusel, menú inferior, iconos...) usa el morado claro
+    // para que se lea bien sobre el fondo negro.
+    final colorScheme = ColorScheme.fromSeed(
+      seedColor: brandPurple,
       brightness: Brightness.dark,
-      surface: const Color(0xFF101014),
-    ),
-    appBarTheme: AppBarTheme(
-      backgroundColor: season.primaryColor.withValues(alpha: 0.94),
-      foregroundColor: Colors.white,
-    ),
-    floatingActionButtonTheme: FloatingActionButtonThemeData(
-      backgroundColor: season.primaryColor,
-      foregroundColor: Colors.white,
-    ),
-    navigationBarTheme: NavigationBarThemeData(
-      indicatorColor: season.secondaryColor.withValues(alpha: 0.35),
-    ),
-  );
+      surface: Colors.black,
+    ).copyWith(
+      primary: brandPurpleLight,
+    );
+
+    return ThemeData(
+      useMaterial3: true,
+      colorScheme: colorScheme,
+      scaffoldBackgroundColor: Colors.black,
+      appBarTheme: const AppBarTheme(
+        backgroundColor: Colors.black,
+        surfaceTintColor: Colors.transparent,
+      ),
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        backgroundColor: Colors.black,
+      ),
+    );
+  }
+
 }

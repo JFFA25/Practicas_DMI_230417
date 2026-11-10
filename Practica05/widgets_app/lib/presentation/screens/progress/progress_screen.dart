@@ -22,9 +22,9 @@ class _ProgressView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return const Center(
       child: Column(
-        children: const [
+        children: [
           SizedBox(height: 30),
           Text('Circula progress indicator'),
           SizedBox(height: 10),

@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
         builder: (context, themes, child) => MaterialApp(
           title: 'TokTik',
           debugShowCheckedModeBanner: false,
-          theme: AppTheme(themes.theme).getTheme(),
+          theme: AppTheme().getTheme(),
           // La splash (con la canción de la temática) sale al abrir la app y
           // después deja ver el feed.
           home: const StartupSplashGate(child: DiscoverScreen()),
