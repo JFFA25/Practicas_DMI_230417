@@ -34,8 +34,6 @@ Cada práctica incluye el código fuente, una breve descripción del objetivo de
 
 ## Tabla de Prácticas de la Materia
 
-## Tabla de Prácticas de la Materia
-
 <table>
   <thead>
     <tr>
