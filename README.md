@@ -34,15 +34,73 @@ Cada práctica incluye el código fuente, una breve descripción del objetivo de
 
 ## Tabla de Prácticas de la Materia
 
-| No. | Nombre | Descripción | Potenciador | Estatus |
-|:-:|:--|:--|:-:|:-:|
-| 01 | Metodología de Evaluación de la Materia | Revisión de la forma en que se evaluará la materia durante el cuatrimestre. | 05 | 🟢 Completada |
-| 02 | [Mi Primera Aplicación Móvil con Flutter](/Practica02/flutter_application_1/README.md) | App contador con botones para sumar, restar y reiniciar, con colores según el valor. | 25 | 🟢 Completada |
-| 03 | [Yes, No, Maybe](/Practica03/yes_no_app/README.md) | Chat Flutter con respuestas automáticas y GIFs mediante la API yesno.wtf. | 30 | 🟢 Completada |
-| 04 | [TokTik](/Practica04/toktik/README.md) | El alumno creará una app de reproducción de videos verticales con el uso de providers y tematización temporal a Halloween y Navidad. | 30 | 🟢 Completada |
-| 4.1 | [Appetize - TokTik](/Practica-Appetize/README.md) | App Flutter - TokTik: reproducción de videos verticales con providers y tematización temporal a Halloween y Navidad. | 10 | 🟢 Completada |
-| 05 | [Widgets App](/Practica05/widgets_app/README.md) | App Flutter con widgets Material 3, navegación con GoRouter y estado con Riverpod: botones, tarjetas, progreso, controles, animaciones, lista con actualización, contador y temas. | 40 | 🟢 Completada |
-| 06 | [Cinemapedia](/Practica06/Cinemapedia/README.md) | App Flutter de películas con la API de The Movie DB: cartelera, estrenos y mejor calificadas, carrusel con flechas, detalle con reparto y tráilers, búsqueda y favoritos locales (Isar). Usa GoRouter, Riverpod, pantalla de carga animada y tema negro con morado. | 100 | 🟢 Completada |
+## Tabla de Prácticas de la Materia
+
+<table>
+  <thead>
+    <tr>
+      <th align="center">Unidad</th>
+      <th align="center">No.</th>
+      <th align="left">Nombre</th>
+      <th align="left">Descripción</th>
+      <th align="center">Potenciador</th>
+      <th align="center">Estatus</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="center" rowspan="5"><b>Unidad 1</b></td>
+      <td align="center">01</td>
+      <td>Metodología de Evaluación de la Materia</td>
+      <td>Revisión de la forma en que se evaluará la materia durante el cuatrimestre.</td>
+      <td align="center">05</td>
+      <td align="center">🟢 Completada</td>
+    </tr>
+    <tr>
+      <td align="center">02</td>
+      <td><a href="/Practica02/flutter_application_1/README.md">Mi Primera Aplicación Móvil con Flutter</a></td>
+      <td>App contador con botones para sumar, restar y reiniciar, con colores según el valor.</td>
+      <td align="center">25</td>
+      <td align="center">🟢 Completada</td>
+    </tr>
+    <tr>
+      <td align="center">03</td>
+      <td><a href="/Practica03/yes_no_app/README.md">Yes, No, Maybe</a></td>
+      <td>Chat Flutter con respuestas automáticas y GIFs mediante la API yesno.wtf.</td>
+      <td align="center">30</td>
+      <td align="center">🟢 Completada</td>
+    </tr>
+    <tr>
+      <td align="center">04</td>
+      <td><a href="/Practica04/toktik/README.md">TokTik</a></td>
+      <td>El alumno creará una app de reproducción de videos verticales con el uso de providers y tematización temporal a Halloween y Navidad.</td>
+      <td align="center">30</td>
+      <td align="center">🟢 Completada</td>
+    </tr>
+    <tr>
+      <td align="center">4.1</td>
+      <td><a href="/Practica-Appetize/README.md">Appetize - TokTik</a></td>
+      <td>App Flutter - TokTik: reproducción de videos verticales con providers y tematización temporal a Halloween y Navidad.</td>
+      <td align="center">10</td>
+      <td align="center">🟢 Completada</td>
+    </tr>
+    <tr>
+      <td align="center" rowspan="2"><b>Unidad 2</b></td>
+      <td align="center">05</td>
+      <td><a href="/Practica05/widgets_app/README.md">Widgets App</a></td>
+      <td>App Flutter con widgets Material 3, navegación con GoRouter y estado con Riverpod: botones, tarjetas, progreso, controles, animaciones, lista con actualización, contador y temas.</td>
+      <td align="center">40</td>
+      <td align="center">🟢 Completada</td>
+    </tr>
+    <tr>
+      <td align="center">06</td>
+      <td><a href="/Practica06/Cinemapedia/README.md">Cinemapedia</a></td>
+      <td>App Flutter de películas con la API de The Movie DB: cartelera, estrenos y mejor calificadas, carrusel con flechas, detalle con reparto y tráilers, búsqueda y favoritos locales (Isar). Usa GoRouter, Riverpod, pantalla de carga animada y tema negro con morado.</td>
+      <td align="center">100</td>
+      <td align="center">🟢 Completada</td>
+    </tr>
+  </tbody>
+</table>
 
 ## Manual de Flutter
 
