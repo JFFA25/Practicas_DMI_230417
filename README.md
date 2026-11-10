@@ -42,7 +42,7 @@ Cada práctica incluye el código fuente, una breve descripción del objetivo de
 | 04 | [TokTik](/Practica04/toktik/README.md) | El alumno creará una app de reproducción de videos verticales con el uso de providers y tematización temporal a Halloween y Navidad. | 30 | 🟢 Completada |
 | 4.1 | [Appetize - TokTik](/Practica-Appetize/README.md) | App Flutter - TokTik: reproducción de videos verticales con providers y tematización temporal a Halloween y Navidad. | 10 | 🟢 Completada |
 | 05 | [Widgets App](/Practica05/widgets_app/README.md) | App Flutter con widgets Material 3, navegación con GoRouter y estado con Riverpod: botones, tarjetas, progreso, controles, animaciones, lista con actualización, contador y temas. | 40 | 🟢 Completada |
-| 06 | [Cinemapedia](/Practica06/Cinemapedia/README.md) | App Flutter de películas con la API de The Movie DB: cartelera, estrenos y mejor calificadas, carrusel con flechas, detalle con reparto y tráilers, búsqueda y favoritos locales (Isar). Usa GoRouter, Riverpod, pantalla de carga animada y tema negro con morado. | -- | 🟢 Completada |
+| 06 | [Cinemapedia](/Practica06/Cinemapedia/README.md) | App Flutter de películas con la API de The Movie DB: cartelera, estrenos y mejor calificadas, carrusel con flechas, detalle con reparto y tráilers, búsqueda y favoritos locales (Isar). Usa GoRouter, Riverpod, pantalla de carga animada y tema negro con morado. | 100 | 🟢 Completada |
 
 ## Manual de Flutter
 
