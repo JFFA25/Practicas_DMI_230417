@@ -42,8 +42,6 @@ desde el navegador.
 
 ### [**Abrir Cinemapedia en Appetize**](https://appetize.io/app/b_yvc3qtmopdddgbgdt2bv2eh72e)
 
-**Cinemapedia:** [https://appetize.io/app/b_yvc3qtmopdddgbgdt2bv2eh72e](https://appetize.io/app/b_yvc3qtmopdddgbgdt2bv2eh72e)
-
 </div>
 
 > El plan gratuito de Appetize limita el tiempo de uso por sesión y por mes. Si la sesión no
